@@ -150,6 +150,26 @@ export function createGameServer() {
       if (!c) throw Error("Join a night first.");
       return c;
     };
+    socket.on("leave", (_data: unknown, ack: unknown) =>
+      execute(ack, () => {
+        const c = clients.get(socket.id);
+        if (!c) return;
+        if (c.room.phase !== "lobby")
+          throw Error(
+            "The night has begun. Rejoin this seat to continue your story.",
+          );
+        clients.delete(socket.id);
+        void socket.leave(c.room.code);
+        c.room.players = c.room.players.filter((p) => p !== c.player);
+        c.room.players.forEach((p) => {
+          p.ready = false;
+        });
+        c.room.clearSignals();
+        c.room.changed();
+        if (c.room.players.length === 0) rooms.delete(c.room.code);
+        else broadcast(c.room);
+      }),
+    );
     socket.on("create", (data: unknown, ack: unknown) =>
       execute(ack, () => {
         if (clients.has(socket.id)) throw Error("You are already in a room.");

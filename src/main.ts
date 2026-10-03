@@ -91,6 +91,20 @@ function emit(event: string, payload: unknown, after?: (reply: Reply) => void) {
 function action(a: Action) {
   emit("action", a);
 }
+function leaveLobby() {
+  emit("leave", {}, () => {
+    sessionStorage.removeItem(resumeKey);
+    localStorage.removeItem("maple-last-room");
+    state = null;
+    lastRevision = -1;
+    lastPhase = "";
+    recoveryAttempts = 0;
+    localBeam = { x: 0.5, y: 0.5, on: false };
+    remoteBeam = targetBeam = { x: 0.5, y: 0.5, on: false };
+    history.replaceState(null, "", "/");
+    render();
+  });
+}
 function enter(
   event: "create" | "join",
   name: string,
@@ -215,7 +229,7 @@ function title() {
   return `${header()}<main class="title-screen"><div class="title-world">${renderScene(null)}<div class="title-gradient"></div></div><section class="title-copy"><p class="eyebrow">A TWO-PLAYER SUMMER-NIGHT STORY</p><h1>Last Night on<br><em>Maple Street</em></h1><p class="premise">The lights go out. Your friend is across the street.<br>One time capsule. One last night before everything changes.</p><div class="entry"><form id="create-form"><label for="create-name">What should your friend call you?</label><input id="create-name" name="name" maxlength="24" placeholder="Your name (optional)" autocomplete="nickname">${button("Start a Night <span>↗</span>", 'type="submit" data-testid="create"', "primary")}</form><form id="join-form"><label for="join-code">Already have a room?</label><div class="join-row"><input id="join-code" name="code" aria-label="Room code" maxlength="8" value="${e(room)}" placeholder="ROOM CODE" autocomplete="off" required>${button("Join a Night", 'type="submit" data-testid="join"')}</div></form></div><p class="small">Two people · Separate screens · About 10–12 minutes<br>No accounts. Use the radio, or talk together.</p></section></main>`;
 }
 function lobby(s: Snapshot) {
-  return `${header()}<main class="lobby-screen"><div class="lobby-art">${renderScene(null)}</div><section class="lobby-copy"><p class="eyebrow">THE LAST NIGHT OF SUMMER</p><h1>Meet me at<br>the window.</h1><div class="invite"><div><span class="small">YOUR ROOM</span><strong data-testid="room-code">${e(s.code)}</strong></div>${button("Copy invite link", 'id="copy"')}</div><p>Choose a house. You see different things.<br>Help each other over the radio.</p><div class="role-list">${(
+  return `${header()}<main class="lobby-screen"><div class="lobby-art">${renderScene(null)}</div><section class="lobby-copy">${button("← Back to title", 'id="leave-lobby" data-testid="leave-lobby"', "quiet lobby-back")}<p class="eyebrow">THE LAST NIGHT OF SUMMER</p><h1>Meet me at<br>the window.</h1><div class="invite"><div><span class="small">YOUR ROOM</span><strong data-testid="room-code">${e(s.code)}</strong></div>${button("Copy invite link", 'id="copy"')}</div><p>Choose a house. You see different things.<br>Help each other over the radio.</p><div class="role-list">${(
     ["alex", "sam"] as Role[]
   )
     .map((role) => {
@@ -304,6 +318,13 @@ function render() {
   paintLights();
 }
 function bind() {
+  document.querySelector("#leave-lobby")?.addEventListener("click", leaveLobby);
+  document.querySelector(".wordmark")?.addEventListener("click", (ev) => {
+    if (state?.phase === "lobby") {
+      ev.preventDefault();
+      leaveLobby();
+    }
+  });
   document.querySelector("#fresh")?.addEventListener("click", () => {
     sessionStorage.removeItem(resumeKey);
     recoveryAttempts = 0;

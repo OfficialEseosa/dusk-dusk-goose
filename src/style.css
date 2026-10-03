@@ -919,3 +919,9 @@ header {
   font-size: 12px;
   color: #e4c38b;
 }
+.lobby-back {
+  margin: 0 0 22px;
+  padding-left: 0;
+  font-size: 13px;
+  min-height: 44px;
+}
