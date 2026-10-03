@@ -23,9 +23,14 @@ test("repeated entry taps while offline queue one room request", async ({
   try {
     await page.goto("/");
     await context.setOffline(true);
-    await expect(page.locator(".connection")).toContainText("Reconnecting", {
-      timeout: 15000,
-    });
+    await expect(page.locator("#app")).toHaveAttribute(
+      "data-connection",
+      "offline",
+      {
+        timeout: 15000,
+      },
+    );
+    await page.locator(".player-name summary").click();
     await page.locator("#create-name").fill("Offline friend");
     for (let index = 0; index < 3; index++)
       await page.getByTestId("create").click();
@@ -43,6 +48,7 @@ test("invalid join keeps both title fields and their DOM nodes", async ({
   page,
 }) => {
   await page.goto("/");
+  await page.locator(".player-name summary").click();
   await page.locator("#create-name").fill("Maple friend");
   await page.locator("#join-code").fill("ZZZZZ");
   const name = await page.locator("#create-name").elementHandle();
@@ -167,10 +173,12 @@ test("same browser tabs join separate seats and explicit Resume transfers only i
   const sam = await context.newPage();
   try {
     await alex.goto("/");
+    await alex.locator(".player-name summary").click();
     await alex.locator("#create-name").fill("Same browser Alex");
     await alex.getByTestId("create").click();
     const code = (await alex.getByTestId("room-code").textContent())!.trim();
     await sam.goto("/");
+    await sam.locator(".player-name summary").click();
     await sam.locator("#create-name").fill("Same browser Sam");
     await sam.locator("#join-code").fill(code);
     await sam.getByTestId("join").click();

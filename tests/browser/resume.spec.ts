@@ -21,6 +21,7 @@ test("scene taps, compact landscape, game menu and reopened invite preserve both
   observe();
   try {
     await alex.goto("/");
+    await alex.locator(".player-name summary").click();
     await alex.locator("#create-name").fill("<svg onload=alert(1)>");
     await alex.getByTestId("create").tap();
     const invite = await alex.locator("#invite-link").inputValue();
@@ -57,7 +58,7 @@ test("scene taps, compact landscape, game menu and reopened invite preserve both
     );
     await alex.getByTestId("game-menu").tap();
     await expect(alex.getByTestId("resume-night")).toHaveText(
-      `Resume night ${code}`,
+      `Continue night ${code}`,
     );
     await expect(sam.locator(".pause-overlay")).toBeVisible();
     await expect(sam.locator(".pause-overlay")).toContainText(

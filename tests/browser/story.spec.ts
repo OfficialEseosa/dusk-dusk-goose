@@ -39,9 +39,11 @@ for (const [seed, disclosure] of [
     try {
       await alex.goto("/");
       await sam.goto("/");
+      await alex.locator(".player-name summary").click();
       await alex.locator("#create-name").fill("First friend");
       await alex.getByTestId("create").click();
       const code = (await alex.getByTestId("room-code").textContent())!.trim();
+      await sam.locator(".player-name summary").click();
       await sam.locator("#create-name").fill("Second friend");
       await sam.locator("#join-code").fill(code);
       await sam.getByTestId("join").click();

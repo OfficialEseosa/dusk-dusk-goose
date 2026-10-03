@@ -45,7 +45,7 @@ The players can speak freely in real life or through their own calls. The game d
 
 ### Entry and lobby
 
-- Title screen: **Start a Night**, **Join a Night**, concise premise, sound toggle.
+- Title screen: **Explore solo**, **Play with a friend**, a room-code field with **Join**, and optional player name entry. Use a simple game menu with no development labels or redundant explanations. Sound controls are available during play.
 - Creating a room produces a short, human-readable code without ambiguous characters, plus a copyable invitation link.
 - Joining accepts a code and optional display name. An invitation link pre-fills the room.
 - Choose Corner House or Blue House. Each role has one seat; concurrent claims must be resolved by the server.
@@ -54,7 +54,7 @@ The players can speak freely in real life or through their own calls. The game d
 - Start when both players are ready and assets required for the opening are loaded. No extra host-only start step is necessary.
 - Explain only what is needed: "You see different things. Help each other over the radio."
 
-### Act I — Lights Out, approximately 3 minutes
+### Act I. Lights Out, approximately 3 minutes
 
 1. Brief date card: "August 30, 2002. 11:52 PM. Maple Street." The exact date is editable story data.
 2. Both players see their own bedroom in warm lamplight.
@@ -66,7 +66,7 @@ The players can speak freely in real life or through their own calls. The game d
 8. Sam returns the favor, illuminating Alex's side passage so Alex can retrieve the garden-gate key. Both have now guided and acted.
 9. A figure with a box crosses the street. Each sees a different segment of the same journey. If a player misses the animation, persistent evidence and a short observation preserve comprehension.
 
-### Act II — Across the Street, approximately 4–5 minutes
+### Act II. Across the Street, approximately 4–5 minutes
 
 The friends decide to retrieve their time capsule before morning. A simple shared objective remains visible when needed.
 
@@ -92,7 +92,7 @@ The friends decide to retrieve their time capsule before morning. A simple share
 - The second player interprets that sequence against the landmarks. They then exchange roles for a final latch or marker interaction.
 - The solution and visual mapping vary per room while remaining internally consistent.
 
-### Act III — The Tower, approximately 3 minutes
+### Act III. The Tower, approximately 3 minutes
 
 1. The friends reach the base of the water tower. No climbing sequence is needed.
 2. Their views now overlap: each sees the same clearing from a different side, including the other's silhouette and beam.
@@ -225,7 +225,7 @@ The skeleton needs at least two validated configurations for the core puzzles. R
 
 ## 10. Scope boundaries
 
-### Skeleton milestone — implement now
+### Skeleton milestone: implement now
 
 - Create/join lobby, exclusive role selection, readiness, and invitation links.
 - Real two-client state synchronization and reconnect tokens.
@@ -239,7 +239,7 @@ The skeleton needs at least two validated configurations for the core puzzles. R
 - Development-only way to start two clients and inspect/reset a test room.
 - Setup instructions, architecture summary, known limitations, and test results.
 
-### Production polish — subsequent milestones
+### Production polish: subsequent milestones
 
 - Art-direction comparisons followed by a polished reference scene.
 - Consistent final room art, props, character silhouettes, layered animation, and lighting.
@@ -312,6 +312,6 @@ Sources reviewed during concept assessment:
 - Supplied rules: C:/Users/rapha/Downloads/[AI_Skills_Studio_Challenge]_Contest_Official_Rules.pdf
 - Public mission: https://joinhandshake.com/learn/create-a-multiplayer-game-8d7d59b5/
 
-## Visual direction update — October 3
+## Visual direction update: October 3
 
 The user has chosen actual first-person 3D exploration, inspired by the experience of walking around a house and seeing a friend through a window. This supersedes the earlier painted 2.5D preference. Keep the cooperative story and authoritative progression while redesigning environments incrementally. The first implementation covers the opening bedrooms with temporary procedural geometry, movement, collision, neighbor presence, and flashlight pickup; the later illustrated locations remain playable pending conversion. This is a visual prototype, not a claim that the whole house or every location is already modeled.

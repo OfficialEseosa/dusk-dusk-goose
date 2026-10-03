@@ -1,4 +1,4 @@
-# Audit fixes — October 3, 2026
+# Audit fixes: October 3, 2026
 
 This tracks the findings in `audits/AUDIT-2026-10-03-0127.md` against the current code. The audit was written during implementation, so some findings predate the previous flow-fix commit. `GAME_SPEC.md` remains the working design; the original brief does not replace it.
 

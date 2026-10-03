@@ -1,4 +1,4 @@
-# Flow verification — October 3, 2026
+# Flow verification: October 3, 2026
 
 The functional milestone supports an incremental first-person 3D redesign, replacing the earlier painted 2.5D direction. The current scenes, lighting and synthesized audio remain temporary.
 
@@ -53,3 +53,11 @@ Only opening/flashlights currently use 3D. Each player has one walkable bedroom 
 The title now offers **Explore house solo** before room creation. `?solo=alex` and `?solo=sam` open the same 3D world without joining the multiplayer server. The solo browser test covers offline entry, walking to the table, E pickup, continued exploration after pickup, house switching, direct URL refresh, clean exit, and subsequent multiplayer creation. It verifies that exploration emits no room-creation request. Solo uses a local presentation snapshot and does not pretend to have a connected friend or advance the cooperative story.
 
 After adding solo entry, `npm run test:e2e` rebuilt successfully and all **20** browser tests passed in **3.2 minutes**, including both full cooperative story branches and the independent-context 3D movement/recovery test.
+
+## Home screen cleanup
+
+The entry screen now uses a single title and direct solo, create, and join controls. Optional player names are collapsed by default, while room recovery appears only for a remembered seat. The pre-room radio status, repeated wordmark, duration/account instructions, development footer, placeholder keepsake glyphs, and solo development notes have been removed. Application strings and maintained project copy contain no literal em dashes; the supplied audit remains unchanged.
+
+Fraunces 600 and DM Sans 400/600 are hosted under `public/fonts/`, together with their SIL Open Font License notices. The menu uses an original vector illustration separate from puzzle props. Browser checks cover desktop 1440×900, phone 390×844, compact 661×712, and landscape 844×390; they verify loaded local fonts, visible entry actions, collapsed optional name, absence of development copy/em dashes, and no horizontal overflow. Existing named-player tests open the optional name disclosure before typing.
+
+Final cleanup verification: the full browser run passed **23 of 24** tests; its sole failure expected the old Resume label. After updating that assertion to Continue night, the complete remaining recovery test passed on a targeted rerun. All 24 current browser scenarios have passing results, with no runtime changes between the full run and rerun. The build passed.
