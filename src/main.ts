@@ -5,6 +5,7 @@ import { escapeHtml as e, renderScene } from "./scene";
 import { copyInvite } from "./clipboard";
 import { patchDom } from "./dom";
 import { HouseWorld } from "./world/house";
+import { soloHouse } from "./world/solo";
 let houseWorld: HouseWorld | null = null;
 let worldFailed = false;
 function housePhase(s: Snapshot) {
@@ -19,7 +20,10 @@ import {
 } from "./seat";
 import "./style.css";
 const app = document.querySelector<HTMLDivElement>("#app")!;
-const socket = io({ autoConnect: true });
+const soloParam = new URLSearchParams(location.search).get("solo");
+let solo: Snapshot | null =
+  soloParam === "alex" || soloParam === "sam" ? soloHouse(soloParam) : null;
+const socket = io({ autoConnect: !solo });
 let state: Snapshot | null = null,
   error = "",
   muted = localStorage.getItem("maple-muted") === "true",
@@ -199,7 +203,7 @@ function enter(
 socket.on("connect", () => {
   socketJoined = false;
   const seat = saved();
-  if (seat && !seatReplaced && !explicitConnecting)
+  if (seat && !solo && !seatReplaced && !explicitConnecting)
     enter("join", seat.name, seat.code, seat.token);
   render();
   socket.emit("visibility", { visible: !document.hidden });
@@ -227,6 +231,7 @@ socket.on("expired", () => {
   render();
 });
 socket.on("snapshot", (next: Snapshot) => {
+  if (solo) return;
   socketJoined = true;
   if (state?.code !== next.code) {
     inviteStatus = "";
@@ -331,7 +336,7 @@ function header() {
 function title() {
   const room = new URLSearchParams(location.search).get("room") ?? "";
   const resume = recentSeat(room ? room.toUpperCase() : undefined);
-  return `${header()}<main class="title-screen"><div class="title-world">${renderScene(null)}<div class="title-gradient"></div></div><section class="title-copy"><p class="eyebrow">A TWO-PLAYER SUMMER-NIGHT STORY</p><h1>Last Night on<br><em>Maple Street</em></h1><p class="premise">The lights go out. Your friend is across the street.<br>One time capsule. One last night before everything changes.</p><div class="entry">${resume ? button(`Resume night ${e(resume.code)}`, 'id="resume-night" data-testid="resume-night"', "full") : ""}<form id="create-form"><label for="create-name">What should your friend call you?</label><input id="create-name" name="name" maxlength="24" placeholder="Your name (optional)" autocomplete="nickname">${button("Start a Night <span>↗</span>", 'type="submit" data-testid="create"', "primary")}</form><form id="join-form"><label for="join-code">Already have a room?</label><div class="join-row"><input id="join-code" name="code" aria-label="Room code" maxlength="8" value="${e(room)}" placeholder="ROOM CODE" autocomplete="off" required>${button("Join a Night", 'type="submit" data-testid="join"')}</div></form></div><p class="small">Two people · Separate screens · About 10–12 minutes<br>No accounts. Use the radio, or talk together.</p></section></main>`;
+  return `${header()}<main class="title-screen"><div class="title-world">${renderScene(null)}<div class="title-gradient"></div></div><section class="title-copy"><p class="eyebrow">A TWO-PLAYER SUMMER-NIGHT STORY</p><h1>Last Night on<br><em>Maple Street</em></h1><p class="premise">The lights go out. Your friend is across the street.<br>One time capsule. One last night before everything changes.</p><div class="entry">${button("Explore house solo", 'id="explore-solo" data-testid="explore-solo"', "primary full")}<p class="small">Walk around immediately. No room or friend needed.</p>${resume ? button(`Resume night ${e(resume.code)}`, 'id="resume-night" data-testid="resume-night"', "full") : ""}<form id="create-form"><label for="create-name">What should your friend call you?</label><input id="create-name" name="name" maxlength="24" placeholder="Your name (optional)" autocomplete="nickname">${button("Start a Night <span>↗</span>", 'type="submit" data-testid="create"', "primary")}</form><form id="join-form"><label for="join-code">Already have a room?</label><div class="join-row"><input id="join-code" name="code" aria-label="Room code" maxlength="8" value="${e(room)}" placeholder="ROOM CODE" autocomplete="off" required>${button("Join a Night", 'type="submit" data-testid="join"')}</div></form></div><p class="small">Two people · Separate screens · About 10–12 minutes<br>No accounts. Use the radio, or talk together.</p></section></main>`;
 }
 function lobby(s: Snapshot) {
   const waiting = s.players.find((p) => !p.connected);
@@ -423,9 +428,13 @@ function game(s: Snapshot) {
       "",
     )}</div><form id="radio-form"><label for="radio-text" class="small">SEND A SHORT MESSAGE</label><div class="radio-input"><input id="radio-text" maxlength="180" placeholder="Over to you…" autocomplete="off">${button("Send", 'type="submit"')}</div></form><div class="hint-row">${button("Need a nudge?", 'id="hint"')}${s.hint ? `<p>${e(s.hint)}</p>` : ""}</div></div></aside></main>`;
 }
+function soloScreen(s: Snapshot) {
+  return `<header><a class="wordmark" href="/">MAPLE STREET <span>SOLO EXPLORATION</span></a><div class="header-tools">${button("Back to title", 'id="solo-exit" data-testid="solo-exit"', "quiet")}</div></header><main class="solo-screen"><div class="chapter"><span>Explore freely</span><span>${s.you.role === "alex" ? "CORNER HOUSE / ALEX" : "BLUE HOUSE / SAM"}</span></div><div class="scene house-scene solo-scene" id="scene">${worldFailed ? '<p class="solo-unavailable">3D rendering is unavailable in this browser. Try a browser with WebGL enabled.</p>' : '<div id="house-world" data-dom-preserve="true"></div>'}<p class="scene-objective">${e(s.objective)}</p></div><div class="solo-details"><p>WASD / arrows to walk · Drag to look · E to pick up the nearby flashlight · Escape to release controls.</p>${button("Try the other house", 'id="solo-switch" data-testid="solo-switch"')}<p class="small">This prototype currently contains one bedroom per house. More rooms follow in the next scene pass. The cooperative story is available from Start a Night.</p></div></main>`;
+}
+
 function render() {
-  app.dataset.phase = state?.phase ?? "title";
-  app.dataset.role = state?.you.role ?? "";
+  app.dataset.phase = solo ? "solo" : (state?.phase ?? "title");
+  app.dataset.role = solo?.you.role ?? state?.you.role ?? "";
   const active = document.activeElement as HTMLElement | null;
   const focusKey = active?.id
     ? `#${CSS.escape(active.id)}`
@@ -444,26 +453,40 @@ function render() {
       : null;
   patchDom(
     app,
-    `${state ? (state.phase === "lobby" ? lobby(state) : game(state)) : title()}${error ? `<div class="toast" role="alert">${e(error)}${button("Dismiss", 'id="dismiss"', "quiet")}${!state ? button("Start fresh", 'id="fresh"', "quiet") + button("Retry connection", 'id="retry"', "quiet") : ""}</div>` : ""}<footer>LAST NIGHT ON MAPLE STREET <span>A PLAYABLE GRAYBOX / ORIGINAL TEMPORARY ART</span></footer>`,
+    `${solo ? soloScreen(solo) : state ? (state.phase === "lobby" ? lobby(state) : game(state)) : title()}${error ? `<div class="toast" role="alert">${e(error)}${button("Dismiss", 'id="dismiss"', "quiet")}${!state ? button("Start fresh", 'id="fresh"', "quiet") + button("Retry connection", 'id="retry"', "quiet") : ""}</div>` : ""}<footer>LAST NIGHT ON MAPLE STREET <span>A PLAYABLE GRAYBOX / ORIGINAL TEMPORARY ART</span></footer>`,
   );
   const worldHost = document.querySelector<HTMLElement>("#house-world");
   if (!worldHost && houseWorld) {
     houseWorld.dispose();
     houseWorld = null;
   }
-  if (worldHost && state) {
+  const worldState = solo ?? state;
+  if (worldHost && worldState) {
     try {
       if (!houseWorld)
         houseWorld = new HouseWorld(
           worldHost,
-          state,
+          worldState,
           (pose) => {
-            if (socketJoined) socket.emit("pose", pose);
+            if (solo) solo.poses = { alex: pose, sam: pose };
+            else if (socketJoined) socket.emit("pose", pose);
           },
-          (id) => action({ type: "interact", target: id }),
-          (x, y) => aim(x, y),
+          (id) => {
+            if (solo) {
+              solo.inventory = [id];
+              solo.objective =
+                "Flashlight collected. Explore freely, or try the other house.";
+              render();
+            } else action({ type: "interact", target: id });
+          },
+          (x, y) => {
+            if (!solo) aim(x, y);
+          },
         );
-      houseWorld.update({ ...state, paused: state.paused || !socketJoined });
+      houseWorld.update({
+        ...worldState,
+        paused: solo ? false : worldState.paused || !socketJoined,
+      });
     } catch (failure) {
       console.warn("3D unavailable; using illustrated scene", failure);
       houseWorld?.dispose();
@@ -515,6 +538,28 @@ function bind() {
       "button, a, #invite-link",
     );
     if (!el) return;
+    if (el.id === "explore-solo" || el.id === "solo-switch") {
+      houseWorld?.dispose();
+      houseWorld = null;
+      solo = soloHouse(
+        el.id === "solo-switch" && solo?.you.role === "alex" ? "sam" : "alex",
+      );
+      error = "";
+      history.replaceState(null, "", `?solo=${solo.you.role}`);
+      render();
+      return;
+    }
+    if (el.id === "solo-exit" || (solo && el.classList.contains("wordmark"))) {
+      ev.preventDefault();
+      houseWorld?.dispose();
+      houseWorld = null;
+      solo = null;
+      history.replaceState(null, "", "/");
+      seatReplaced = true;
+      render();
+      socket.connect();
+      return;
+    }
     if (state && el.id !== "mute") unlockAudio();
     if (el.id === "invite-link") {
       (el as HTMLInputElement).select();

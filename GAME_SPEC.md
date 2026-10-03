@@ -16,7 +16,7 @@ It is the last night of summer in 2002. Two best friends live across Maple Stree
 
 **Target experience:** an atmospheric, cooperative, bittersweet adventure lasting about 10–12 minutes for a first playthrough. This duration is a design target to validate through playtesting, not a timer or failure condition.
 
-**Players:** exactly two active players for the initial release, each on a separate phone or computer.
+**Players:** exactly two active players for the cooperative story, each on a separate phone or computer. Provide a prominently accessible solo exploration mode so the user can inspect and play with the current 3D house without creating a room or waiting for a friend. Solo exploration does not require cooperative story progression.
 
 **Tone:** summer-night mystery, warmth, and mild suspense. No combat, gore, jump-scare dependency, or punitive horror mechanics.
 

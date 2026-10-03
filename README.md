@@ -13,6 +13,8 @@ npm run dev
 
 Open **http://localhost:5173**. The Vite client runs on port 5173 and the authoritative Socket.IO server on port 3001. Keep both processes running; Ctrl+C stops them.
 
+To explore alone, choose **Explore house solo**, the first title-screen button, or open **http://localhost:5173/?solo=alex** directly. No room, name, second player, or multiplayer connection is needed. Use WASD/arrows to walk, drag to look, and E near the bedside table to collect the flashlight. **Try the other house** changes between Alex and Sam; **Back to title** returns to the normal entry screen. Solo exploration stays open after collecting the flashlight. The current environment has one bedroom per house.
+
 For two players on one computer, use two fresh tabs, independent browser contexts, or different browsers. Fresh tabs can join separate seats. Duplicating an existing player tab may copy its private credential and transfer that seat; the older tab is told play continued elsewhere. Choose **Start a Night** in the first window, then use its invitation link or enter its room code in the other. Choose **Corner House / Alex** and **Blue House / Sam**, then both select **Ready for the Night**.
 
 To try two devices on your local network, open `http://YOUR_COMPUTER_LAN_IP:5173` on each device. The development server binds to all interfaces, and Vite proxies multiplayer requests to the local backend. Your Windows firewall must permit port 5173; both devices must be able to reach the computer. This is a local development setup, not a public deployment.

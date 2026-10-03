@@ -1115,3 +1115,29 @@ header {
   z-index: 3;
   pointer-events: none;
 }
+.solo-screen {
+  max-width: 1400px;
+  margin: 24px auto;
+  padding: 0 24px;
+}
+.solo-scene {
+  height: min(72svh, 800px);
+  min-height: 280px;
+  aspect-ratio: auto;
+}
+.solo-details {
+  margin-top: 16px;
+  color: #bdd0c9;
+}
+.solo-unavailable {
+  padding: 80px 24px;
+}
+@media (max-width: 600px) {
+  .solo-screen {
+    padding: 0 12px;
+    margin: 12px auto;
+  }
+  .solo-scene {
+    height: 68svh;
+  }
+}
