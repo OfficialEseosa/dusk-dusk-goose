@@ -49,11 +49,11 @@ test("real Socket.IO rooms enforce seats, reconnect credentials, presence, radio
       (
         await stranger.request("join", {
           code: created.code,
-          token: created.token,
+          token: "wrong-token",
         })
       ).ok,
       false,
-      "live duplicate tab cannot take over",
+      "only the secret token authorizes a replacement",
     );
     const claims = await Promise.all([
       a.request("action", { type: "claim", role: "alex" }),
@@ -73,11 +73,13 @@ test("real Socket.IO rooms enforce seats, reconnect credentials, presence, radio
       false,
     );
     sam.socket.emit("visibility", { visible: false });
-    await alex.wait((s) => s.paused);
+    await alex.wait((s) =>
+      s.players.some((p) => p.role === "sam" && !p.visible),
+    );
     await alex.action({ type: "ready" });
     await sam.action({ type: "ready" });
-    assert.equal(alex.state!.phase, "lobby");
-    sam.socket.emit("visibility", { visible: true });
+    assert.equal(alex.state!.phase, "opening");
+    assert.equal(alex.state!.paused, false);
     await alex.wait((s) => s.phase === "opening");
     await sam.wait((s) => s.phase === "opening");
     assert.equal(alex.state!.phaseStartedAt, sam.state!.phaseStartedAt);
@@ -85,6 +87,8 @@ test("real Socket.IO rooms enforce seats, reconnect credentials, presence, radio
     await sam.wait((s) => s.phase === "flashlights");
     await alex.action({ type: "interact", target: "flashlight-alex" });
     await sam.action({ type: "interact", target: "flashlight-sam" });
+    sam.socket.emit("visibility", { visible: true });
+    await alex.wait((s) => s.players.every((p) => p.visible));
     await sam.wait((s) => s.phase === "shelf");
     const room = app.rooms.get(created.code!)!;
     assert(
@@ -106,8 +110,20 @@ test("real Socket.IO rooms enforce seats, reconnect credentials, presence, radio
     );
     alex.socket.emit("beam", { x: shelf.x, y: shelf.y, on: true });
     assert.equal((await beamEvent).role, "alex");
+    alex.socket.emit("visibility", { visible: false });
+    await sam.wait((s) =>
+      s.players.some((p) => p.role === "alex" && !p.visible),
+    );
+    assert.equal(room.paused, false);
     await sam.action({ type: "interact", target: shelf.id });
     assert.equal(room.phase, "key");
+    assert.equal(
+      room.beams.alex.on,
+      false,
+      "phase advance cancels the hidden handoff lease",
+    );
+    alex.socket.emit("visibility", { visible: true });
+    await sam.wait((s) => s.players.every((p) => p.visible));
     assert.equal(
       (await sam.request("action", { type: "interact", target: shelf.id })).ok,
       false,
@@ -167,14 +183,35 @@ test("real Socket.IO rooms enforce seats, reconnect credentials, presence, radio
         s.you.role === role &&
         s.inventory.includes("route-card"),
     );
+    const replaced = new Promise<{ error: string }>((resolve) =>
+      rejoin.socket.once("seat-replaced", resolve),
+    );
+    const replacement = await stranger.request("join", {
+      code: created.code,
+      token: credential.token,
+    });
     assert.equal(
-      (
-        await stranger.request("join", {
-          code: created.code,
-          token: credential.token,
-        })
-      ).ok,
-      false,
+      replacement.ok,
+      true,
+      "valid token replaces a connection without waiting for heartbeat expiry",
+    );
+    assert.equal(replacement.playerId, credential.playerId);
+    assert.match((await replaced).error, /another tab/);
+    await stranger.wait(
+      (s) => !s.paused && s.you.connected && s.phase === phase,
+    );
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    assert.equal(rejoin.socket.connected, false);
+    assert.equal(
+      room.players.find((p) => p.id === credential.playerId)!.connected,
+      true,
+      "closing the old socket never disconnects its replacement",
+    );
+    assert.equal(room.players.length, 2);
+    assert.equal(
+      (await stranger.request("hint", {})).ok,
+      true,
+      "replacement membership is live",
     );
   } finally {
     a.close();

@@ -56,7 +56,7 @@ test("leave lobby returns to title, frees a ready seat, and permits a fresh nigh
   }
 });
 
-test("both-ready lobby explains a hidden partner and starts when they return", async ({
+test("hidden partner does not prevent ready, blackout or ordinary actions", async ({
   browser,
 }) => {
   const aContext = await browser.newContext();
@@ -67,8 +67,7 @@ test("both-ready lobby explains a hidden partner and starts when they return", a
     await alex.goto("/");
     await alex.getByTestId("create").click();
     const code = (await alex.getByTestId("room-code").textContent())!.trim();
-    await sam.goto(`/?room=${code}`);
-    await sam.locator("#create-name").fill("James");
+    await sam.goto("/?room=" + code);
     await sam.getByTestId("join").click();
     await alex.getByTestId("claim-alex").click();
     await sam.getByTestId("claim-sam").click();
@@ -81,44 +80,30 @@ test("both-ready lobby explains a hidden partner and starts when they return", a
     });
     await alex.getByTestId("ready").click();
     await sam.getByTestId("ready").click();
-    await expect(alex.locator("#app")).toHaveAttribute("data-phase", "lobby");
-    await expect(alex.getByTestId("lobby-status")).toContainText(
-      "James’s game tab is hidden",
-    );
-    await expect(alex.getByTestId("ready")).toHaveText(
-      "Both ready — waiting for both screens",
-    );
-    await sam.evaluate(() => {
-      Object.defineProperty(document, "hidden", {
-        configurable: true,
-        get: () => false,
-      });
-      document.dispatchEvent(new Event("visibilitychange"));
-    });
     await expect(alex.locator("#app")).toHaveAttribute("data-phase", "opening");
-    await expect(sam.locator("#app")).toHaveAttribute("data-phase", "opening");
-    await sam.evaluate(() => {
-      Object.defineProperty(document, "hidden", {
-        configurable: true,
-        get: () => true,
-      });
-      document.dispatchEvent(new Event("visibilitychange"));
-    });
-    await expect(alex.locator(".pause-overlay")).toBeVisible();
-    await sam.waitForTimeout(4500);
-    await expect(alex.locator("#app")).toHaveAttribute("data-phase", "opening");
-    await expect(alex.locator(".date-card")).not.toHaveClass(/dark/);
-    await sam.evaluate(() => {
-      Object.defineProperty(document, "hidden", {
-        configurable: true,
-        get: () => false,
-      });
-      document.dispatchEvent(new Event("visibilitychange"));
-    });
+    await expect(alex.locator(".pause-overlay")).toHaveCount(0);
     await expect(alex.locator("#app")).toHaveAttribute(
       "data-phase",
       "flashlights",
     );
+    await alex.getByTestId("scene-flashlight-alex").click();
+    await expect(alex.locator(".scene-caption")).toContainText(
+      "flashlight alex",
+    );
+    await alex.locator("#radio-text").fill("Still here while you are away.");
+    await alex.locator("#radio-text").press("Enter");
+    await expect(sam.locator(".messages")).toContainText(
+      "Still here while you are away.",
+    );
+    await sam.evaluate(() => {
+      Object.defineProperty(document, "hidden", {
+        configurable: true,
+        get: () => false,
+      });
+      document.dispatchEvent(new Event("visibilitychange"));
+    });
+    await sam.getByTestId("scene-flashlight-sam").click();
+    await expect(alex.locator("#app")).toHaveAttribute("data-phase", "shelf");
   } finally {
     await aContext.close();
     await sContext.close();

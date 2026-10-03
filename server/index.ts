@@ -200,11 +200,26 @@ export function createGameServer() {
             throw Error(
               "No night with that code. Check the code or start a new night.",
             );
+          const previousSocketId =
+            typeof data?.token === "string"
+              ? room.players.find((p) => p.token === data.token)?.socketId
+              : null;
           const p =
             typeof data?.token === "string"
               ? room.reconnect(data.token, socket.id)
               : room.addPlayer(data?.name ?? "Friend", socket.id);
           clients.set(socket.id, { room, player: p });
+          // Remove the old membership before closing it: its disconnect handler
+          // must never mark the authenticated replacement offline.
+          if (previousSocketId && previousSocketId !== socket.id) {
+            clients.delete(previousSocketId);
+            const previous = io.sockets.sockets.get(previousSocketId);
+            previous?.emit("seat-replaced", {
+              error:
+                "Your night was resumed in another tab. Continue there, or resume here from the menu.",
+            });
+            previous?.disconnect(true);
+          }
           socket.join(room.code);
           broadcast(room);
           return { ok: true, code: room.code, token: p.token, playerId: p.id };

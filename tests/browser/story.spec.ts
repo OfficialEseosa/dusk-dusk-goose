@@ -141,7 +141,10 @@ for (const [seed, disclosure] of [
           });
           document.dispatchEvent(new Event("visibilitychange"));
         });
-        await expect(alex.locator(".pause-overlay")).toBeVisible();
+        await expect(alex.locator(".pause-overlay")).toHaveCount(0);
+        await expect(alex.locator(".radio-heading")).toContainText(
+          "FRIEND AWAY",
+        );
         await sam.waitForTimeout(30_000);
         await phase(alex, "key");
         await sam.evaluate(() => {
@@ -204,16 +207,41 @@ for (const [seed, disclosure] of [
       await sam.getByTestId("choice-continue").click();
       await phase(alex, "goodbye");
       await phase(sam, "goodbye");
+      await sam.evaluate(() => {
+        Object.defineProperty(document, "hidden", {
+          configurable: true,
+          get: () => true,
+        });
+        document.dispatchEvent(new Event("visibilitychange"));
+      });
       await alex.getByTestId("signal-toggle").click();
+      await alex.waitForTimeout(1200);
+      await phase(alex, "goodbye");
+      await sam.evaluate(() => {
+        Object.defineProperty(document, "hidden", {
+          configurable: true,
+          get: () => false,
+        });
+        document.dispatchEvent(new Event("visibilitychange"));
+      });
       await expect(sam.locator(".signal-status")).toContainText("holding");
       if (seed === 1) {
         await sam.locator("#signal-hold").focus();
         await sam.keyboard.down("Space");
       } else {
-        await sam.getByTestId("signal-toggle").click();
+        const hold = sam.locator("#signal-hold");
+        await hold.scrollIntoViewIfNeeded();
+        const bounds = (await hold.boundingBox())!;
+        await sam.mouse.move(
+          bounds.x + bounds.width / 2,
+          bounds.y + bounds.height / 2,
+        );
+        await sam.mouse.down();
+        await alex.locator("#hint").click(); // snapshot while the real pointer is captured
       }
       await phase(alex, "ending");
       await phase(sam, "ending");
+      if (seed === 0) await sam.mouse.up();
       if (seed === 1) {
         await sam.keyboard.up("Space");
         await sam.waitForTimeout(150);

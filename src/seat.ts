@@ -31,8 +31,10 @@ function remembered(): SavedSeat[] {
     return [];
   }
 }
-export function recentSeat() {
-  return remembered()[0] ?? null;
+export function recentSeat(code?: string) {
+  return (
+    (code ? remembered().find((s) => s.code === code) : remembered()[0]) ?? null
+  );
 }
 export function readSeat(): SavedSeat | null {
   try {
@@ -41,10 +43,9 @@ export function readSeat(): SavedSeat | null {
   } catch {
     /* A stale stored value is not a credential. */
   }
-  const room = new URLSearchParams(location.search).get("room")?.toUpperCase();
-  const seat = remembered().find((s) => s.code === room);
-  if (seat) sessionStorage.setItem(TAB_KEY, JSON.stringify(seat));
-  return seat ?? null;
+  // A new tab may be the second player. Offer remembered credentials explicitly
+  // rather than automatically taking over the first player's connected seat.
+  return null;
 }
 export function rememberSeat(seat: SavedSeat) {
   const updated = { ...seat, savedAt: Date.now() };

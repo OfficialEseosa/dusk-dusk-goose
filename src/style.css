@@ -960,6 +960,53 @@ header {
 .game-menu {
   min-height: 44px;
 }
+.scene-objective {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: #0b1925db;
+  color: #e9e7d8;
+  font-size: 14px;
+  line-height: 1.4;
+  pointer-events: none;
+}
+.scene-actions {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 3;
+}
+.scene-actions button {
+  min-height: 44px;
+  font-size: 14px;
+  background: #152a35f0;
+}
+.scene-actions .signal-status {
+  width: 100%;
+  background: #0b1925db;
+  padding: 5px 8px;
+  font-size: 13px;
+}
+.chapter span:last-child,
+.scene-caption,
+.radio-heading small {
+  font-size: 12px;
+}
+.private-note,
+.messages p {
+  font-size: 14px;
+}
+.quick-messages button {
+  font-size: 13px;
+}
+.radio-input input {
+  font-size: 16px;
+}
 @media (orientation: landscape) and (max-height: 500px) and (max-width: 1000px) {
   header {
     height: 44px;
@@ -969,12 +1016,14 @@ header {
     margin-top: 8px;
     padding: 0 14px;
     gap: 14px;
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
   }
   .chapter {
     margin-bottom: 6px;
   }
   .scene {
-    height: calc(100svh - 100px);
+    height: calc(100svh - 100px - env(safe-area-inset-bottom));
     aspect-ratio: auto;
   }
   .radio-panel {

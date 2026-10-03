@@ -109,27 +109,70 @@ for (const seed of [0, 1])
     });
   }
 
-test("hidden or disconnected player pauses opening and clears signals and beams", () => {
+test("hidden tabs start and act while disconnects pause; finale requires visible overlap", () => {
   const room = new GameRoom("PAUSE");
   const alex = room.addPlayer("Alex", "a");
   const sam = room.addPlayer("Sam", "s");
   room.action(alex, { type: "claim", role: "alex" });
   room.action(sam, { type: "claim", role: "sam" });
+  room.visibility(sam, false);
   room.action(alex, { type: "ready" });
   room.action(sam, { type: "ready" });
-  room.visibility(sam, false);
-  for (let i = 1; i <= 60; i++) room.tick(Date.now() + i * 500);
   assert.equal(room.phase, "opening");
-  assert.equal(room.paused, true);
-  room.visibility(sam, true);
+  assert.equal(room.paused, false);
   for (let i = 1; i <= 9; i++) room.tick(Date.now() + i * 500);
   assert.equal(room.phase, "flashlights");
+  room.action(alex, { type: "interact", target: "flashlight-alex" });
+  assert(room.inventory.includes("flashlight-alex"));
   room.disconnect(sam);
   assert.equal(room.paused, true);
+  assert.throws(
+    () => room.action(alex, { type: "interact", target: "flashlight-alex" }),
+    /return/,
+  );
   assert.throws(() => room.reconnect("wrong-token", "s2"), /credential/);
   assert.equal(room.reconnect(sam.token, "s2").id, sam.id);
+  assert.equal(room.reconnect(sam.token, "s3").socketId, "s3");
   assert.equal(room.paused, false);
-  assert.throws(() => room.reconnect(sam.token, "s3"), /another tab/);
+  room.enter("goodbye");
+  room.action(alex, { type: "signal", value: true });
+  room.action(sam, { type: "signal", value: true });
+  room.visibility(sam, false);
+  assert.equal(
+    room.signals.alex,
+    true,
+    "hidden friend does not cancel visible signal",
+  );
+  assert.equal(room.signals.sam, false);
+  room.action(sam, { type: "signal", value: true });
+  for (let i = 1; i <= 9; i++) room.tick(Date.now() + 5000 + i * 500);
+  assert.equal(
+    room.phase,
+    "goodbye",
+    "hidden finale cannot advance even with stale signal input",
+  );
+  room.visibility(sam, true);
+  assert.equal(
+    room.signals.sam,
+    false,
+    "hidden input never restores a finale signal",
+  );
+  room.action(sam, { type: "signal", value: true });
+  for (let i = 1; i <= 3; i++) room.tick(Date.now() + 10000 + i * 500);
+  assert.equal(room.phase, "ending");
+});
+
+test("actual disconnect preserves the opening countdown until authenticated return", () => {
+  const room = new GameRoom("INTRO");
+  const alex = room.addPlayer("Alex", "a");
+  const sam = room.addPlayer("Sam", "s");
+  room.enter("opening");
+  room.disconnect(sam);
+  for (let i = 1; i <= 60; i++) room.tick(Date.now() + i * 500);
+  assert.equal(room.phase, "opening");
+  room.reconnect(sam.token, "s2");
+  for (let i = 1; i <= 9; i++) room.tick(Date.now() + i * 500);
+  assert.equal(room.phase, "flashlights");
 });
 
 test("Alex can answer a deferred disclosure during route without repeating the line", () => {

@@ -181,7 +181,7 @@ Provide separate overall mute and readable captions for authored spoken content.
 - Give controls clear labels, visible focus states, adequate contrast, and generous touch targets.
 - Support keyboard navigation and an alternative to precise pointer aiming, such as selectable beam anchor points.
 - Do not distinguish puzzle answers by color alone.
-- Pause or preserve important narrative moments when either player's tab is hidden or connection is lost. Resume coherently when both return.
+- Ordinary play and the opening continue while both players are connected, even if one tab is hidden. Returning tabs catch up from the authoritative snapshot. A deliberate beam has a ten-second handoff window after hiding, then turns off; hidden input cannot renew it. Disconnects and phase transitions clear beams. The final goodbye requires both tabs visible and a fresh signal after returning. Actual disconnection pauses progression until recovery. This narrows the original visibility rule following the October 3 audit so players can test by switching tabs.
 
 ## 8. Multiplayer and state architecture
 
@@ -211,6 +211,7 @@ Do not choose an external paid service or require credentials merely to start lo
 - Deliver snapshots on joining/rejoining and ordered or revisioned updates afterward.
 - Separate ephemeral beam/presence updates from durable progression.
 - A display name is not authentication. Use an unguessable reconnect token retained locally; do not let someone steal a seat by entering the same name.
+- A valid reconnect token immediately transfers its seat to the new connection. Tell the older tab that play continued elsewhere and suppress automatic reclaiming. Fresh tabs may join the other seat without automatically using a remembered token; offer explicit Resume, and recover a remembered seat on a full-room code join.
 - Expire abandoned rooms and bound message history and room counts.
 - Handle invalid/full/expired rooms, role races, duplicate tabs, repeated input, disconnects, and reconnects explicitly.
 - For the skeleton, in-memory rooms are acceptable if server-restart loss is clearly documented. Browser refresh/rejoin must still work while the server remains running.

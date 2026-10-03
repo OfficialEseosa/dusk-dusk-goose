@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test("scene taps, compact landscape, game menu and reopened invite preserve both seats", async ({
   browser,
-}) => {
+}, testInfo) => {
   const aContext = await browser.newContext({
     viewport: { width: 844, height: 390 },
     hasTouch: true,
@@ -33,11 +33,15 @@ test("scene taps, compact landscape, game menu and reopened invite preserve both
     await sam.getByTestId("ready").click();
     await expect(alex.getByTestId("scene-flashlight-alex")).toBeVisible();
     await expect(alex.locator("#scene")).toBeInViewport({ ratio: 1 });
+    await expect(alex.locator(".scene-objective")).toBeInViewport({ ratio: 1 });
     expect(
       await alex.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     ).toBe(true);
+    await alex.screenshot({
+      path: testInfo.outputPath("landscape-objective.png"),
+    });
     await alex.getByTestId("scene-flashlight-alex").tap();
     await sam.getByTestId("scene-flashlight-sam").click();
     await expect(alex.locator("#app")).toHaveAttribute("data-phase", "shelf");
@@ -70,6 +74,7 @@ test("scene taps, compact landscape, game menu and reopened invite preserve both
     alex = await aContext.newPage();
     observe();
     await alex.goto(invite);
+    await alex.getByTestId("resume-night").tap();
     await expect(alex.locator("#app")).toHaveAttribute("data-phase", "shelf");
     await expect(sam.locator(".pause-overlay")).toHaveCount(0);
     await expect(alex.locator(".scene-caption")).toContainText(

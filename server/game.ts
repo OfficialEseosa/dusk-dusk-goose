@@ -54,6 +54,7 @@ export class GameRoom {
   private elapsed = 0;
   private lastTick: number;
   private overlap = 0;
+  private beamExpiresAt: Partial<Record<Role, number>> = {};
   private capsuleStep = 0;
   private keepsakeReady = new Set<Role>();
   constructor(code: string, now = Date.now(), seed = randomInt(0, 2147483647)) {
@@ -63,10 +64,7 @@ export class GameRoom {
     this.variant = seed % 2;
   }
   get paused() {
-    return (
-      this.players.length !== 2 ||
-      this.players.some((p) => !p.connected || !p.visible)
-    );
+    return this.players.length !== 2 || this.players.some((p) => !p.connected);
   }
   get shelfIndex() {
     return this.variant === 0 ? 0 : 2;
@@ -105,10 +103,12 @@ export class GameRoom {
     const p = this.players.find((p) => p.token === token);
     if (!p)
       throw Error("This reconnect credential is not valid for this room.");
-    if (p.connected)
-      throw Error(
-        "This seat is already open in another tab. Close that tab first.",
-      );
+    if (p.role) {
+      this.beams[p.role].on = false;
+      delete this.beamExpiresAt[p.role];
+      this.signals[p.role] = false;
+      this.overlap = 0;
+    }
     p.connected = true;
     p.visible = true;
     p.socketId = socketId;
@@ -124,7 +124,14 @@ export class GameRoom {
   }
   visibility(p: Player, visible: boolean) {
     p.visible = visible;
-    if (!visible) this.clearSignals();
+    if (!visible && p.role) {
+      // Give a deliberate aim a short lease for switching between game tabs.
+      // Hidden input cannot renew it; disconnect and phase changes cancel it.
+      if (this.beams[p.role].on && !this.beamExpiresAt[p.role])
+        this.beamExpiresAt[p.role] = Date.now() + 10000;
+      this.signals[p.role] = false;
+      this.overlap = 0;
+    }
     this.lastTick = Date.now();
     this.changed();
     this.maybeStart();
@@ -138,6 +145,7 @@ export class GameRoom {
       this.enter("opening");
   }
   clearSignals() {
+    this.beamExpiresAt = {};
     this.signals = { alex: false, sam: false };
     this.overlap = 0;
     this.beams.alex.on = false;
@@ -165,8 +173,7 @@ export class GameRoom {
     this.phase = phase;
     this.phaseStartedAt = Date.now();
     this.elapsed = 0;
-    this.overlap = 0;
-    this.signals = { alex: false, sam: false };
+    this.clearSignals();
     this.players.forEach((p) => (p.hintLevel = 0));
     this.changed();
     const line = phaseTransmission(phase, this.disclosed);
@@ -176,6 +183,14 @@ export class GameRoom {
     const dt = Math.max(0, Math.min(now - this.lastTick, 500));
     this.lastTick = now;
     const rev = this.revision;
+    for (const role of ROLES) {
+      const expiresAt = this.beamExpiresAt[role];
+      if (expiresAt && now >= expiresAt) {
+        this.beams[role].on = false;
+        delete this.beamExpiresAt[role];
+        this.changed();
+      }
+    }
     this.maybeStart();
     if (!this.paused) {
       this.elapsed += dt;
@@ -183,14 +198,19 @@ export class GameRoom {
         this.enter("flashlights");
       if (this.phase === "goodbye") {
         this.overlap =
-          this.signals.alex && this.signals.sam ? this.overlap + dt : 0;
+          this.players.every((p) => p.visible) &&
+          this.signals.alex &&
+          this.signals.sam
+            ? this.overlap + dt
+            : 0;
         if (this.overlap >= 1000) this.enter("ending");
       }
     }
     return rev !== this.revision;
   }
   setBeam(p: Player, beam: Beam) {
-    if (!p.role || this.paused) return;
+    if (!p.role || !p.visible || this.paused) return;
+    delete this.beamExpiresAt[p.role];
     this.beams[p.role] = {
       x: Math.max(0, Math.min(1, beam.x)),
       y: Math.max(0, Math.min(1, beam.y)),
@@ -309,7 +329,7 @@ export class GameRoom {
     if (a.type === "signal") {
       if (this.phase !== "goodbye")
         throw Error("Signals are used at the final goodbye.");
-      this.signals[role] = a.value === true;
+      this.signals[role] = p.visible && a.value === true;
       this.changed();
       return;
     }
@@ -559,7 +579,7 @@ export class GameRoom {
       case "lobby":
         return "Each choose a different house, then both press Ready.";
       case "opening":
-        return "Keep both tabs visible; the blackout arrives after four seconds.";
+        return "The lights go out after four seconds. Your friend will catch up when they return.";
       case "flashlights":
         return "Choose your flashlight in the room.";
       case "shelf":

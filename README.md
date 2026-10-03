@@ -13,7 +13,7 @@ npm run dev
 
 Open **http://localhost:5173**. The Vite client runs on port 5173 and the authoritative Socket.IO server on port 3001. Keep both processes running; Ctrl+C stops them.
 
-For two independent players on one computer, use a normal browser window and an incognito window (or two different browsers). Duplicating an existing player tab may copy its session credential and is rejected while that seat is connected. Choose **Start a Night** in the first window, then use its invitation link or enter its room code in the other. Choose **Corner House / Alex** and **Blue House / Sam**, then both select **Ready for the Night**.
+For two players on one computer, use two fresh tabs, independent browser contexts, or different browsers. Fresh tabs can join separate seats. Duplicating an existing player tab may copy its private credential and transfer that seat; the older tab is told play continued elsewhere. Choose **Start a Night** in the first window, then use its invitation link or enter its room code in the other. Choose **Corner House / Alex** and **Blue House / Sam**, then both select **Ready for the Night**.
 
 To try two devices on your local network, open `http://YOUR_COMPUTER_LAN_IP:5173` on each device. The development server binds to all interfaces, and Vite proxies multiplayer requests to the local backend. Your Windows firewall must permit port 5173; both devices must be able to reach the computer. This is a local development setup, not a public deployment.
 
@@ -21,7 +21,7 @@ To try two devices on your local network, open `http://YOUR_COMPUTER_LAN_IP:5173
 
 Tap the scene's marked prop targets to interact; for the guiding role, those targets aim the beam. Aim with pointer/touch or the labeled beam anchors for keyboard and touch-friendly targeting. The radio offers contextual transmissions and optional short text; voice is never required. Manual hints explain the current cooperative step. Both players act throughout the passage, route, and capsule puzzles. Sam's explicit disclosure choice affects the ending; ordinary radio text does not select a story branch.
 
-Refreshing or reopening the invitation in the same browser profile restores your seat using a private reconnect credential while the server is running. The title screen offers Resume night for a remembered seat. Game menu pauses your participation and preserves that seat; Back to title in the lobby releases it. Leaving the tab or disconnecting pauses important progress until both players return. A display name cannot reclaim another player's seat. Complete the final signal together; the toggle alternative removes any requirement to hold a pointer down. At the ending, both players can agree to replay with swapped roles and a fresh puzzle configuration, or return to the lobby.
+Refreshing restores your seat using a private reconnect credential while the server is running. Reopening an invitation offers Resume for a remembered seat; entering a full room code also recovers the matching remembered credential. The title screen offers Resume night for a remembered seat. Game menu pauses your participation and preserves that seat; Back to title in the lobby releases it. Hidden tabs do not stop ordinary play. A deliberate beam survives hiding for ten seconds to let you switch tabs and act; disconnects and phase transitions clear it. Actual disconnects pause progression. The finale requires both players visible; arrange windows side by side or use separate devices for that final overlap. Leave this night on the disconnect overlay forgets the seat and permits a fresh start. A display name cannot reclaim another player's seat. Complete the final signal together; the toggle alternative removes any requirement to hold a pointer down. At the ending, both players can agree to replay with swapped roles and a fresh puzzle configuration, or return to the lobby.
 
 ## Development and checks
 
@@ -50,7 +50,7 @@ For development inspection, `GET /api/dev/rooms/ROOMCODE` reports the phase, var
 
 Physical-phone keyboard behavior, public-network latency, production persistence, and final artwork/audio are not established by desktop emulation. The browser suite exercises a 30-second real elapsed absence through the document visibility handler; it emulates hidden state because headless browser contexts do not reliably background one another.
 
-The functional verification report is in [FLOW_VERIFICATION.md](FLOW_VERIFICATION.md). It records coverage and practical limits before the screen-by-screen redesign. Browser screenshots and failure traces are local artifacts under `test-results/`, not game assets.
+The audit status is in [AUDIT_FIXES.md](AUDIT_FIXES.md), and the functional verification report is in [FLOW_VERIFICATION.md](FLOW_VERIFICATION.md). It records coverage and practical limits before the screen-by-screen redesign. Browser screenshots and failure traces are local artifacts under `test-results/`, not game assets.
 
 For the built local client, run `npm run build` followed by `npm start`, then open http://localhost:3001. A production-mode smoke check served the built client, created a real room, returned a healthy backend, and confirmed development inspection endpoints were unavailable with `NODE_ENV=production`.
 

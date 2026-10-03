@@ -4,7 +4,7 @@ import type { AddressInfo } from "node:net";
 import { createServer as createProxy, connect, type Socket } from "node:net";
 
 for (const explicitResume of [false, true]) {
-  test(`network switch recovers ${explicitResume ? "explicit Resume" : "automatically"} through the old connection`, async ({
+  test(`network switch recovers ${explicitResume ? "explicit Resume" : "automatically"} immediately despite the old connection`, async ({
     browser,
   }) => {
     const app = createGameServer();
@@ -35,6 +35,7 @@ for (const explicitResume of [false, true]) {
       const code = (await page.getByTestId("room-code").textContent())!.trim();
       await page.getByTestId("claim-alex").click();
       const before = app.rooms.get(code)!.players[0].id;
+      const beforeSocket = app.rooms.get(code)!.players[0].socketId;
       // Cut the browser path while leaving the old backend TCP socket alive.
       // Rejoining must retry until Socket.IO's real heartbeat expires the ghost.
       for (const link of links) {
@@ -50,12 +51,9 @@ for (const explicitResume of [false, true]) {
         await page.goto(url);
         await page.getByTestId("resume-night").click();
       }
-      await expect(page.locator(".toast")).toContainText(
-        "Rejoining your seat",
-        {
-          timeout: 10000,
-        },
-      );
+      await expect
+        .poll(() => app.rooms.get(code)!.players[0].socketId, { timeout: 5000 })
+        .not.toBe(beforeSocket);
       await expect(page.getByTestId("claim-alex")).toHaveClass(/selected/, {
         timeout: 30000,
       });
