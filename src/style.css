@@ -925,3 +925,64 @@ header {
   font-size: 13px;
   min-height: 44px;
 }
+.invite-share {
+  margin: -10px 0 20px;
+}
+.invite-share input {
+  font-size: 12px;
+}
+.invite-share p {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #e4c38b;
+  margin: 8px 0 0;
+}
+.lobby-presence {
+  padding: 12px 14px;
+  border: 1px solid #e4c38b70;
+  border-radius: 5px;
+  color: #e4c38b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+/* Functional landscape framing: keep the full scene visible without trapping page scrolling. */
+.scene {
+  touch-action: pan-y;
+}
+.hotspot {
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+}
+.quick-messages button {
+  min-height: 44px;
+}
+.game-menu {
+  min-height: 44px;
+}
+@media (orientation: landscape) and (max-height: 500px) and (max-width: 1000px) {
+  header {
+    height: 44px;
+    padding: 0 16px;
+  }
+  .game-screen {
+    margin-top: 8px;
+    padding: 0 14px;
+    gap: 14px;
+  }
+  .chapter {
+    margin-bottom: 6px;
+  }
+  .scene {
+    height: calc(100svh - 100px);
+    aspect-ratio: auto;
+  }
+  .radio-panel {
+    margin-top: 22px;
+  }
+}
+@media (max-width: 700px) {
+  .header-tools .connection {
+    max-width: 68px;
+  }
+}

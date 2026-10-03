@@ -6,7 +6,7 @@ async function phase(page: Page, value: string) {
 async function litReach(guide: Page, actor: Page, target: string) {
   await guide.getByTestId(`aim-${target}`).click();
   await actor.waitForTimeout(90); // bounded beam emission must arrive before authoritative interaction
-  await actor.getByTestId(`target-${target}`).click();
+  await actor.getByTestId(`scene-${target}`).click();
 }
 
 for (const [seed, disclosure] of [
@@ -59,8 +59,8 @@ for (const [seed, disclosure] of [
       await phase(sam, "opening");
       await phase(alex, "flashlights");
       await phase(sam, "flashlights");
-      await alex.getByTestId("target-flashlight-alex").click();
-      await sam.getByTestId("target-flashlight-sam").click();
+      await alex.getByTestId("scene-flashlight-alex").click();
+      await sam.getByTestId("scene-flashlight-sam").click();
       await phase(sam, "shelf");
       await sam.locator("[data-radio]").first().click();
       await expect(alex.locator(".messages")).toContainText(
@@ -116,7 +116,7 @@ for (const [seed, disclosure] of [
         });
         await sam.setViewportSize({ width: 1440, height: 960 });
       }
-      await sam.getByTestId(`target-${shelfId}`).click();
+      await sam.getByTestId(`scene-${shelfId}`).click();
       await phase(alex, "key");
 
       if (seed === 0) {
@@ -182,7 +182,7 @@ for (const [seed, disclosure] of [
           .locator("button[data-aim]")
           .filter({ hasText: `${shapes[i]} landmark` });
         const id = await landmark.getAttribute("data-aim");
-        await sam.getByTestId(`target-${id}`).click();
+        await sam.getByTestId(`scene-${id}`).click();
         if (i < 2)
           await expect(sam.locator(".objective h2")).toContainText(
             `${i + 2}/3`,
@@ -232,11 +232,24 @@ for (const [seed, disclosure] of [
       });
       await expect(alex.getByTestId("replay")).toBeVisible();
       await alex.getByTestId("replay").click();
-      await sam.getByTestId("replay").click();
+      if (seed === 1) {
+        await sam.getByTestId("lobby").click();
+        await phase(alex, "ending");
+        await expect(alex.locator(".ending-card")).toContainText(
+          "matching vote",
+        );
+        await alex.getByTestId("lobby").click();
+      } else await sam.getByTestId("replay").click();
       await phase(alex, "lobby");
       await phase(sam, "lobby");
-      await expect(alex.locator("#app")).toHaveAttribute("data-role", "sam");
-      await expect(sam.locator("#app")).toHaveAttribute("data-role", "alex");
+      await expect(alex.locator("#app")).toHaveAttribute(
+        "data-role",
+        seed === 0 ? "sam" : "alex",
+      );
+      await expect(sam.locator("#app")).toHaveAttribute(
+        "data-role",
+        seed === 0 ? "alex" : "sam",
+      );
       const inspected = await request.get(`/api/dev/rooms/${code}`);
       const inspection = await inspected.json();
       expect(inspection.variant).toBe(1 - seed);

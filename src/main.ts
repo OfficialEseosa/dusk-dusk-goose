@@ -2,6 +2,14 @@ import { io } from "socket.io-client";
 import type { Action, Beam, Reply, Role, Snapshot } from "../shared/protocol";
 import { TITLES, quickMessages, actorCanInteract } from "./content";
 import { escapeHtml as e, renderScene } from "./scene";
+import { copyInvite } from "./clipboard";
+import {
+  readSeat,
+  rememberSeat,
+  recentSeat,
+  clearTabSeat,
+  forgetSeat,
+} from "./seat";
 import "./style.css";
 const app = document.querySelector<HTMLDivElement>("#app")!;
 const socket = io({ autoConnect: true });
@@ -20,19 +28,14 @@ let lastBeam = 0,
   progressKey = "",
   lastProgress = Date.now(),
   holding = false;
-const resumeKey = "maple-seat";
+let socketJoined = false;
 let recoveryAttempts = 0;
-const saved = () => {
-  try {
-    return JSON.parse(sessionStorage.getItem(resumeKey) ?? "null") as {
-      code: string;
-      token: string;
-      name: string;
-    } | null;
-  } catch {
-    return null;
-  }
-};
+let radioDraft = "",
+  radioPending = false;
+let inviteStatus = "",
+  inviteCopied = false,
+  invitePending = false;
+const saved = readSeat;
 function beep(frequency = 330) {
   if (muted || !audio) return;
   try {
@@ -52,15 +55,21 @@ function beep(frequency = 330) {
 function unlockAudio() {
   try {
     audio ??= new AudioContext();
-    void audio.resume();
+    void audio.resume().catch(() => {});
   } catch {
     /* optional audio */
   }
 }
-function emit(event: string, payload: unknown, after?: (reply: Reply) => void) {
+function emit(
+  event: string,
+  payload: unknown,
+  after?: (reply: Reply) => void,
+  settled?: () => void,
+) {
   socket
     .timeout(7000)
     .emit(event, payload, (timeout: Error | null, reply: Reply) => {
+      settled?.();
       if (timeout) {
         error =
           "The radio connection is slow. Your progress is saved; try again.";
@@ -71,15 +80,28 @@ function emit(event: string, payload: unknown, after?: (reply: Reply) => void) {
         error = reply?.error ?? "That action could not be completed.";
         if (
           event === "join" &&
+          (error.startsWith("No night") ||
+            error.includes("credential is not valid"))
+        ) {
+          forgetSeat(saved()?.code);
+          state = null;
+          lastRevision = -1;
+          error =
+            "This room is no longer available. Start a fresh night together.";
+        }
+        if (
+          event === "join" &&
           error.includes("already open") &&
-          recoveryAttempts < 7
+          recoveryAttempts < 12
         ) {
           recoveryAttempts++;
           setTimeout(() => {
             const seat = saved();
-            if (seat && !state && socket.connected)
+            if (seat && !socketJoined && socket.connected)
               enter("join", seat.name, seat.code, seat.token);
           }, 2000);
+          error =
+            "Rejoining your seat. Close another window using this seat, or wait for the previous connection to finish closing.";
         }
         render();
         return;
@@ -89,21 +111,40 @@ function emit(event: string, payload: unknown, after?: (reply: Reply) => void) {
     });
 }
 function action(a: Action) {
+  if (!socket.connected || !socketJoined) {
+    error = "Your radio is reconnecting. Wait a moment, then try again.";
+    render();
+    return;
+  }
   emit("action", a);
 }
 function leaveLobby() {
   emit("leave", {}, () => {
-    sessionStorage.removeItem(resumeKey);
-    localStorage.removeItem("maple-last-room");
-    state = null;
-    lastRevision = -1;
-    lastPhase = "";
-    recoveryAttempts = 0;
-    localBeam = { x: 0.5, y: 0.5, on: false };
-    remoteBeam = targetBeam = { x: 0.5, y: 0.5, on: false };
-    history.replaceState(null, "", "/");
-    render();
+    returnToTitle(false);
   });
+}
+function returnToTitle(preserveSeat: boolean) {
+  if (preserveSeat) clearTabSeat();
+  else forgetSeat(state?.code);
+  state = null;
+  socketJoined = false;
+  error = "";
+  radioDraft = "";
+  radioPending = false;
+  inviteStatus = "";
+  inviteCopied = invitePending = false;
+  lastRevision = -1;
+  lastPhase = "";
+  recoveryAttempts = 0;
+  localBeam = { x: 0.5, y: 0.5, on: false };
+  remoteBeam = targetBeam = { x: 0.5, y: 0.5, on: false };
+  history.replaceState(null, "", "/");
+  render();
+}
+function gameMenu() {
+  returnToTitle(true);
+  socket.disconnect();
+  socket.connect();
 }
 function enter(
   event: "create" | "join",
@@ -113,27 +154,26 @@ function enter(
 ) {
   emit(event, { name, code, token }, (reply) => {
     if (reply.code && reply.token) {
-      sessionStorage.setItem(
-        resumeKey,
-        JSON.stringify({ code: reply.code, token: reply.token, name }),
-      );
-      localStorage.setItem("maple-last-room", reply.code);
+      rememberSeat({ code: reply.code, token: reply.token, name });
       history.replaceState(null, "", `?room=${reply.code}`);
+      socket.emit("visibility", { visible: !document.hidden });
     }
   });
 }
 socket.on("connect", () => {
+  socketJoined = false;
   const seat = saved();
   if (seat) enter("join", seat.name, seat.code, seat.token);
   render();
   socket.emit("visibility", { visible: !document.hidden });
 });
 socket.on("disconnect", (reason) => {
+  socketJoined = false;
   render();
   if (reason === "io server disconnect" && !saved()) socket.connect();
 });
 socket.on("expired", () => {
-  sessionStorage.removeItem(resumeKey);
+  forgetSeat(state?.code ?? saved()?.code);
   state = null;
   lastRevision = -1;
   holding = false;
@@ -141,6 +181,13 @@ socket.on("expired", () => {
   render();
 });
 socket.on("snapshot", (next: Snapshot) => {
+  socketJoined = true;
+  if (state?.code !== next.code) {
+    inviteStatus = "";
+    inviteCopied = invitePending = false;
+    radioDraft = "";
+    radioPending = false;
+  }
   recoveryAttempts = 0;
   if (next.revision < lastRevision && next.code === state?.code) return;
   lastRevision = next.revision;
@@ -160,6 +207,7 @@ socket.on("snapshot", (next: Snapshot) => {
   if (lastPhase !== next.phase) {
     beep(next.phase === "ending" ? 660 : 330);
     lastPhase = next.phase;
+    window.scrollTo({ top: 0, behavior: "instant" });
   }
   render();
 });
@@ -203,11 +251,6 @@ function animation() {
   remoteBeam.x += (targetBeam.x - remoteBeam.x) * smoothing;
   remoteBeam.y += (targetBeam.y - remoteBeam.y) * smoothing;
   paintLights();
-  const opening = document.querySelector(".date-card");
-  if (state?.phase === "opening" && opening) {
-    const elapsed = Date.now() + clockOffset - state.phaseStartedAt;
-    opening.classList.toggle("dark", elapsed > 2300);
-  }
   document
     .querySelector(".radio-heading")
     ?.classList.toggle("nudge", Date.now() - lastProgress > 50000);
@@ -215,6 +258,15 @@ function animation() {
     const target = state?.targets.find((t) => t.id === el.dataset.shelfLabel);
     if (target) el.textContent = "◎ " + shelfLabel(target);
   });
+  document
+    .querySelectorAll<HTMLElement>("[data-shelf-target]")
+    .forEach((el) => {
+      const target = state?.targets.find(
+        (t) => t.id === el.dataset.shelfTarget,
+      );
+      if (target)
+        el.setAttribute("aria-label", `Interact with ${shelfLabel(target)}`);
+    });
   requestAnimationFrame(animation);
 }
 requestAnimationFrame(animation);
@@ -222,23 +274,30 @@ function button(label: string, attrs: string = "", cls = "") {
   return `<button class="${cls}" ${attrs}>${label}</button>`;
 }
 function header() {
-  return `<header><a class="wordmark" href="/">MAPLE STREET <span>SUMMER ’02</span></a><div class="header-tools"><span class="connection ${socket.connected ? "" : "offline"}">${socket.connected ? "● Radio connected" : "◌ Reconnecting…"}</span>${button(muted ? "Sound off" : "Sound on", 'id="mute" aria-label="Toggle sound"', "quiet")}</div></header>`;
+  return `<header><a class="wordmark" href="/">MAPLE STREET <span>SUMMER ’02</span></a><div class="header-tools">${state && state.phase !== "lobby" ? button("Game menu", 'id="game-menu" data-testid="game-menu"', "quiet game-menu") : ""}<span class="connection ${socket.connected ? "" : "offline"}">${socket.connected && (!state || socketJoined) ? "● Radio connected" : "◌ Reconnecting…"}</span>${button(muted ? "Sound off" : "Sound on", 'id="mute" aria-label="Toggle sound"', "quiet")}</div></header>`;
 }
 function title() {
+  const resume = recentSeat();
   const room = new URLSearchParams(location.search).get("room") ?? "";
-  return `${header()}<main class="title-screen"><div class="title-world">${renderScene(null)}<div class="title-gradient"></div></div><section class="title-copy"><p class="eyebrow">A TWO-PLAYER SUMMER-NIGHT STORY</p><h1>Last Night on<br><em>Maple Street</em></h1><p class="premise">The lights go out. Your friend is across the street.<br>One time capsule. One last night before everything changes.</p><div class="entry"><form id="create-form"><label for="create-name">What should your friend call you?</label><input id="create-name" name="name" maxlength="24" placeholder="Your name (optional)" autocomplete="nickname">${button("Start a Night <span>↗</span>", 'type="submit" data-testid="create"', "primary")}</form><form id="join-form"><label for="join-code">Already have a room?</label><div class="join-row"><input id="join-code" name="code" aria-label="Room code" maxlength="8" value="${e(room)}" placeholder="ROOM CODE" autocomplete="off" required>${button("Join a Night", 'type="submit" data-testid="join"')}</div></form></div><p class="small">Two people · Separate screens · About 10–12 minutes<br>No accounts. Use the radio, or talk together.</p></section></main>`;
+  return `${header()}<main class="title-screen"><div class="title-world">${renderScene(null)}<div class="title-gradient"></div></div><section class="title-copy"><p class="eyebrow">A TWO-PLAYER SUMMER-NIGHT STORY</p><h1>Last Night on<br><em>Maple Street</em></h1><p class="premise">The lights go out. Your friend is across the street.<br>One time capsule. One last night before everything changes.</p><div class="entry">${resume ? button(`Resume night ${e(resume.code)}`, 'id="resume-night" data-testid="resume-night"', "full") : ""}<form id="create-form"><label for="create-name">What should your friend call you?</label><input id="create-name" name="name" maxlength="24" placeholder="Your name (optional)" autocomplete="nickname">${button("Start a Night <span>↗</span>", 'type="submit" data-testid="create"', "primary")}</form><form id="join-form"><label for="join-code">Already have a room?</label><div class="join-row"><input id="join-code" name="code" aria-label="Room code" maxlength="8" value="${e(room)}" placeholder="ROOM CODE" autocomplete="off" required>${button("Join a Night", 'type="submit" data-testid="join"')}</div></form></div><p class="small">Two people · Separate screens · About 10–12 minutes<br>No accounts. Use the radio, or talk together.</p></section></main>`;
 }
 function lobby(s: Snapshot) {
-  return `${header()}<main class="lobby-screen"><div class="lobby-art">${renderScene(null)}</div><section class="lobby-copy">${button("← Back to title", 'id="leave-lobby" data-testid="leave-lobby"', "quiet lobby-back")}<p class="eyebrow">THE LAST NIGHT OF SUMMER</p><h1>Meet me at<br>the window.</h1><div class="invite"><div><span class="small">YOUR ROOM</span><strong data-testid="room-code">${e(s.code)}</strong></div>${button("Copy invite link", 'id="copy"')}</div><p>Choose a house. You see different things.<br>Help each other over the radio.</p><div class="role-list">${(
+  const waiting = s.players.find((p) => !p.connected || !p.visible);
+  const bothReady = s.players.length === 2 && s.players.every((p) => p.ready);
+  const presenceNote =
+    bothReady && waiting
+      ? `${waiting.name}${waiting.connected ? "’s game tab is hidden. Keep both game windows visible side by side, or return to the game on both devices." : "’s radio is reconnecting. The night will start automatically when they return."}`
+      : "";
+  return `${header()}<main class="lobby-screen"><div class="lobby-art">${renderScene(null)}</div><section class="lobby-copy">${button("← Back to title", 'id="leave-lobby" data-testid="leave-lobby"', "quiet lobby-back")}<p class="eyebrow">THE LAST NIGHT OF SUMMER</p><h1>Meet me at<br>the window.</h1><div class="invite"><div><span class="small">YOUR ROOM</span><strong data-testid="room-code">${e(s.code)}</strong></div>${button(inviteCopied ? "Link selected" : "Copy invite link", 'id="copy" data-testid="copy-invite"')}</div><div class="invite-share"><label for="invite-link">Invite link</label><input id="invite-link" readonly value="${e(`${location.origin}/?room=${s.code}`)}"><p id="invite-status" role="status">${e(inviteStatus || "Copy the link, or share the room code above.")}</p></div><p>Choose a house. You see different things.<br>Help each other over the radio.</p><div class="role-list">${(
     ["alex", "sam"] as Role[]
   )
     .map((role) => {
       const seat = s.players.find((p) => p.role === role);
-      return `<button data-testid="claim-${role}" data-claim="${role}" class="role ${s.you.role === role ? "selected" : ""}" ${seat && seat.id !== s.you.id ? "disabled" : ""}><span class="house-icon">${role === "alex" ? "⌂" : "⌂"}</span><span><strong>${role === "alex" ? "Corner House" : "Blue House"}</strong><small>${role === "alex" ? "Alex · The summer ritual" : "Sam · A secret to carry"}</small><small>${seat ? `${e(seat.name)} · ${seat.connected ? "connected" : "reconnecting"}${seat.ready ? " · ready" : ""}` : "Seat open"}</small></span><span>${s.you.role === role ? "✓" : "↗"}</span></button>`;
+      return `<button data-testid="claim-${role}" data-claim="${role}" class="role ${s.you.role === role ? "selected" : ""}" ${seat && seat.id !== s.you.id ? "disabled" : ""}><span class="house-icon">${role === "alex" ? "⌂" : "⌂"}</span><span><strong>${role === "alex" ? "Corner House" : "Blue House"}</strong><small>${role === "alex" ? "Alex · The summer ritual" : "Sam · A secret to carry"}</small><small>${seat ? `${e(seat.name)} · ${seat.connected ? (seat.visible ? "connected" : "tab hidden") : "reconnecting"}${seat.ready ? " · ready" : ""}` : "Seat open"}</small></span><span>${s.you.role === role ? "✓" : "↗"}</span></button>`;
     })
     .join(
       "",
-    )}</div>${button(s.you.ready ? "Ready — waiting for your friend" : "Ready for the Night", 'id="ready" data-testid="ready" ' + (!s.you.role || s.you.ready ? "disabled" : ""), "primary full")}<p class="small">${s.players.length < 2 ? "Share the invitation with your friend." : "Your night begins when both friends are ready."}</p></section></main>`;
+    )}</div>${button(s.you.ready ? (bothReady && waiting ? "Both ready — waiting for both screens" : "Ready — waiting for your friend") : "Ready for the Night", 'id="ready" data-testid="ready" ' + (!s.you.role || s.you.ready ? "disabled" : ""), "primary full")}<p class="${presenceNote ? "lobby-presence" : "small"}" data-testid="lobby-status" role="status">${presenceNote ? e(presenceNote) : s.players.length < 2 ? "Share the invitation with your friend." : "Your night begins when both friends are ready."}</p></section></main>`;
 }
 function choices(s: Snapshot) {
   if (
@@ -271,10 +330,25 @@ function choices(s: Snapshot) {
 function choice(label: string, value: string) {
   return button(label, `data-choice="${value}" data-testid="choice-${value}"`);
 }
+function sceneHotspots(s: Snapshot, canInteract: boolean) {
+  return s.targets
+    .map((t) => {
+      const interact =
+        canInteract &&
+        (s.phase !== "capsule" || t.id === `capsule-${s.you.role}`);
+      const operation = interact ? "target" : "aim";
+      const label =
+        s.phase === "flashlights"
+          ? "Pick up your flashlight"
+          : `${interact ? "Interact with" : "Aim at"} ${shelfLabel(t)}`;
+      return `<button class="hotspot" style="left:${t.x * 100}%;top:${t.y * 100}%" data-${operation}="${e(t.id)}" data-testid="scene-${e(t.id)}" ${s.phase === "shelf" && s.you.role === "sam" ? `data-shelf-target="${e(t.id)}"` : ""} aria-label="${e(label)}"><span>${interact ? "↗" : "+"}</span></button>`;
+    })
+    .join("");
+}
 function game(s: Snapshot) {
   const canInteract = actorCanInteract(s);
   const partner = s.players.find((p) => p.id !== s.you.id);
-  return `${header()}<main class="game-screen"><section class="scene-column"><div class="chapter"><span>${e(TITLES[s.phase])}</span><span>${s.you.role === "alex" ? "CORNER HOUSE / ALEX" : "BLUE HOUSE / SAM"}</span></div><div class="scene" id="scene">${renderScene(s)}<div class="scene-vignette"></div>${s.targets.map((t) => `<button class="hotspot" style="left:${t.x * 100}%;top:${t.y * 100}%" data-aim="${e(t.id)}" aria-label="Aim at ${e(t.label)}"><span>+</span></button>`).join("")}${s.phase === "opening" ? '<div class="date-card"><p>AUGUST 30, 2002</p><h2>11:52 PM.</h2><span>Maple Street. The last night of summer.</span></div>' : ""}${s.paused ? `<div class="pause-overlay"><h2>We’ll wait for each other.</h2><p>${partner && !partner.connected ? "Your friend’s radio is reconnecting." : "The night is paused while a friend is away."}</p><small>Your discoveries and choices are safe.</small></div>` : ""}${s.phase === "ending" ? `<div class="ending-card"><p class="eyebrow">THE LIGHTS CAME BACK. WE KEPT OUR PROMISE.</p><h2>Some things<br>travel with you.</h2><p>${s.disclosed ? "We said the difficult thing. Then we finished our summer together." : "We found the words under the water tower. It was never too late."}</p><span class="keepsake-symbol">${s.keepsake.toLowerCase().includes("map") ? "⌘" : s.keepsake.toLowerCase().includes("token") ? "◇" : "▧"}</span><p class="small">Recovered: ${e(s.keepsake || "our summer keepsake")}</p>${button("Swap Roles and Play Again", 'data-replay data-testid="replay"', "primary")}${button("Return to Lobby", 'data-lobby data-testid="lobby"')}<small>${s.replayVotes.length || s.lobbyVotes.length ? "Waiting for your friend’s matching vote." : "Both friends choose together."}</small></div>` : ""}</div><div class="scene-caption"><span>◌ ${hasFlashlight() ? "Your light follows your pointer. Amber light belongs to your friend." : "Moonlight is enough to find your way."}</span><span>${s.inventory.length ? e(s.inventory.join(" · ").replaceAll("-", " ")) : "Walkie-talkie / Channel 04"}</span></div><section class="objective"><p class="eyebrow">${s.phase === "ending" ? "ONE LAST SUMMER" : "YOUR NEXT MOMENT"}</p><h2>${e(s.objective)}</h2>${s.phase === "ending" ? `<p class="recovered-note">Recovered keepsake: ${e(s.keepsake)}</p>` : ""}${s.privateText ? `<p class="private-note">${e(s.privateText)}</p>` : ""}<div class="actions">${choices(s)}${s.phase === "goodbye" ? `${button(s.signals[s.you.role!] ? "Signal is held — tap to release" : "Hold your light with your friend", 'id="signal-toggle" data-testid="signal-toggle"', "primary")}${button("Press and hold signal", 'id="signal-hold"')}<span class="signal-status">${partner?.role && s.signals[partner.role] ? "Your friend is holding their signal." : "Waiting for your friend’s light…"}</span>` : ""}</div>${s.targets.length && s.phase !== "opening" ? `<div class="target-controls"><p class="small">${canInteract ? "Aim and interact are separate. Your friend may need to light the object first." : "Your friend needs your light. Select an aim point, then hold it steady."}</p><div class="anchor-list">${s.targets.map((t) => `<div class="anchor">${button(`◎ ${e(shelfLabel(t))}`, `data-aim="${e(t.id)}" data-testid="aim-${e(t.id)}" ${s.phase === "shelf" && s.you.role === "sam" ? `data-shelf-label="${e(t.id)}"` : ""}`, "aim")}${canInteract ? button("Interact", `data-target="${e(t.id)}" data-testid="target-${e(t.id)}"`, "interact") : ""}</div>`).join("")}</div></div>` : ""}</section></section><aside class="radio-panel ${radioOpen ? "" : "collapsed"}"><div class="radio-heading"><div><span class="radio-led"></span><strong>Walkie-talkie</strong><small>CHANNEL 04 · ${partner?.connected ? "FRIEND ONLINE" : "AWAITING FRIEND"}</small></div>${button(radioOpen ? "−" : "+", 'id="radio-toggle" aria-label="Toggle radio"', "quiet")}</div><div class="radio-content"><div class="messages" aria-live="polite">${
+  return `${header()}<main class="game-screen"><section class="scene-column"><div class="chapter"><span>${e(TITLES[s.phase])}</span><span>${s.you.role === "alex" ? "CORNER HOUSE / ALEX" : "BLUE HOUSE / SAM"}</span></div><div class="scene" id="scene">${renderScene(s)}<div class="scene-vignette"></div>${sceneHotspots(s, canInteract)}${s.phase === "opening" ? '<div class="date-card"><p>AUGUST 30, 2002</p><h2>11:52 PM.</h2><span>Maple Street. The last night of summer.</span></div>' : ""}${s.paused || !socketJoined ? `<div class="pause-overlay"><h2>We’ll wait for each other.</h2><p>${!socketJoined ? "Your radio is reconnecting. Wait here; your progress is safe." : partner && !partner.connected ? `${e(partner.name)} is disconnected. They can reopen the invite link to rejoin. You can also return to the game menu.` : "A game tab is hidden. Keep both game windows visible, or return on both devices."}</p><small>Your discoveries and choices are safe.</small></div>` : ""}${s.phase === "ending" ? `<div class="ending-card"><p class="eyebrow">THE LIGHTS CAME BACK. WE KEPT OUR PROMISE.</p><h2>Some things<br>travel with you.</h2><p>${s.disclosed ? "We said the difficult thing. Then we finished our summer together." : "We found the words under the water tower. It was never too late."}</p><span class="keepsake-symbol">${s.keepsake.toLowerCase().includes("map") ? "⌘" : s.keepsake.toLowerCase().includes("token") ? "◇" : "▧"}</span><p class="small">Recovered: ${e(s.keepsake || "our summer keepsake")}</p>${button("Swap Roles and Play Again", 'data-replay data-testid="replay"', "primary")}${button("Return to Lobby", 'data-lobby data-testid="lobby"')}<small>${s.replayVotes.length || s.lobbyVotes.length ? "Waiting for your friend’s matching vote." : "Both friends choose together."}</small></div>` : ""}</div><div class="scene-caption"><span>◌ ${hasFlashlight() ? "Your light follows your pointer. Amber light belongs to your friend." : "Moonlight is enough to find your way."}</span><span>${s.inventory.length ? e(s.inventory.join(" · ").replaceAll("-", " ")) : "Walkie-talkie / Channel 04"}</span></div><section class="objective"><p class="eyebrow">${s.phase === "ending" ? "ONE LAST SUMMER" : "YOUR NEXT MOMENT"}</p><h2>${e(s.objective)}</h2>${s.phase === "ending" ? `<p class="recovered-note">Recovered keepsake: ${e(s.keepsake)}</p>` : ""}${s.privateText ? `<p class="private-note">${e(s.privateText)}</p>` : ""}<div class="actions">${choices(s)}${s.phase === "goodbye" ? `${button(s.signals[s.you.role!] ? "Signal is held — tap to release" : "Hold your light with your friend", 'id="signal-toggle" data-testid="signal-toggle"', "primary")}${button("Press and hold signal", 'id="signal-hold"')}<span class="signal-status">${partner?.role && s.signals[partner.role] ? "Your friend is holding their signal." : "Waiting for your friend’s light…"}</span>` : ""}</div>${s.targets.length && s.phase !== "opening" ? `<div class="target-controls"><p class="small">${canInteract ? "Aim and interact are separate. Your friend may need to light the object first." : "Your friend needs your light. Select an aim point, then hold it steady."}</p><div class="anchor-list">${s.targets.map((t) => `<div class="anchor">${button(`◎ ${e(shelfLabel(t))}`, `data-aim="${e(t.id)}" data-testid="aim-${e(t.id)}" ${s.phase === "shelf" && s.you.role === "sam" ? `data-shelf-label="${e(t.id)}"` : ""}`, "aim")}${canInteract ? button("Interact", `data-target="${e(t.id)}" data-testid="target-${e(t.id)}"`, "interact") : ""}</div>`).join("")}</div></div>` : ""}</section></section><aside class="radio-panel ${radioOpen ? "" : "collapsed"}"><div class="radio-heading"><div><span class="radio-led"></span><strong>Walkie-talkie</strong><small>CHANNEL 04 · ${partner?.connected ? "FRIEND ONLINE" : "AWAITING FRIEND"}</small></div>${button(radioOpen ? "−" : "+", 'id="radio-toggle" aria-label="Toggle radio"', "quiet")}</div><div class="radio-content"><div class="messages" aria-live="polite">${
     s.messages
       .slice(-12)
       .map(
@@ -294,9 +368,16 @@ function game(s: Snapshot) {
 function render() {
   app.dataset.phase = state?.phase ?? "title";
   app.dataset.role = state?.you.role ?? "";
-  const active = document.activeElement as HTMLInputElement | null;
+  const active = document.activeElement as HTMLElement | null;
+  const focusKey = active?.id
+    ? `#${CSS.escape(active.id)}`
+    : active?.dataset.testid
+      ? `[data-testid="${CSS.escape(active.dataset.testid)}"]`
+      : active?.dataset.radio
+        ? `[data-radio="${CSS.escape(active.dataset.radio)}"]`
+        : null;
   const savedInput =
-    active?.id === "radio-text"
+    active instanceof HTMLInputElement
       ? {
           text: active.value,
           start: active.selectionStart,
@@ -305,12 +386,16 @@ function render() {
       : null;
   app.innerHTML = `${state ? (state.phase === "lobby" ? lobby(state) : game(state)) : title()}${error ? `<div class="toast" role="alert">${e(error)}${button("Dismiss", 'id="dismiss"', "quiet")}${!state ? button("Start fresh", 'id="fresh"', "quiet") + button("Retry connection", 'id="retry"', "quiet") : ""}</div>` : ""}<footer>LAST NIGHT ON MAPLE STREET <span>A PLAYABLE GRAYBOX / ORIGINAL TEMPORARY ART</span></footer>`;
   bind();
-  if (savedInput) {
-    const input = document.querySelector<HTMLInputElement>("#radio-text");
-    if (input) {
-      input.value = savedInput.text;
-      input.focus();
-      input.setSelectionRange(savedInput.start, savedInput.end);
+  const draftInput = document.querySelector<HTMLInputElement>("#radio-text");
+  if (draftInput) draftInput.value = radioDraft;
+  const restored = focusKey
+    ? document.querySelector<HTMLElement>(focusKey)
+    : null;
+  if (restored) {
+    restored.focus({ preventScroll: true });
+    if (savedInput && restored instanceof HTMLInputElement) {
+      if (restored.id !== "radio-text") restored.value = savedInput.text;
+      restored.setSelectionRange(savedInput.start, savedInput.end);
     }
   }
   const messages = document.querySelector(".messages");
@@ -318,15 +403,27 @@ function render() {
   paintLights();
 }
 function bind() {
+  document.querySelector("#game-menu")?.addEventListener("click", gameMenu);
+  document.querySelector("#resume-night")?.addEventListener("click", () => {
+    const seat = recentSeat();
+    if (seat) {
+      // Explicit resume must retain its credential through a rejected/slow join.
+      rememberSeat(seat);
+      enter("join", seat.name, seat.code, seat.token);
+    }
+  });
   document.querySelector("#leave-lobby")?.addEventListener("click", leaveLobby);
   document.querySelector(".wordmark")?.addEventListener("click", (ev) => {
     if (state?.phase === "lobby") {
       ev.preventDefault();
       leaveLobby();
+    } else if (state) {
+      ev.preventDefault();
+      gameMenu();
     }
   });
   document.querySelector("#fresh")?.addEventListener("click", () => {
-    sessionStorage.removeItem(resumeKey);
+    forgetSeat(saved()?.code);
     recoveryAttempts = 0;
     if (!socket.connected) socket.connect();
     error = "";
@@ -382,15 +479,32 @@ function bind() {
     action({ type: "ready" });
   });
   document.querySelector("#copy")?.addEventListener("click", async () => {
-    const link = `${location.origin}/?room=${state!.code}`;
-    try {
-      await navigator.clipboard.writeText(link);
-      error = "Invite link copied.";
-    } catch {
-      error = `Share this invitation: ${link}`;
+    if (invitePending) return;
+    const input = document.querySelector<HTMLInputElement>("#invite-link")!;
+    const room = state?.code;
+    invitePending = true;
+    const copyButton = document.querySelector<HTMLButtonElement>("#copy");
+    if (copyButton) {
+      copyButton.textContent = "Copying…";
+      copyButton.disabled = true;
     }
+    const copied = await copyInvite(input);
+    if (state?.code !== room || state?.phase !== "lobby") return;
+    invitePending = false;
+    inviteCopied = copied;
+    inviteStatus = copied
+      ? "Copy requested. If pasting does not work in this browser, press Ctrl+C, Cmd+C, or use your phone’s Copy menu. The link is selected."
+      : "Clipboard access is blocked here. The link is selected; copy it with Ctrl+C, Cmd+C, or your phone’s Copy menu.";
     render();
+    const selected = document.querySelector<HTMLInputElement>("#invite-link");
+    selected?.focus();
+    selected?.select();
   });
+  document
+    .querySelector<HTMLInputElement>("#invite-link")
+    ?.addEventListener("click", (ev) =>
+      (ev.currentTarget as HTMLInputElement).select(),
+    );
   document.querySelectorAll<HTMLElement>("[data-aim]").forEach(
     (el) =>
       (el.onclick = () => {
@@ -417,13 +531,37 @@ function bind() {
     .forEach(
       (el) => (el.onclick = () => emit("radio", { text: el.dataset.radio })),
     );
+  document
+    .querySelector<HTMLInputElement>("#radio-text")
+    ?.addEventListener("input", (ev) => {
+      radioDraft = (ev.currentTarget as HTMLInputElement).value;
+    });
   document.querySelector("#radio-form")?.addEventListener("submit", (ev) => {
     ev.preventDefault();
     const input = document.querySelector<HTMLInputElement>("#radio-text")!;
-    if (input.value.trim())
-      emit("radio", { text: input.value.trim() }, () => {
-        input.value = "";
-      });
+    const submitted = input.value;
+    if (!submitted.trim() || radioPending) return;
+    if (!socket.connected || !socketJoined) {
+      error = "Your radio is reconnecting. Your draft is saved.";
+      render();
+      return;
+    }
+    radioPending = true;
+    emit(
+      "radio",
+      { text: submitted.trim() },
+      () => {
+        if (radioDraft === submitted) {
+          radioDraft = "";
+          const liveInput =
+            document.querySelector<HTMLInputElement>("#radio-text");
+          if (liveInput) liveInput.value = "";
+        }
+      },
+      () => {
+        radioPending = false;
+      },
+    );
   });
   document.querySelector("#radio-toggle")?.addEventListener("click", () => {
     radioOpen = !radioOpen;
