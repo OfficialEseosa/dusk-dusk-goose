@@ -1,0 +1,11 @@
+import { defineConfig } from "vite";
+export default defineConfig({
+  server: {
+    watch: { ignored: ["**/test-results/**", "**/playwright-report/**"] },
+    proxy: {
+      "/socket.io": { target: "http://127.0.0.1:3001", ws: true },
+      "/api": "http://127.0.0.1:3001",
+    },
+  },
+  build: { outDir: "dist" },
+});
