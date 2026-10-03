@@ -27,6 +27,12 @@ export interface Beam {
   y: number;
   on: boolean;
 }
+/** Coordinates are local to the player's own house, in metres/radians. */
+export interface PlayerPose {
+  x: number;
+  z: number;
+  yaw: number;
+}
 export interface RadioMessage {
   id: number;
   kind: "player" | "story" | "system";
@@ -49,6 +55,7 @@ export interface Snapshot {
   you: Seat;
   players: Seat[];
   beams: Record<Role, Beam>;
+  poses?: Record<Role, PlayerPose>;
   inventory: string[];
   passageStep: number;
   mistakes: number;

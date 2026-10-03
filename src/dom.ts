@@ -64,7 +64,8 @@ function patchNode(current: Node, desired: Node) {
       desired instanceof HTMLInputElement
     )
       if (current.value !== desired.value) current.value = desired.value;
-    patchChildren(current, desired);
+    if (!current.hasAttribute("data-dom-preserve"))
+      patchChildren(current, desired);
   } else if (current.nodeValue !== desired.nodeValue) {
     current.nodeValue = desired.nodeValue;
   }

@@ -1035,3 +1035,83 @@ header {
     max-width: 68px;
   }
 }
+#house-world {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+#house-world canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  outline: none;
+}
+#house-world canvas:focus-visible {
+  outline: 2px solid #efc57e;
+  outline-offset: -3px;
+}
+.house-scene .scene-vignette {
+  pointer-events: none;
+}
+.world-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  margin: 0;
+  color: #fff1d8;
+  font-size: 12px;
+  background: #10202bd9;
+  padding: 8px 10px;
+  pointer-events: none;
+}
+.world-pickup {
+  position: absolute;
+  bottom: 62px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ebc786;
+  color: #182833;
+  min-height: 44px;
+}
+.world-pad {
+  position: absolute;
+  bottom: 54px;
+  left: 12px;
+  display: flex;
+  gap: 4px;
+}
+.world-pad button {
+  min-width: 40px;
+  min-height: 44px;
+  background: #172d3cdd;
+  color: #ffe1ae;
+  padding: 6px;
+  touch-action: none;
+}
+.house-scene .scene-hotspot {
+  z-index: 3;
+}
+.house-scene .hotspot {
+  z-index: 3;
+  left: auto !important;
+  top: auto !important;
+  right: 12px;
+  bottom: 12px;
+  transform: none;
+  width: auto;
+  border-radius: 6px;
+  padding: 0 10px;
+  background: #172d3cdd;
+}
+.house-scene .hotspot span {
+  font-size: 12px;
+}
+.house-scene .hotspot span::after {
+  content: " Flashlight shortcut";
+}
+.house-scene .scene-objective {
+  z-index: 3;
+  pointer-events: none;
+}

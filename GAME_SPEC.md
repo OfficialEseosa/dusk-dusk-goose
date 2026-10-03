@@ -311,3 +311,7 @@ Sources reviewed during concept assessment:
 - Original idea: C:/Users/rapha/Downloads/last-night-on-maple-street-brief.md
 - Supplied rules: C:/Users/rapha/Downloads/[AI_Skills_Studio_Challenge]_Contest_Official_Rules.pdf
 - Public mission: https://joinhandshake.com/learn/create-a-multiplayer-game-8d7d59b5/
+
+## Visual direction update — October 3
+
+The user has chosen actual first-person 3D exploration, inspired by the experience of walking around a house and seeing a friend through a window. This supersedes the earlier painted 2.5D preference. Keep the cooperative story and authoritative progression while redesigning environments incrementally. The first implementation covers the opening bedrooms with temporary procedural geometry, movement, collision, neighbor presence, and flashlight pickup; the later illustrated locations remain playable pending conversion. This is a visual prototype, not a claim that the whole house or every location is already modeled.

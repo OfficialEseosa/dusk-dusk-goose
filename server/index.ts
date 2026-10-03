@@ -5,11 +5,36 @@ import { fileURLToPath } from "node:url";
 import { randomInt } from "node:crypto";
 import { Server } from "socket.io";
 import { GameRoom, type Player } from "./game.js";
-import type { Action, Beam, Reply } from "../shared/protocol.js";
+import type {
+  Action,
+  Beam,
+  PlayerPose,
+  Reply,
+  Role,
+} from "../shared/protocol.js";
 
 export function createGameServer() {
   const rooms = new Map<string, GameRoom>();
   const clients = new Map<string, { room: GameRoom; player: Player }>();
+  // Visual movement is independent of story revisions and survives a seat handoff.
+  const worldPoses = new Map<string, Record<Role, PlayerPose>>();
+  const poseTimes = new Map<string, number>();
+  function posesFor(room: GameRoom) {
+    let poses = worldPoses.get(room.code);
+    if (!poses) {
+      poses = {
+        alex: { x: 0, z: 1.5, yaw: 0 },
+        sam: { x: 0, z: 1.5, yaw: 0 },
+      };
+      worldPoses.set(room.code, poses);
+    }
+    return poses;
+  }
+  function forgetWorld(code: string) {
+    worldPoses.delete(code);
+    poseTimes.delete(`${code}:alex`);
+    poseTimes.delete(`${code}:sam`);
+  }
   const root = resolve(fileURLToPath(new URL("../dist/", import.meta.url)));
   const development = process.env.NODE_ENV !== "production";
   const http = createServer(async (req, res) => {
@@ -109,7 +134,11 @@ export function createGameServer() {
   });
   function broadcast(room: GameRoom) {
     for (const p of room.players)
-      if (p.socketId) io.to(p.socketId).emit("snapshot", room.snapshot(p));
+      if (p.socketId)
+        io.to(p.socketId).emit("snapshot", {
+          ...room.snapshot(p),
+          poses: posesFor(room),
+        });
   }
   function cleanCode(code: unknown) {
     return typeof code === "string" ? code.trim().toUpperCase() : "";
@@ -128,6 +157,7 @@ export function createGameServer() {
   io.on("connection", (socket) => {
     let arrivals: number[] = [];
     let beamAt = 0;
+    let poseAt = 0;
     const execute = (ack: unknown, fn: () => Reply | void) => {
       try {
         const now = Date.now();
@@ -166,8 +196,10 @@ export function createGameServer() {
         });
         c.room.clearSignals();
         c.room.changed();
-        if (c.room.players.length === 0) rooms.delete(c.room.code);
-        else broadcast(c.room);
+        if (c.room.players.length === 0) {
+          rooms.delete(c.room.code);
+          forgetWorld(c.room.code);
+        } else broadcast(c.room);
       }),
     );
     socket.on("create", (data: unknown, ack: unknown) =>
@@ -258,6 +290,46 @@ export function createGameServer() {
         /* Ephemeral invalid input has no state effect. */
       }
     });
+    socket.on("pose", (pose: PlayerPose) => {
+      try {
+        const now = Date.now();
+        if (now - poseAt < 40) return;
+        poseAt = now;
+        if (
+          !pose ||
+          !Number.isFinite(pose.x) ||
+          !Number.isFinite(pose.z) ||
+          !Number.isFinite(pose.yaw) ||
+          Math.abs(pose.x) > 4 ||
+          Math.abs(pose.z) > 3
+        )
+          return;
+        const { room, player } = member();
+        if (!player.role || !player.connected || !player.visible) return;
+        const poses = posesFor(room);
+        const previous = poses[player.role];
+        const key = `${room.code}:${player.role}`;
+        const previousAt = poseTimes.get(key) ?? now - 100;
+        // Allow normal frame/network jitter, but never a whole-house teleport.
+        const distance = Math.hypot(pose.x - previous.x, pose.z - previous.z);
+        const allowance = Math.min(0.5, (now - previousAt) / 1000) * 6 + 0.35;
+        if (distance > allowance) return;
+        const accepted = {
+          x: pose.x,
+          z: pose.z,
+          yaw: Math.atan2(Math.sin(pose.yaw), Math.cos(pose.yaw)),
+        };
+        poses[player.role] = accepted;
+        poseTimes.set(key, now);
+        socket.to(room.code).emit("pose", {
+          role: player.role,
+          pose: accepted,
+          serverTime: now,
+        });
+      } catch {
+        /* Invalid or unauthenticated movement has no state effect. */
+      }
+    });
     socket.on("visibility", (data: { visible?: unknown }) =>
       execute(undefined, () => {
         if (typeof data?.visible !== "boolean") return;
@@ -308,6 +380,7 @@ export function createGameServer() {
         now - room.touchedAt > 30 * 60 * 1000
       ) {
         rooms.delete(code);
+        forgetWorld(code);
       } else if (now - room.createdAt > 12 * 60 * 60 * 1000) {
         for (const p of room.players)
           if (p.socketId) {
@@ -317,6 +390,7 @@ export function createGameServer() {
             io.sockets.sockets.get(p.socketId)?.disconnect(true);
           }
         rooms.delete(code);
+        forgetWorld(code);
       }
     }
   }, 100);

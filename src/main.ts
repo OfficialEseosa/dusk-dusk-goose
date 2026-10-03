@@ -4,6 +4,12 @@ import { TITLES, quickMessages, actorCanInteract } from "./content";
 import { escapeHtml as e, renderScene } from "./scene";
 import { copyInvite } from "./clipboard";
 import { patchDom } from "./dom";
+import { HouseWorld } from "./world/house";
+let houseWorld: HouseWorld | null = null;
+let worldFailed = false;
+function housePhase(s: Snapshot) {
+  return !worldFailed && ["opening", "flashlights"].includes(s.phase);
+}
 import {
   readSeat,
   rememberSeat,
@@ -251,8 +257,14 @@ socket.on("snapshot", (next: Snapshot) => {
   }
   render();
 });
+socket.on(
+  "pose",
+  (packet: { role: Role; pose: import("../shared/protocol").PlayerPose }) =>
+    houseWorld?.receive(packet.role, packet.pose),
+);
 socket.on("beam", (packet: { role: Role; beam: Beam }) => {
   if (packet.role !== state?.you.role) targetBeam = packet.beam;
+  houseWorld?.receiveBeam(packet.role, packet.beam);
 });
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) releaseHold();
@@ -394,7 +406,7 @@ function sceneActions(
 function game(s: Snapshot) {
   const canInteract = actorCanInteract(s);
   const partner = s.players.find((p) => p.id !== s.you.id);
-  return `${header()}<main class="game-screen"><section class="scene-column"><div class="chapter"><span>${e(TITLES[s.phase])}</span><span>${s.you.role === "alex" ? "CORNER HOUSE / ALEX" : "BLUE HOUSE / SAM"}</span></div><div class="scene" id="scene">${renderScene(s)}<div class="scene-vignette"></div>${sceneHotspots(s, canInteract)}<p class="scene-objective">${e(s.objective)}</p>${sceneActions(s, partner)}${s.phase === "opening" ? '<div class="date-card"><p>AUGUST 30, 2002</p><h2>11:52 PM.</h2><span>Maple Street. The last night of summer.</span></div>' : ""}${s.paused || !socketJoined ? `<div class="pause-overlay"><h2>We’ll wait for each other.</h2><p>${!socketJoined ? "Your radio is reconnecting. Wait here; your progress is safe." : partner && !partner.connected ? `${e(partner.name)} is disconnected. They can reopen the invite link to rejoin. You can also return to the game menu.` : "A game tab is hidden. Keep both game windows visible, or return on both devices."}</p><small>Your discoveries and choices are safe.</small>${button("Leave this night", 'id="leave-night" data-testid="leave-night"', "quiet")}</div>` : ""}${s.phase === "ending" ? `<div class="ending-card"><p class="eyebrow">THE LIGHTS CAME BACK. WE KEPT OUR PROMISE.</p><h2>Some things<br>travel with you.</h2><p>${s.disclosed ? "We said the difficult thing. Then we finished our summer together." : "We found the words under the water tower. It was never too late."}</p><span class="keepsake-symbol">${s.keepsake.toLowerCase().includes("map") ? "⌘" : s.keepsake.toLowerCase().includes("token") ? "◇" : "▧"}</span><p class="small">Recovered: ${e(s.keepsake || "our summer keepsake")}</p>${button("Swap Roles and Play Again", 'data-replay data-testid="replay"', "primary")}${button("Return to Lobby", 'data-lobby data-testid="lobby"')}<small>${s.replayVotes.length || s.lobbyVotes.length ? "Waiting for your friend’s matching vote." : "Both friends choose together."}</small></div>` : ""}</div><div class="scene-caption"><span>◌ ${hasFlashlight() ? "Your light follows your pointer. Amber light belongs to your friend." : "Moonlight is enough to find your way."}</span><span>${s.inventory.length ? e(s.inventory.join(" · ").replaceAll("-", " ")) : "Walkie-talkie / Channel 04"}</span></div><section class="objective"><p class="eyebrow">${s.phase === "ending" ? "ONE LAST SUMMER" : "YOUR NEXT MOMENT"}</p><h2>${e(s.objective)}</h2>${s.phase === "ending" ? `<p class="recovered-note">Recovered keepsake: ${e(s.keepsake)}</p>` : ""}${s.privateText ? `<p class="private-note">${e(s.privateText)}</p>` : ""}${s.targets.length && s.phase !== "opening" ? `<div class="target-controls"><p class="small">${canInteract ? "Aim and interact are separate. Your friend may need to light the object first." : "Your friend needs your light. Select an aim point, then hold it steady."}</p><div class="anchor-list">${s.targets.map((t) => `<div class="anchor">${button(`◎ ${e(shelfLabel(t))}`, `data-aim="${e(t.id)}" data-testid="aim-${e(t.id)}" ${s.phase === "shelf" && s.you.role === "sam" ? `data-shelf-label="${e(t.id)}"` : ""}`, "aim")}${canInteract ? button("Interact", `data-target="${e(t.id)}" data-testid="target-${e(t.id)}"`, "interact") : ""}</div>`).join("")}</div></div>` : ""}</section></section><aside class="radio-panel ${radioOpen ? "" : "collapsed"}"><div class="radio-heading"><div><span class="radio-led"></span><strong>Walkie-talkie</strong><small>CHANNEL 04 · ${partner?.connected ? (partner.visible ? "FRIEND ONLINE" : "FRIEND AWAY") : "AWAITING FRIEND"}</small></div>${button(radioOpen ? "−" : "+", 'id="radio-toggle" aria-label="Toggle radio"', "quiet")}</div><div class="radio-content"><div class="messages" aria-live="polite">${
+  return `${header()}<main class="game-screen"><section class="scene-column"><div class="chapter"><span>${e(TITLES[s.phase])}</span><span>${s.you.role === "alex" ? "CORNER HOUSE / ALEX" : "BLUE HOUSE / SAM"}</span></div><div class="scene ${housePhase(s) ? "house-scene" : ""}" id="scene">${housePhase(s) ? '<div id="house-world" data-dom-preserve="true"></div>' : renderScene(s)}<div class="scene-vignette"></div>${sceneHotspots(s, canInteract)}<p class="scene-objective">${e(s.objective)}</p>${sceneActions(s, partner)}${s.phase === "opening" ? '<div class="date-card"><p>AUGUST 30, 2002</p><h2>11:52 PM.</h2><span>Maple Street. The last night of summer.</span></div>' : ""}${s.paused || !socketJoined ? `<div class="pause-overlay"><h2>We’ll wait for each other.</h2><p>${!socketJoined ? "Your radio is reconnecting. Wait here; your progress is safe." : partner && !partner.connected ? `${e(partner.name)} is disconnected. They can reopen the invite link to rejoin. You can also return to the game menu.` : "A game tab is hidden. Keep both game windows visible, or return on both devices."}</p><small>Your discoveries and choices are safe.</small>${button("Leave this night", 'id="leave-night" data-testid="leave-night"', "quiet")}</div>` : ""}${s.phase === "ending" ? `<div class="ending-card"><p class="eyebrow">THE LIGHTS CAME BACK. WE KEPT OUR PROMISE.</p><h2>Some things<br>travel with you.</h2><p>${s.disclosed ? "We said the difficult thing. Then we finished our summer together." : "We found the words under the water tower. It was never too late."}</p><span class="keepsake-symbol">${s.keepsake.toLowerCase().includes("map") ? "⌘" : s.keepsake.toLowerCase().includes("token") ? "◇" : "▧"}</span><p class="small">Recovered: ${e(s.keepsake || "our summer keepsake")}</p>${button("Swap Roles and Play Again", 'data-replay data-testid="replay"', "primary")}${button("Return to Lobby", 'data-lobby data-testid="lobby"')}<small>${s.replayVotes.length || s.lobbyVotes.length ? "Waiting for your friend’s matching vote." : "Both friends choose together."}</small></div>` : ""}</div><div class="scene-caption"><span>◌ ${hasFlashlight() ? "Your light follows your pointer. Amber light belongs to your friend." : "Moonlight is enough to find your way."}</span><span>${s.inventory.length ? e(s.inventory.join(" · ").replaceAll("-", " ")) : "Walkie-talkie / Channel 04"}</span></div><section class="objective"><p class="eyebrow">${s.phase === "ending" ? "ONE LAST SUMMER" : "YOUR NEXT MOMENT"}</p><h2>${e(s.objective)}</h2>${s.phase === "ending" ? `<p class="recovered-note">Recovered keepsake: ${e(s.keepsake)}</p>` : ""}${s.privateText ? `<p class="private-note">${e(s.privateText)}</p>` : ""}${s.targets.length && s.phase !== "opening" ? `<div class="target-controls"><p class="small">${canInteract ? "Aim and interact are separate. Your friend may need to light the object first." : "Your friend needs your light. Select an aim point, then hold it steady."}</p><div class="anchor-list">${s.targets.map((t) => `<div class="anchor">${button(`◎ ${e(shelfLabel(t))}`, `data-aim="${e(t.id)}" data-testid="aim-${e(t.id)}" ${s.phase === "shelf" && s.you.role === "sam" ? `data-shelf-label="${e(t.id)}"` : ""}`, "aim")}${canInteract ? button("Interact", `data-target="${e(t.id)}" data-testid="target-${e(t.id)}"`, "interact") : ""}</div>`).join("")}</div></div>` : ""}</section></section><aside class="radio-panel ${radioOpen ? "" : "collapsed"}"><div class="radio-heading"><div><span class="radio-led"></span><strong>Walkie-talkie</strong><small>CHANNEL 04 · ${partner?.connected ? (partner.visible ? "FRIEND ONLINE" : "FRIEND AWAY") : "AWAITING FRIEND"}</small></div>${button(radioOpen ? "−" : "+", 'id="radio-toggle" aria-label="Toggle radio"', "quiet")}</div><div class="radio-content"><div class="messages" aria-live="polite">${
     s.messages
       .slice(-12)
       .map(
@@ -434,6 +446,33 @@ function render() {
     app,
     `${state ? (state.phase === "lobby" ? lobby(state) : game(state)) : title()}${error ? `<div class="toast" role="alert">${e(error)}${button("Dismiss", 'id="dismiss"', "quiet")}${!state ? button("Start fresh", 'id="fresh"', "quiet") + button("Retry connection", 'id="retry"', "quiet") : ""}</div>` : ""}<footer>LAST NIGHT ON MAPLE STREET <span>A PLAYABLE GRAYBOX / ORIGINAL TEMPORARY ART</span></footer>`,
   );
+  const worldHost = document.querySelector<HTMLElement>("#house-world");
+  if (!worldHost && houseWorld) {
+    houseWorld.dispose();
+    houseWorld = null;
+  }
+  if (worldHost && state) {
+    try {
+      if (!houseWorld)
+        houseWorld = new HouseWorld(
+          worldHost,
+          state,
+          (pose) => {
+            if (socketJoined) socket.emit("pose", pose);
+          },
+          (id) => action({ type: "interact", target: id }),
+          (x, y) => aim(x, y),
+        );
+      houseWorld.update({ ...state, paused: state.paused || !socketJoined });
+    } catch (failure) {
+      console.warn("3D unavailable; using illustrated scene", failure);
+      houseWorld?.dispose();
+      houseWorld = null;
+      worldFailed = true;
+      render();
+      return;
+    }
+  }
   bind();
   const draftInput = document.querySelector<HTMLInputElement>("#radio-text");
   if (draftInput && draftInput !== active && draftInput.value !== radioDraft)
@@ -659,6 +698,7 @@ function bind() {
     const scene = target.closest<HTMLElement>("#scene");
     if (
       !scene ||
+      !!target.closest("#house-world") ||
       target.closest("button") ||
       (ev.pointerType === "touch" && !ev.buttons)
     )

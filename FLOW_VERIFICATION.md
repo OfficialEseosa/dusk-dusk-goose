@@ -1,10 +1,10 @@
 # Flow verification — October 3, 2026
 
-The functional milestone precedes the screen-by-screen painted 2.5D redesign. The current scenes, lighting and synthesized audio remain temporary.
+The functional milestone supports an incremental first-person 3D redesign, replacing the earlier painted 2.5D direction. The current scenes, lighting and synthesized audio remain temporary.
 
 The October 3 audit follow-up replaces screen-wide redraws with stable DOM updates, permits hidden-tab play, and immediately transfers authenticated reconnects. See [AUDIT_FIXES.md](AUDIT_FIXES.md) for addressed findings and remaining work. Both completion paths use scene targets directly.
 
-Final results: `npm run build` passed, `npm test` passed all **11** rules/real Socket.IO tests, and `npm run test:e2e` passed all **18** Chromium browser tests in **2.1 minutes**. The final browser run was sequential with no concurrent source changes or competing artifact writers. A preceding overlapping run collided in Playwright's shared trace directory; the sequential rerun resolved that test-runner failure.
+3D prototype results: `npm run build` passed, `npm test` passed all **12** rules/real Socket.IO tests, and `npm run test:e2e` passed all **19** Chromium browser tests in **2.9 minutes**. After review fixes for offline movement, interrupted dragging, and live neighbor beams, all six targeted world/recovery browser tests passed again. The final browser run was sequential with no concurrent source changes or competing artifact writers. A preceding overlapping run collided in Playwright's shared trace directory; the sequential rerun resolved that test-runner failure.
 
 ## Reproduce
 
@@ -41,3 +41,9 @@ Visibility is explicitly emulated in headless Chromium because independent conte
 - No solo companion is included in the specified two-player skeleton. No public deployment or service purchase was performed.
 
 Next: finish the remaining rules/hint and production-runtime audit findings before the painted 2.5D visual pass. Its reference scene remains the reciprocal garage-window puzzle.
+
+## Opening house prototype
+
+Two independent Chromium contexts rendered real WebGL bedrooms and sent authenticated movement through Socket.IO. The new test walks to the bedside table, observes the peer position, refreshes at the retained position, checks wall bounds, picks up both flashlights with E/the nearby prompt, and reaches the existing garage puzzle. It also checks that a partner snapshot preserves the canvas and that movement freezes while the local connection is offline. A separate transport test rejects invalid, unauthenticated, hidden, and excessive movement and retains the accepted position across credential replacement.
+
+Only opening/flashlights currently use 3D. Each player has one walkable bedroom with procedural furniture and a neighbor avatar; later locations remain illustrated. Desktop WebGL and emulated mobile layout are covered; physical touch controls, low-end GPU performance, final assets, connected house rooms, and complete 3D conversion remain to be built. The production bundle currently produces Vite's size warning (about 614 KB uncompressed, 163 KB gzip); lazy-loading the 3D renderer is a later optimization.
