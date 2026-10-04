@@ -1,0 +1,9 @@
+
+Running 4 tests using 1 worker
+
+  ok 1 tests\match.spec.ts:24:1 › solo completes three rounds, refreshes both score screens, remembers best and replays (37.3s)
+  ok 2 tests\match.spec.ts:38:1 › two separate phone and laptop sessions finish four alternating rounds with shared scores and replay (34.1s)
+  ok 3 tests\match.spec.ts:47:1 › friend joins solo between rounds, gets a fresh human cycle, and departure does not stall it (23.4s)
+  ok 4 tests\match.spec.ts:54:1 › six-player scorecards fit phone and laptop with long names and persistent controls (50.9s)
+
+  4 passed (2.5m)

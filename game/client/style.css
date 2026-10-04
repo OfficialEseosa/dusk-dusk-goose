@@ -481,3 +481,22 @@ h1 {
 #clue-choices {position:absolute;bottom:64px;left:50%;transform:translateX(-50%);display:flex;gap:5px;width:calc(100% - 330px);max-width:540px;}
 #clue-choices button {flex:1;min-width:0;min-height:66px;padding:6px;background:#182f3cee;border:1px solid #c8b385;border-radius:8px;color:#ffdfaa;font-size:16px;line-height:1.15;}
 #clue-choices[hidden],#clue-transmission[hidden] {display:none;}
+
+#match-panel {position:absolute;top:62px;bottom:max(12px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(580px,calc(100% - 32px));padding:14px 20px;background:#0b1c2bf5;border:1px solid #9c8c69;border-radius:14px;color:#f1e5ca;display:flex;flex-direction:column;gap:8px;font-size:16px;box-shadow:0 8px 40px #0008;}
+#match-panel[hidden],#match-panel [hidden] {display:none;}
+.match-heading {display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
+#match-title {font-family:Fraunces,serif;font-size:24px;line-height:1.15;margin:0;}
+#match-rounds {white-space:nowrap;}
+#match-panel p {margin:0;line-height:1.25;}
+#match-announcement:empty,#solo-best:empty {display:none;}
+#match-announcement {color:#f2c887;}
+#match-scores {list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin:0;padding:0;flex:1;align-content:center;}
+#match-scores li {display:flex;align-items:center;gap:8px;min-width:0;min-height:30px;border-bottom:1px solid #465463;padding:4px 0;}
+.score-name {flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.score-earned {color:#b9ccbb;}.score-total {font-variant-numeric:tabular-nums;font-size:20px;}.winner .score-name {color:#ffd38e;}
+.match-actions {display:flex;justify-content:center;gap:10px;flex-shrink:0;}.match-actions button {font-size:16px;min-height:44px;padding:8px 16px;}
+.match-actions .next-round {position:static;transform:none;background:#bca673;}
+#play-again {background:#bca673;color:#10202a;}#match-countdown {text-align:center;}
+.showing-scores #move-stick {visibility:hidden;pointer-events:none;}
+@media(max-height:400px){#match-panel {padding:10px 16px;gap:6px;}#match-title {font-size:22px;}#match-scores {gap:3px 12px;}#match-scores li {padding:2px 0;min-height:28px;}}
+
+#match-banner {position:absolute;top:99px;left:50%;transform:translateX(-50%);max-width:calc(100% - 32px);margin:0;padding:8px 12px;border-radius:8px;background:#10232ded;color:#ffdfaa;text-align:center;font-size:16px;pointer-events:none;}#match-banner[hidden]{display:none;}

@@ -24,7 +24,7 @@ async function setup(roundDurations: Parameters<typeof createGameServer>[0]['rou
     await new Promise<void>(resolve => socket.once('open', resolve)); let sequence = 0;
     async function request(body: Omit<ClientRequest, 'id'>) {
       const current = [...messages].reverse().find(m => m.type === 'room');
-      const epoch = ['pickup','bury','search_begin','search_cancel','search_complete'].includes(body.type) && current?.type === 'room' ? current.room.round?.number : undefined;
+      const epoch = ['pickup','bury','disturb','search_begin','search_cancel','search_complete'].includes(body.type) && current?.type === 'room' ? current.room.round?.number : undefined;
       const id = String(++sequence); socket.send(JSON.stringify({ roundNumber: epoch, ...body, id }));
       for (let i = 0; i < 400; i++) { const message = messages.find(m => m.type === 'result' && m.id === id); if (message?.type === 'result') return message; await wait(5); }
       throw new Error('No response: ' + body.type);
@@ -56,12 +56,33 @@ test('human burial, private projection, full server hold, wrong cooldown, one re
   try {
     const a = await connect(), b = await connect(), c = await create(a, 'Alex');
     const joined = await b.request({ type: 'join', name: 'Sam', code: c.room.code }); assert.ok(joined.ok && joined.seat);
+    const otherSeeker = await connect(), joinedOther = await otherSeeker.request({ type: 'join', name: 'Lee', code: c.room.code }); assert.ok(joinedOther.ok && joinedOther.seat);
     const started = await a.request({ type: 'start' }); assert.ok(started.ok && started.room?.round?.hiderId === c.seat.playerId);
     await until(() => b.room().round?.phase === 'hiding', 'seeker hiding-phase projection');
     assert.equal(b.room().players.some(p => p.id === c.seat.playerId), false);
     assert.equal((await b.request({ type: 'bury', spotId: HIDING_SPOTS[8].id })).ok, false);
     await atSpot(a, c.seat.playerId); assert.ok((await a.request({ type: 'bury', spotId: HIDING_SPOTS[8].id })).ok);
     await until(() => b.room().round?.phase === 'seeking', 'hiding timer to start seeking', 15_000);
+    // Add a decoy after seeking begins, then inspect repeated projections. A
+    // newly appended decoy must not leave the burial at a privileged list index.
+    const otherPose = otherSeeker.room().players.find(p => p.id === joinedOther.seat!.playerId)!;
+    otherSeeker.socket.send(JSON.stringify({ id: 'turn-away', type: 'move', x: otherPose.x, z: otherPose.z, facing: 0, seq: otherPose.seq + 1 }));
+    await until(() => otherSeeker.room().players.find(p => p.id === joinedOther.seat!.playerId)!.seq > otherPose.seq, 'Other seeker turns away');
+    const seekerPose = b.room().players.find(p => p.id === joined.seat!.playerId)!;
+    b.socket.send(JSON.stringify({ id: 'turn-away', type: 'move', x: seekerPose.x, z: seekerPose.z, facing: 0, seq: seekerPose.seq + 1 }));
+    await until(() => b.room().players.find(p => p.id === joined.seat!.playerId)!.seq > seekerPose.seq, 'Seeker turns away from the decoy author');
+    await afterServerDeadline(a.room().players.find(p => p.id === c.seat.playerId)!.frozenUntil ?? 0);
+    await atSpot(a, c.seat.playerId, HIDING_SPOTS[11]);
+    const decoy = await a.request({ type: 'disturb', spotId: HIDING_SPOTS[11].id, roundNumber: 1 }); assert.ok(decoy.ok);
+    const burialRanks = new Set<number>();
+    let markSet: string | undefined;
+    for (let sample = 0; sample < 20; sample++) {
+      const projection = await b.request({ type: 'search_cancel' }); assert.ok(projection.ok && projection.room);
+      const identity = JSON.stringify([...projection.room.round!.marks!].sort((a,b) => a.id.localeCompare(b.id)));
+      markSet ??= identity; assert.equal(identity, markSet, 'Shuffle preserves stable IDs, coordinates and timestamps');
+      burialRanks.add(projection.room.round!.marks!.findIndex(mark => mark.x === HIDING_SPOTS[8].x && mark.z === HIDING_SPOTS[8].z));
+    }
+    assert.deepEqual([...burialRanks].sort(), [0,1], 'Human burial has no fixed index after a late seeking decoy');
     const prior = b.messages.filter(m => m.type === 'room' || (m.type === 'result' && m.ok && m.room));
     assert.ok(prior.every(m => !JSON.stringify(m).includes('capsuleSpotId')));
     assert.equal(b.room().round?.phase, 'seeking');
@@ -84,6 +105,12 @@ test('human burial, private projection, full server hold, wrong cooldown, one re
     await afterServerDeadline(rightSearch.endsAt); assert.ok((await b.request({ type: 'search_complete', spotId: HIDING_SPOTS[8].id })).ok);
     assert.equal((await b.request({ type: 'search_complete', spotId: HIDING_SPOTS[8].id })).ok, false);
     assert.equal(b.room().round?.capsuleSpotId, HIDING_SPOTS[8].id); assert.equal(b.room().round?.foundBy, joined.seat.playerId); assert.equal(b.room().round?.foundByName, 'Sam');
+    const scores = b.room().match!.scores;
+    const hiderScore = scores.find(entry => entry.playerId === c.seat.playerId)!;
+    const seekerScore = scores.find(entry => entry.playerId === joined.seat.playerId)!;
+    assert.equal(hiderScore.score + seekerScore.score, 60, 'Elapsed and remaining server seconds partition the round');
+    assert.ok(seekerScore.score > 0 && hiderScore.score > 0);
+    assert.equal(scores.find(entry => entry.playerId === joinedOther.seat.playerId)!.score, seekerScore.score, 'Every seeker earns the remaining seconds, not just the finder');
     assert.ok(b.room().round?.revealReadyAt); await afterServerDeadline(b.room().round!.revealReadyAt!); const next = await a.request({ type: 'start' }); assert.ok(next.ok && next.room?.round?.hiderId === joined.seat.playerId);
     for (const type of ['pickup','bury','search_begin','search_cancel','search_complete'] as const) {
       const stale = await b.request({ type, spotId: HIDING_SPOTS[8].id, roundNumber: 1 });

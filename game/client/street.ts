@@ -478,7 +478,8 @@ export class Street {
     const revealViewing=this.snapshot?.round?.phase==="reveal"&&Date.now()+this.serverOffset<(this.snapshot.round.revealReadyAt??0);
     const serverNow=Date.now()+this.serverOffset;
     const frozen=(this.snapshot?.players.find(p=>p.id===this.localId)?.frozenUntil??0)>serverNow;
-    const turning = length > 0.08 && this.connected && !document.hidden&&!revealViewing;
+    const scoreViewing=this.snapshot?.round?.phase==="reveal"&&Boolean(this.snapshot?.match);
+    const turning = length > 0.08 && this.connected && !document.hidden&&!revealViewing&&!scoreViewing;
     const moving = turning&&!frozen;
     if (turning) {
       dx /= Math.max(length, 1); dz /= Math.max(length, 1);

@@ -1,0 +1,62 @@
+Step 6 browser verification, 2026-10-04
+Command: npx playwright test
+Run against compiled production client/server. Single Playwright worker.
+Windows Chromium, independent contexts: 667x375 touch phone viewport and 1366x768 laptop viewport. No physical phone was used.
+
+20 passed (11.6 minutes), no failures:
+1 solo three rounds, refresh score screens, best score and replay: 37.0 seconds
+2 two independent sessions four alternating rounds, shared scores and replay: 34.9 seconds
+3 solo friend fresh cycle, visible announcement and departure: 23.7 seconds
+4 independent phone/laptop join, clipboard, start, refresh, leave: 2.7 seconds
+5 separate tabs, disconnected credential offer, clipboard fallback: 848 ms
+6 solo, invalid inputs, phone layout: 710 ms
+7 six-player phone lobby and name-only recovery rejected: 2.2 seconds
+8 actual production restart returns both sessions to title: 2.8 seconds
+9 duplicated tab takeover stops displaced tab reclaiming: 3.1 seconds
+10 page-cache restoration one connection and same seat: 314 ms
+11 silent browser-side TCP drop, stale upstream still open: 2.8 seconds
+   Seat recovery: 865 ms
+12 human full round, private search, cooldown, refresh, rotation: 57.4 seconds
+13 solo full production 120-second seeking phase and timeout: 2.1 minutes
+14 full ground beam in four phone directions: 46.3 seconds
+   Character height measurements: north 49.1523 px; east 49.1522; south 49.1521; west 49.1522
+15 solid collision classes, moving away: 43.5 seconds
+16 phone camera, separated labels, warm beam by house: 42.7 seconds
+17 shared blackout, remote poses, stable controls, refresh, late join: 38.8 seconds
+   Remote movement observation latency: 219 ms
+   Blackout screen skew: 1 ms
+18 hidden/frozen device never pauses other player or blackout: 36.6 seconds
+19 audio unlock, hum stops, flashlight click: 10.7 seconds
+20 human and solo trails, three decoys, beam reveal, freeze, real 30/60/90-second clues: 2.9 minutes
+
+The new full-match tests use an isolated child server with private constructor timer options:
+blackout 100 ms, hiding 2 seconds, seeking 5 seconds, reveal ready 1.2 seconds,
+automatic next round 7 seconds. Search hold remains production 2 seconds.
+Production duration regressions use the normal server with 120-second seeking and
+30/60/90-second clues. No public test or debugging endpoints were added.
+
+A subsequent final-build targeted rerun is recorded below.
+
+Final-build targeted rerun: npx playwright test tests/match.spec.ts tests/trails.spec.ts
+5 passed (5.4 minutes), output: step6-browser-final-targeted.txt
+Solo complete match: 37.1 seconds
+Two-player complete match: 33.8 seconds
+Fresh roster cycle and departure: 23.4 seconds
+Six-player scorecards, six-round tie, stable controls: 50.6 seconds
+Production human/solo trails and 30/60/90-second clues: 2.9 minutes
+Six-player cards checked on both 667x375 and 1366x768 with 24-character names;
+all six rows fit, intentionally ellipsizing long names. Visible font sizes >=16px,
+buttons >=44px tall, no scrolling or elements outside viewport. The move stick,
+action control and score panel retain the same DOM identity across phases,
+rounds and score updates. Winner ties use explicit Winner text.
+Best-score persistence checked using a previously stored nonzero best of 17;
+a zero-scoring final does not replace it, and final refresh displays 17 again.
+All 21 unique browser tests have now passed across the full and targeted runs.
+
+Latest build replay-epoch guard and explicit capsule reveal text rerun:
+Command: npx playwright test tests/match.spec.ts
+4 passed (2.5 minutes); output: step6-browser-guard-rerun.txt
+Solo:37.3 seconds; two-player:34.1; roster change:23.4; six-player:50.9.
+Final and between-round screenshots refreshed against this final build.
+Phone final image visually checked: winner text, capsule object/house,
+closing line, best score and both buttons fit at 667x375.

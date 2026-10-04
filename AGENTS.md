@@ -82,13 +82,12 @@ APPROVED AMENDMENTS:
 - Replacement character downloads must be listed before use. Wait for the user
   to supply them, preserve source filenames and report mismatches.
 
-CURRENT AUTHORIZATION: Step 4 is independently verified. Build step 5 only:
-beam-only bounded footprints and disturbed marks, three decoys, server-owned
-2-second freezes with 5-second subsequent immunity, scheduled true clues at
-30/60/90 seconds and computer-generated trails/clues for solo rounds. Fix the
-flaky round test, move instructions away from the character and separate reveal
-labels. Preserve prior flow and persistent controls. Inspect seeker payloads,
-run server tests ten consecutive times and all browser tests, report rendering
-budget and limitations in STEP5_VERIFICATION.md, save phone evidence, commit and
-stop. No typed chat, quick phrases, scoring, match length, extra layouts or
-deployment.
+CURRENT AUTHORIZATION: Step 5 is independently verified. Fix disturbed-mark
+ordering and check solo footprint ordering for capsule information. Build step 6
+only: server-owned scoring, fixed matches (solo 3 rounds, two players 4 rounds,
+three to six one hider turn each), automatic next rounds, running/final scores,
+replay, roster-change scoring cycles and device-local solo best. Preserve all
+prior behavior and persistent controls. Verify secret filtering and recovery,
+run server tests ten consecutive times and all browser tests, record checks and
+limitations in STEP6_VERIFICATION.md, save phone score screenshots, commit and
+stop. No typed chat, quick phrases, extra layouts, new art or deployment.

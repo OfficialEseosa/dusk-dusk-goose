@@ -397,7 +397,7 @@ function renderStreet(){
     roundControls=new RoundControls(app.querySelector<HTMLElement>('.game-screen')!,street,seat.playerId,async(type,fields={})=>{
       try {const r=await request(type,{roundNumber:room?.round?.number,...fields});if(seat?.playerId!==controlsPlayerId||room?.code!==controlsRoomCode)return r;if(r.ok&&r.room){notice="";room=r.room;render();}else if(!r.ok&&r.error?.code!=="stale_round"){notice=r.error?.message??"Try again.";render();}return r;}
       catch {return {ok:false};}
-    });
+    },()=>void leave());
     const current=street;
     void current.initialize(seat.playerId,room).then(()=>{if(street===current)app.querySelector('#street-loading')?.remove();}).catch(()=>{if(street===current){const loading=app.querySelector('#street-loading')!;loading.innerHTML='<p>The street could not load.</p><button id="retry-scene">Try again</button>';loading.querySelector('#retry-scene')?.addEventListener('click',()=>location.reload());}});
   }

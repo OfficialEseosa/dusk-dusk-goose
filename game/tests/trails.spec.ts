@@ -76,8 +76,8 @@ test('human and solo trails, three decoys, beam visibility, freeze and all three
  }
  // Human clue choices (including an unanswered offer) and the solo automatic clues must all be true without uniquely identifying a spot.
  for(const [frames,knownId] of [[bf,'mailbox-2'],[sf,undefined]] as const){
-  if(!knownId)await expect(solo.locator('canvas')).toHaveAttribute('data-round-phase','reveal',{timeout:35000});
-  const room=latest(frames),id=knownId??room.round!.capsuleSpotId!,capsule=HIDING_SPOTS.find(s=>s.id===id)!;
+  if(!knownId)await expect.poll(()=>rooms(frames).some(r=>r.round?.phase==='reveal'&&r.round.clues?.length===3),{timeout:35000}).toBe(true);
+  const room=knownId?rooms(frames).findLast(r=>r.round?.clues?.length===3)!:rooms(frames).find(r=>r.round?.phase==='reveal'&&r.round.clues?.length===3)!,id=knownId??room.round!.capsuleSpotId!,capsule=HIDING_SPOTS.find(s=>s.id===id)!;
   const pool=trueCluePool(capsule),clues=room.round!.clues!;expect(clues).toHaveLength(3);let candidates=HIDING_SPOTS.map(s=>s.id);
   for(const clue of clues){const truth=pool.find(item=>item.text===clue.text);expect(truth).toBeDefined();expect(truth!.candidates).toContain(id);candidates=candidates.filter(candidate=>truth!.candidates.includes(candidate));}
   expect(candidates.length).toBeGreaterThanOrEqual(2);
@@ -85,7 +85,7 @@ test('human and solo trails, three decoys, beam visibility, freeze and all three
  expect(errors).toEqual([]);
 
  // Play another solo round to a real find, using only the public clue and unlabelled marks.
- await expect(solo.locator('#next-round')).toBeEnabled({timeout:6000});await solo.locator('#next-round').click();await pickUpFlashlight(solo);await seeking(solo);
+ if(latest(sf).round?.phase==='reveal'){await expect(solo.locator('#next-round')).toBeEnabled({timeout:6000});await solo.locator('#next-round').click();}await pickUpFlashlight(solo);await seeking(solo);
  await expect.poll(()=>latest(sf).round?.clues?.length??0,{timeout:35000}).toBe(1);
  const publicRound=latest(sf).round!,text=publicRound.clues![0].text;
  const truth=HIDING_SPOTS.flatMap(candidate=>trueCluePool(candidate)).find(clue=>clue.text===text)!;

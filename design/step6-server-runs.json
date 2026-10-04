@@ -1,0 +1,82 @@
+[
+  {
+    "run": 1,
+    "exitCode": 0,
+    "passes": "28",
+    "durationMs": 48220,
+    "markRankCounts": "17, 19, 9, 15",
+    "reorderedFootprintRounds": "60"
+  },
+  {
+    "run": 2,
+    "exitCode": 0,
+    "passes": "28",
+    "durationMs": 48066,
+    "markRankCounts": "13, 21, 17, 9",
+    "reorderedFootprintRounds": "60"
+  },
+  {
+    "run": 3,
+    "exitCode": 0,
+    "passes": "28",
+    "durationMs": 47672,
+    "markRankCounts": "16, 15, 19, 10",
+    "reorderedFootprintRounds": "60"
+  },
+  {
+    "run": 4,
+    "exitCode": 0,
+    "passes": "28",
+    "durationMs": 47914,
+    "markRankCounts": "19, 10, 14, 17",
+    "reorderedFootprintRounds": "59"
+  },
+  {
+    "run": 5,
+    "exitCode": 0,
+    "passes": "28",
+    "durationMs": 48736,
+    "markRankCounts": "16, 14, 16, 14",
+    "reorderedFootprintRounds": "57"
+  },
+  {
+    "run": 6,
+    "exitCode": 0,
+    "passes": "28",
+    "durationMs": 48157,
+    "markRankCounts": "12, 12, 19, 17",
+    "reorderedFootprintRounds": "59"
+  },
+  {
+    "run": 7,
+    "exitCode": 0,
+    "passes": "28",
+    "durationMs": 47617,
+    "markRankCounts": "17, 11, 13, 19",
+    "reorderedFootprintRounds": "60"
+  },
+  {
+    "run": 8,
+    "exitCode": 0,
+    "passes": "28",
+    "durationMs": 47844,
+    "markRankCounts": "11, 22, 16, 11",
+    "reorderedFootprintRounds": "59"
+  },
+  {
+    "run": 9,
+    "exitCode": 0,
+    "passes": "28",
+    "durationMs": 48065,
+    "markRankCounts": "11, 10, 20, 19",
+    "reorderedFootprintRounds": "59"
+  },
+  {
+    "run": 10,
+    "exitCode": 0,
+    "passes": "28",
+    "durationMs": 48012,
+    "markRankCounts": "11, 17, 18, 14",
+    "reorderedFootprintRounds": "60"
+  }
+]

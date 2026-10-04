@@ -1,4 +1,4 @@
-import { randomBytes, randomUUID, timingSafeEqual } from "node:crypto";
+import { randomBytes, randomInt, randomUUID, timingSafeEqual } from "node:crypto";
 import { createServer, type ServerResponse } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { extname, resolve, sep } from "node:path";
@@ -35,6 +35,11 @@ interface Seat {
   frozenUntil?: number;
   immunityUntil?: number;
 }
+interface Match {
+  id: string; phase: 'playing' | 'finished'; roundNumber: number; totalRounds: number; solo: boolean;
+  scores: { playerId: string; name: string; score: number; roundPoints: number }[];
+  rosterIds: string[]; announcement: string; nextRoundAt?: number; winnerIds: string[];
+}
 interface Room {
   code: string;
   phase: "lobby" | "started";
@@ -45,6 +50,7 @@ interface Room {
   blackoutAt?: number;
   movementDirty?: boolean;
   round?: { number: number; phase: 'hiding' | 'seeking' | 'reveal'; hiderId: string | null; phaseEndsAt: number; capsuleSpotId?: string; foundBy?: string | null; foundByName?: string; revealReadyAt?: number };
+  match?: Match;
   previousHiderOrder?: number;
   nextJoinOrder: number;
   trails?: { footprints: { id: string; x: number; z: number; facing: number; fadeAt: number; expiresAt: number }[]; marks: { id: string; x: number; z: number; createdAt: number }[]; disturbed: Set<string>; decoys: number; lastStep?: { x: number; z: number }; seekingStartedAt?: number; clues: { id: string; text: string; sentAt: number }[]; clueCount: number; offer?: { id: string; options: TrueClue[]; deadlineAt: number } };
@@ -66,7 +72,7 @@ export interface ServerOptions {
   seatGraceMs?: number;
   abandonedMs?: number;
   heartbeatMs?: number;
-  roundDurations?: { hidingMs?: number; seekingMs?: number; searchMs?: number; cooldownMs?: number; revealMs?: number; blackoutMs?: number };
+  roundDurations?: { hidingMs?: number; seekingMs?: number; searchMs?: number; cooldownMs?: number; revealMs?: number; nextRoundMs?: number; blackoutMs?: number };
   clueIntervalMs?: number;
   clueChoiceMs?: number;
 }
@@ -108,7 +114,7 @@ export function createGameServer(options: ServerOptions = {}) {
     }
     socket.send(JSON.stringify(message));
   }
-  const durations = { hidingMs: HIDING_MS, seekingMs: SEEKING_MS, searchMs: SEARCH_MS, cooldownMs: COOLDOWN_MS, revealMs: REVEAL_MS, blackoutMs: BLACKOUT_DELAY_MS, ...options.roundDurations };
+  const durations = { hidingMs: HIDING_MS, seekingMs: SEEKING_MS, searchMs: SEARCH_MS, cooldownMs: COOLDOWN_MS, revealMs: REVEAL_MS, nextRoundMs: 8000, blackoutMs: BLACKOUT_DELAY_MS, ...options.roundDurations };
   function snapshot(room: Room, recipient?: Seat): RoomSnapshot {
     const round = room.round;
     const visibleRound = round && { number: round.number, phase: round.phase, hiderId: round.hiderId, phaseEndsAt: round.phaseEndsAt,
@@ -120,8 +126,9 @@ export function createGameServer(options: ServerOptions = {}) {
       serverTime: Date.now(),
       startedAt: room.startedAt,
       blackoutAt: room.blackoutAt,
+      match: room.match && { id: room.match.id, phase: room.match.phase, roundNumber: room.match.roundNumber, totalRounds: room.match.totalRounds, solo: room.match.solo, scores: room.match.scores, rosterChanged: rosterChanged(room), announcement: room.match.announcement, nextRoundAt: room.match.nextRoundAt, winnerIds: room.match.winnerIds },
       round: visibleRound && { ...visibleRound, seekingStartedAt: room.trails?.seekingStartedAt,
-        ...(recipient?.place === 'street' ? { footprints: room.trails?.footprints, marks: room.trails?.marks } : {}),
+        ...(recipient?.place === 'street' ? { footprints: shuffled([...(room.trails?.footprints ?? [])]), marks: shuffled([...(room.trails?.marks ?? [])]) } : {}),
         clues: room.trails?.clues,
         ...(recipient?.role === 'hider' ? { decoysRemaining: 3 - (room.trails?.decoys ?? 0), clueOffer: room.trails?.offer && { id: room.trails.offer.id, deadlineAt: room.trails.offer.deadlineAt, options: room.trails.offer.options.map(({ id, text }) => ({ id, text })) } } : {}) },
       roster: [...room.seats.values()].map(seat => ({ id: seat.id, name: seat.name, connected: !!seat.socket, skin: seat.skin })),
@@ -161,8 +168,7 @@ export function createGameServer(options: ServerOptions = {}) {
     const traces = room.trails, spot = HIDING_SPOTS.find(item => item.id === spotId);
     if (!traces || !spot || traces.disturbed.has(spotId) || traces.marks.length >= 4) return;
     traces.disturbed.add(spotId); traces.marks.push({ id: randomUUID(), x: spot.x, z: spot.z, createdAt: room.startedAt ?? Date.now() });
-    // Random stable order: neither insertion order nor timestamp identifies burial.
-    traces.marks.sort((a,b) => a.id.localeCompare(b.id));
+    // Public projection independently shuffles every list, including after late decoys.
   }
   function leaveSteps(room: Room, path: { x: number; z: number }[], now: number) {
     const traces = room.trails;
@@ -202,9 +208,37 @@ export function createGameServer(options: ServerOptions = {}) {
     room.round.phase = 'reveal'; room.round.foundBy = foundBy; room.round.foundByName = foundBy ? room.seats.get(foundBy)?.name : undefined; room.round.phaseEndsAt = Date.now() + durations.revealMs; room.round.revealReadyAt = room.round.phaseEndsAt;
     for (const seat of room.seats.values()) seat.search = undefined;
     if (room.trails) room.trails.offer = undefined;
+    const match = room.match!;
+    const fullSeconds = Math.ceil(durations.seekingMs / 1000);
+    // Seeking start remains authoritative, independent of client clocks.
+    const elapsed = Math.max(0, Math.min(fullSeconds, Math.floor((Date.now() - (room.trails?.seekingStartedAt ?? Date.now())) / 1000)));
+    for (const entry of match.scores) {
+      entry.roundPoints = entry.playerId === room.round.hiderId ? (foundBy ? elapsed : fullSeconds) : room.seats.get(entry.playerId)?.role === 'seeker' && foundBy ? fullSeconds - elapsed : 0;
+      entry.score += entry.roundPoints;
+    }
+    if (match.roundNumber >= match.totalRounds && !rosterChanged(room)) {
+      match.phase = 'finished'; match.nextRoundAt = undefined;
+      const maximum = Math.max(...match.scores.map(entry => entry.score));
+      match.winnerIds = match.scores.filter(entry => entry.score === maximum).map(entry => entry.playerId);
+    } else match.nextRoundAt = Date.now() + durations.nextRoundMs;
     broadcast(room);
   }
+  function rosterChanged(room: Room) {
+    const ids = room.match?.rosterIds;
+    return !!ids && (ids.length !== room.seats.size || ids.some(id => !room.seats.has(id)));
+  }
+  function newMatch(room: Room, changed = false) {
+    const seats = [...room.seats.values()];
+    room.match = { id: randomUUID(), phase: 'playing', roundNumber: 0, totalRounds: seats.length === 1 ? 3 : seats.length === 2 ? 4 : seats.length, solo: seats.length === 1,
+      scores: seats.map(seat => ({ playerId: seat.id, name: seat.name, score: 0, roundPoints: 0 })), rosterIds: seats.map(seat => seat.id),
+      announcement: changed ? 'The group changed. A fresh match starts now.' : '', winnerIds: [] };
+  }
   function startRound(room: Room) {
+    if (![...room.seats.values()].some(seat => seat.socket)) return;
+    if (!room.match || rosterChanged(room)) newMatch(room, !!room.match);
+    if (room.match!.phase === 'finished') return;
+    room.match!.roundNumber++; room.match!.nextRoundAt = undefined;
+
     const participants = [...room.seats.values()].filter(seat => seat.socket);
     const hider = participants.length > 1 ? participants.find(seat => seat.joinOrder > (room.previousHiderOrder ?? -1)) ?? participants[0] : undefined;
     if (hider) room.previousHiderOrder = hider.joinOrder;
@@ -375,6 +409,13 @@ export function createGameServer(options: ServerOptions = {}) {
       disconnect(socket, true);
       send(socket, { type: "result", id, ok: true });
       return;
+    }
+    if (request.type === "play_again") {
+      const { room, seat } = session;
+      if (!room || !seat || room.match?.phase !== 'finished') return fail(socket, id, 'not_finished', 'Finish this match before playing again.');
+      if (request.roundNumber !== room.round?.number) return fail(socket, id, 'stale_round', 'That replay belonged to an earlier match.');
+      newMatch(room); room.previousHiderOrder = undefined; startRound(room);
+      send(socket, { type: 'result', id, ok: true, room: snapshot(room, seat) }); broadcast(room); return;
     }
     if (request.type === "start") {
       if (!session.room || !session.seat)
@@ -723,6 +764,7 @@ export function createGameServer(options: ServerOptions = {}) {
     for (const room of rooms.values()) {
       if (room.round?.phase === 'hiding' && Date.now() >= room.round.phaseEndsAt) beginSeeking(room);
       if (room.round?.phase === 'seeking' && Date.now() >= room.round.phaseEndsAt) reveal(room, null);
+      if (room.round?.phase === 'reveal' && room.match?.phase === 'playing' && Date.now() >= (room.match.nextRoundAt ?? Infinity)) { startRound(room); broadcast(room); }
       updateTrails(room, Date.now());
       if (room.phase === "started" && room.movementDirty) {
         room.movementDirty = false;
@@ -751,7 +793,7 @@ function initialPose(skin: number) {
   return { skin, x: (skin - 2.5) * 1.6, z: 2, facing: Math.PI, seq: 0, moveAt: Date.now(), distanceCredit: 0.25 };
 }
 function shuffled<T>(items: T[]): T[] {
-  for (let i = items.length - 1; i > 0; i--) { const j = randomBytes(4).readUInt32BE(0) % (i + 1); [items[i],items[j]] = [items[j],items[i]]; }
+  for (let i = items.length - 1; i > 0; i--) { const j = randomInt(i + 1); [items[i],items[j]] = [items[j],items[i]]; }
   return items;
 }
 /** Bounded client traces preserve legitimate sliding around a corner. */

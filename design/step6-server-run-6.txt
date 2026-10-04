@@ -1,0 +1,183 @@
+
+> maple-street-night@1.0.0 test
+> tsx --test tests/server*.test.ts
+
+TAP version 13
+# Subtest: every rendered body blocks its occupied footprint with player clearance
+ok 1 - every rendered body blocks its occupied footprint with player clearance
+  ---
+  duration_ms: 1.6654
+  type: 'test'
+  ...
+# Subtest: swept validation rejects crossing a thin lamp with clear endpoints
+ok 2 - swept validation rejects crossing a thin lamp with clear endpoints
+  ---
+  duration_ms: 0.8414
+  type: 'test'
+  ...
+# Subtest: device sliding stops at a car and continues along its face
+ok 3 - device sliding stops at a car and continues along its face
+  ---
+  duration_ms: 7.8245
+  type: 'test'
+  ...
+# Subtest: large movement cannot tunnel through a car, house or street boundary
+ok 4 - large movement cannot tunnel through a car, house or street boundary
+  ---
+  duration_ms: 8.1832
+  type: 'test'
+  ...
+# Subtest: solo completes three server-owned rounds, restores final scoreboard and replay creates a fresh match
+ok 5 - solo completes three server-owned rounds, restores final scoreboard and replay creates a fresh match
+  ---
+  duration_ms: 2962.7476
+  type: 'test'
+  ...
+# Subtest: two players alternate four rounds, agree on scores, auto-advance and either player may replay
+ok 6 - two players alternate four rounds, agree on scores, auto-advance and either player may replay
+  ---
+  duration_ms: 1938.6956
+  type: 'test'
+  ...
+# Subtest: late joins reset the announced scoring cycle and removing the next hider does not stall
+ok 7 - late joins reset the announced scoring cycle and removing the next hider does not stall
+  ---
+  duration_ms: 2529.9145
+  type: 'test'
+  ...
+# Privacy sampling: real mark rank counts [ 12, 12, 19, 17 ] footprint lists reordered 59
+# Subtest: sixty solo rounds put the real disturbed mark in every list position without a labelled trail or mark
+ok 8 - sixty solo rounds put the real disturbed mark in every list position without a labelled trail or mark
+  ---
+  duration_ms: 27846.9294
+  type: 'test'
+  ...
+# Subtest: three through six players each receive one hider turn and a disconnected seat cannot pause the match
+ok 9 - three through six players each receive one hider turn and a disconnected seat cannot pause the match
+  ---
+  duration_ms: 10944.7969
+  type: 'test'
+  ...
+# Subtest: between-round reconnect keeps scores and a device cannot inject points or force the next round
+ok 10 - between-round reconnect keeps scores and a device cannot inject points or force the next round
+  ---
+  duration_ms: 386.8463
+  type: 'test'
+  ...
+# Subtest: human burial, private projection, full server hold, wrong cooldown, one reveal and rotation
+ok 11 - human burial, private projection, full server hold, wrong cooldown, one reveal and rotation
+  ---
+  duration_ms: 29044.5912
+  type: 'test'
+  ...
+# Subtest: solo pickup, timeout secrecy, late join waits and enters next human round
+ok 12 - solo pickup, timeout secrecy, late join waits and enters next human round
+  ---
+  duration_ms: 2614.5191
+  type: 'test'
+  ...
+# Subtest: disconnected hider cannot stall fallback burial and seeker resumes role and place
+ok 13 - disconnected hider cannot stall fallback burial and seeker resumes role and place
+  ---
+  duration_ms: 1264.7975
+  type: 'test'
+  ...
+# Subtest: rotation advances past a removed hider rather than returning to the first joiner
+ok 14 - rotation advances past a removed hider rather than returning to the first joiner
+  ---
+  duration_ms: 846.6245
+  type: 'test'
+  ...
+# Subtest: all possible clue selections stay true and preserve at least two hiding spots
+ok 15 - all possible clue selections stay true and preserve at least two hiding spots
+  ---
+  duration_ms: 4.6924
+  type: 'test'
+  ...
+# Subtest: human clue choices are private, truthful and fall back automatically; beam freeze rejects movement
+ok 16 - human clue choices are private, truthful and fall back automatically; beam freeze rejects movement
+  ---
+  duration_ms: 2904.6156
+  type: 'test'
+  ...
+# Subtest: computer burial routes remain collision-valid and beam mask uses exact shared cone
+ok 17 - computer burial routes remain collision-valid and beam mask uses exact shared cone
+  ---
+  duration_ms: 210.2245
+  type: 'test'
+  ...
+# Subtest: solo snapshots publish bounded indistinguishable trails and marks, scheduled clues, then reveal only at timeout
+ok 18 - solo snapshots publish bounded indistinguishable trails and marks, scheduled clues, then reveal only at timeout
+  ---
+  duration_ms: 7291.6132
+  type: 'test'
+  ...
+# Subtest: hiding prints follow actual accepted movement during the lit lead-in without inventing a later jump
+ok 19 - hiding prints follow actual accepted movement during the lit lead-in without inventing a later jump
+  ---
+  duration_ms: 336.3754
+  type: 'test'
+  ...
+# Subtest: solo start, shared joins, private credentials, leave and host reassignment
+ok 20 - solo start, shared joins, private credentials, leave and host reassignment
+  ---
+  duration_ms: 164.4713
+  type: 'test'
+  ...
+# Subtest: valid credentials replace live seats; offers stay disconnected-only and names do not authenticate
+ok 21 - valid credentials replace live seats; offers stay disconnected-only and names do not authenticate
+  ---
+  duration_ms: 125.1322
+  type: 'test'
+  ...
+# Subtest: six seats and room capacity are bounded; old boot token returns restart reason
+ok 22 - six seats and room capacity are bounded; old boot token returns restart reason
+  ---
+  duration_ms: 140.5795
+  type: 'test'
+  ...
+# Subtest: expired disconnected seats disappear without deleting connected players
+ok 23 - expired disconnected seats disappear without deleting connected players
+  ---
+  duration_ms: 163.537
+  type: 'test'
+  ...
+# Subtest: a real process-state restart loses the room and identifies stale credentials
+ok 24 - a real process-state restart loses the room and identifies stale credentials
+  ---
+  duration_ms: 47.1992
+  type: 'test'
+  ...
+# Subtest: production serves built static files and rejects development routes and foreign origins
+ok 25 - production serves built static files and rejects development routes and foreign origins
+  ---
+  duration_ms: 49.9627
+  type: 'test'
+  ...
+# Subtest: street state has stable blackout timing and character poses through late joins and takeover
+ok 26 - street state has stable blackout timing and character poses through late joins and takeover
+  ---
+  duration_ms: 330.8366
+  type: 'test'
+  ...
+# Subtest: 20 Hz movement has its own budget and invalid speed, boundaries and replay are rejected
+ok 27 - 20 Hz movement has its own budget and invalid speed, boundaries and replay are rejected
+  ---
+  duration_ms: 3953.5057
+  type: 'test'
+  ...
+# Subtest: server rejects lamp penetration while accepting bounded legal corner traces
+ok 28 - server rejects lamp penetration while accepting bounded legal corner traces
+  ---
+  duration_ms: 4779.2122
+  type: 'test'
+  ...
+1..28
+# tests 28
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 47149.0879
