@@ -250,3 +250,72 @@ test("production serves built static files and rejects development routes and fo
     await rm(directory, { recursive: true, force: true });
   }
 });
+
+test("street state has stable blackout timing and character poses through late joins and takeover", async () => {
+  const { game, url } = await setup();
+  try {
+    const a = await connect(url);
+    const created = await a.request({ type: "create", name: "Alex" });
+    assert.ok(created.ok && created.seat);
+    const started = await a.request({ type: "start" });
+    assert.ok(started.ok && started.room?.startedAt && started.room.blackoutAt);
+    assert.equal(started.room.blackoutAt - started.room.startedAt, 10_000);
+    const again = await a.request({ type: "start" });
+    assert.ok(again.ok && again.room);
+    assert.equal(again.room.blackoutAt, started.room.blackoutAt);
+    const b = await connect(url);
+    const joined = await b.request({ type: "join", code: created.seat.room, name: "Sam" });
+    assert.ok(joined.ok && joined.room);
+    assert.equal(joined.room.blackoutAt, started.room.blackoutAt);
+    assert.deepEqual(joined.room.players.map((player) => player.skin), [0, 1]);
+    const pose = started.room.players[0];
+    await new Promise((resolve) => setTimeout(resolve, 60));
+    a.socket.send(JSON.stringify({ type: "move", id: "move", seq: 1, x: pose.x + 0.1, z: pose.z, facing: 0.5 }));
+    await new Promise((resolve) => setTimeout(resolve, 160));
+    const c = await connect(url);
+    const restored = await c.request({ type: "resume", code: created.seat.room, token: created.seat.token, bootId: created.seat.bootId });
+    assert.ok(restored.ok && restored.room);
+    const restoredPlayer = restored.room.players.find((player) => player.id === created.seat!.playerId)!;
+    assert.equal(restoredPlayer.skin, pose.skin);
+    assert.equal(restoredPlayer.x, pose.x + 0.1);
+    assert.equal(restoredPlayer.facing, 0.5);
+    assert.equal(restoredPlayer.seq, 1);
+    assert.equal(restored.room.blackoutAt, started.room.blackoutAt);
+  } finally { await game.close(); }
+});
+
+test("20 Hz movement has its own budget and invalid speed, boundaries and replay are rejected", async () => {
+  const { game, url } = await setup();
+  try {
+    const a = await connect(url);
+    const created = await a.request({ type: "create", name: "Alex" });
+    assert.ok(created.ok && created.seat);
+    const started = await a.request({ type: "start" });
+    assert.ok(started.ok && started.room);
+    const pose = started.room.players[0];
+    for (let seq = 1; seq <= 60; seq++) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      a.socket.send(JSON.stringify({ type: "move", id: "move", seq, x: pose.x + seq * 0.05, z: pose.z, facing: 0.5 }));
+    }
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    assert.ok(!a.messages.some((message) => message.type === "pose_rejected"));
+    const state = await a.request({ type: "start" });
+    assert.ok(state.ok && state.room);
+    assert.equal(state.room.players[0].seq, 60);
+    assert.equal(state.room.players[0].x, pose.x + 3);
+    for (const invalid of [
+      { seq: 61, x: 35, z: 2, facing: 0 },
+      { seq: 61, x: -37, z: 2, facing: 0 },
+      { seq: 60, x: pose.x + 3, z: 2, facing: 0 },
+    ]) {
+      const before = a.messages.filter((message) => message.type === "pose_rejected").length;
+      a.socket.send(JSON.stringify({ type: "move", id: "move", ...invalid }));
+      await new Promise((resolve) => setTimeout(resolve, 60));
+      assert.equal(a.messages.filter((message) => message.type === "pose_rejected").length, before + 1);
+    }
+    const current = await a.request({ type: "start" });
+    assert.ok(current.ok && current.room);
+    assert.equal(current.room.players[0].x, pose.x + 3);
+    assert.equal(current.room.players[0].seq, 60);
+  } finally { await game.close(); }
+});

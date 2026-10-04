@@ -75,12 +75,16 @@ APPROVED AMENDMENTS:
 - Send footprints/disturbed marks to seekers without false-trail labels. Each
   device shows them only inside beams. No server beam/wall visibility filtering.
 - Keep per-tab seats. Offer a disconnected same-browser seat in a new tab using
-  its private credential; never recover by name or claim a connected seat.
+  its private credential; never recover by name. A valid private credential
+  takes over a stale/live seat immediately; the displaced tab clears auto-resume.
 - One street and one shared preparation room first. Other layouts after step 6.
 - Start burial trail fading at seeking. Wrong search cooldown starts at 5 seconds.
 - Replacement character downloads must be listed before use. Wait for the user
   to supply them, preserve source filenames and report mismatches.
 
-CURRENT AUTHORIZATION: The plan is approved with these amendments. Build step 1
-only. Do not build step 2 or deploy in this turn. Railway setup must be ready for
-the user's deployment at the end of step 2.
+CURRENT AUTHORIZATION: Step 2 street only, using supplied Kenney characters and
+one layout. Include shared blackout, local movement/validated reports, persistent
+controls, smoothing, first-tap sound and reconnects. No preparation room, hiding,
+seeking, footprints, radio or scoring. No deployment. Test a ten-minute session,
+measure frame rate, save actual-versus-Mood-A comparison and STEP2_VERIFICATION.md,
+commit and stop before step 3.

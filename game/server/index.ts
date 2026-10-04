@@ -9,6 +9,7 @@ import type {
   RoomSnapshot,
   ServerMessage,
 } from "../shared/protocol.js";
+import { BLACKOUT_DELAY_MS, MOVE_SPEED, insideStreet } from "../shared/street-layout.js";
 
 interface Seat {
   id: string;
@@ -16,6 +17,13 @@ interface Seat {
   token: string;
   socket?: WebSocket;
   disconnectedAt?: number;
+  skin: number;
+  x: number;
+  z: number;
+  facing: number;
+  seq: number;
+  moveAt: number;
+  distanceCredit: number;
 }
 interface Room {
   code: string;
@@ -23,6 +31,9 @@ interface Room {
   hostId: string;
   seats: Map<string, Seat>;
   touchedAt: number;
+  startedAt?: number;
+  blackoutAt?: number;
+  movementDirty?: boolean;
 }
 interface Session {
   revoked?: boolean;
@@ -31,6 +42,8 @@ interface Session {
   alive: boolean;
   windowAt: number;
   requests: number;
+  movementTokens: number;
+  movementAt: number;
 }
 export interface ServerOptions {
   clientDir?: string;
@@ -83,10 +96,18 @@ export function createGameServer(options: ServerOptions = {}) {
       code: room.code,
       phase: room.phase,
       hostId: room.hostId,
+      serverTime: Date.now(),
+      startedAt: room.startedAt,
+      blackoutAt: room.blackoutAt,
       players: [...room.seats.values()].map((seat) => ({
         id: seat.id,
         name: seat.name,
         connected: !!seat.socket,
+        skin: seat.skin,
+        x: seat.x,
+        z: seat.z,
+        facing: seat.facing,
+        seq: seat.seq,
       })),
     };
   }
@@ -158,6 +179,8 @@ export function createGameServer(options: ServerOptions = {}) {
   ) {
     seat.socket = socket;
     seat.disconnectedAt = undefined;
+    seat.moveAt = Date.now();
+    seat.distanceCredit = 0.25;
     session.room = room;
     session.seat = seat;
     room.touchedAt = Date.now();
@@ -175,6 +198,33 @@ export function createGameServer(options: ServerOptions = {}) {
     const session = sessions.get(socket)!;
     if (session.revoked) return;
     const id = request.id;
+    if (request.type === "move") {
+      const now = Date.now();
+      session.movementTokens = Math.min(10, session.movementTokens + (now - session.movementAt) * 0.03);
+      session.movementAt = now;
+      if (session.movementTokens < 1) return;
+      session.movementTokens--;
+      const { seat, room } = session;
+      if (!seat || !room || room.phase !== "started") return;
+      const { x, z, facing, seq } = request;
+      const credit = Math.min(1, seat.distanceCredit + Math.max(0, now - seat.moveAt) * MOVE_SPEED / 1000);
+      seat.moveAt = now;
+      seat.distanceCredit = credit;
+      if (typeof x !== "number" || typeof z !== "number" || typeof facing !== "number" ||
+          !Number.isFinite(facing) || typeof seq !== "number" || !Number.isSafeInteger(seq) ||
+          seq <= seat.seq || !insideStreet(x, z) || Math.hypot(x - seat.x, z - seat.z) > credit + 0.001) {
+        send(socket, { type: "pose_rejected", playerId: seat.id, x: seat.x, z: seat.z, facing: seat.facing, seq: seat.seq });
+        return;
+      }
+      seat.distanceCredit -= Math.hypot(x - seat.x, z - seat.z);
+      seat.x = x;
+      seat.z = z;
+      seat.facing = Math.atan2(Math.sin(facing), Math.cos(facing));
+      seat.seq = seq;
+      room.movementDirty = true;
+      room.touchedAt = now;
+      return;
+    }
     if (Date.now() - session.windowAt > 10_000) {
       session.windowAt = Date.now();
       session.requests = 0;
@@ -197,7 +247,11 @@ export function createGameServer(options: ServerOptions = {}) {
       host(session.room);
       if (session.room.hostId !== session.seat.id)
         return fail(socket, id, "not_host", "The host starts the night.");
-      session.room.phase = "started";
+      if (session.room.phase !== "started") {
+        session.room.phase = "started";
+        session.room.startedAt = Date.now();
+        session.room.blackoutAt = session.room.startedAt + BLACKOUT_DELAY_MS;
+      }
       session.room.touchedAt = Date.now();
       send(socket, {
         type: "result",
@@ -235,6 +289,7 @@ export function createGameServer(options: ServerOptions = {}) {
         id: randomUUID(),
         name: name(request.name),
         token: randomBytes(32).toString("hex"),
+        ...initialPose(0),
       };
       const room: Room = {
         code: roomCode,
@@ -328,6 +383,7 @@ export function createGameServer(options: ServerOptions = {}) {
         id: randomUUID(),
         name: name(request.name),
         token: randomBytes(32).toString("hex"),
+        ...initialPose(Array.from({ length: 6 }, (_, index) => index).find((skin) => ![...room.seats.values()].some((seat) => seat.skin === skin))!),
       };
       room.seats.set(seat.id, seat);
       attach(socket, session, room, seat, id);
@@ -428,7 +484,7 @@ export function createGameServer(options: ServerOptions = {}) {
     );
   });
   wss.on("connection", (socket) => {
-    sessions.set(socket, { alive: true, windowAt: Date.now(), requests: 0 });
+    sessions.set(socket, { alive: true, windowAt: Date.now(), requests: 0, movementTokens: 10, movementAt: Date.now() });
     send(socket, { type: "hello", bootId });
     socket.on("pong", () => {
       const session = sessions.get(socket);
@@ -483,11 +539,21 @@ export function createGameServer(options: ServerOptions = {}) {
     }
   }, options.heartbeatMs ?? 10_000);
   cleanup.unref();
+  const movementBroadcast = setInterval(() => {
+    for (const room of rooms.values()) {
+      if (room.phase === "started" && room.movementDirty) {
+        room.movementDirty = false;
+        broadcast(room);
+      }
+    }
+  }, 100);
+  movementBroadcast.unref();
   return {
     server,
     bootId,
     async close() {
       clearInterval(cleanup);
+      clearInterval(movementBroadcast);
       for (const socket of sessions.keys()) socket.terminate();
       await new Promise<void>((resolveClose) =>
         wss.close(() => resolveClose()),
@@ -497,6 +563,9 @@ export function createGameServer(options: ServerOptions = {}) {
       );
     },
   };
+}
+function initialPose(skin: number) {
+  return { skin, x: (skin - 2.5) * 1.6, z: 2, facing: Math.PI, seq: 0, moveAt: Date.now(), distanceCredit: 0.25 };
 }
 function missing(response: ServerResponse) {
   response.writeHead(404);

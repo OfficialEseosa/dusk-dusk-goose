@@ -65,7 +65,7 @@ test("two independent phone/laptop sessions: join, clipboard, start, refresh, le
   await b.screenshot({ path: "test-results/laptop-room.png" });
   await a.getByRole("button", { name: "Start the night", exact: true }).click();
   await expect(
-    b.getByText("The night is open.", { exact: true }),
+    b.locator('canvas[data-ready="true"]'),
   ).toBeVisible();
   await b.reload();
   await expect(b.getByRole("list", { name: "Players" })).toContainText(
@@ -171,7 +171,7 @@ test("solo starts; invalid rooms and names stay actionable; small viewport fits"
     .getByRole("button", { name: "Start the night", exact: true })
     .click();
   await expect(
-    page.getByText("The night is open.", { exact: true }),
+    page.locator('canvas[data-ready="true"]'),
   ).toBeVisible();
   await bounds(page);
   await context.close();
@@ -455,6 +455,14 @@ test("silent browser-side drop resumes before the stale server socket expires", 
       "Sam (you)",
     );
     expect(tunnels).toHaveLength(1);
+    await a.getByRole('button', {name:'Start the night',exact:true}).click();
+    await a.locator('canvas[data-ready="true"]').waitFor();
+    await b.locator('canvas[data-ready="true"]').waitFor();
+    await a.keyboard.down('d');
+    await a.waitForTimeout(400);
+    await a.keyboard.up('d');
+    await a.waitForTimeout(250);
+    const beforeDrop = JSON.parse(await a.locator('canvas').getAttribute('data-playerposes') ?? '{}');
     const old = tunnels[0];
     old.blackhole = true;
     old.client.unpipe(old.upstream);
@@ -470,9 +478,9 @@ test("silent browser-side drop resumes before the stale server socket expires", 
     expect(
       await a.evaluate(() => sessionStorage.getItem("maple:seat:v1")),
     ).toBe(seat);
-    await expect(
-      a.getByRole("button", { name: "Start the night", exact: true }),
-    ).toBeEnabled();
+    await expect(a.locator('canvas[data-ready="true"]')).toBeVisible();
+    const playerId = JSON.parse(seat!).playerId;
+    await expect.poll(async()=>JSON.parse(await a.locator('canvas').getAttribute('data-playerposes') ?? '{}')[playerId]?.x).toBeCloseTo(beforeDrop[playerId].x,1);
     await expect(
       a.getByText(
         "Your seat is still reconnecting. You can also join as another player.",
@@ -483,7 +491,7 @@ test("silent browser-side drop resumes before the stale server socket expires", 
         .getByRole("listitem")
         .filter({ hasText: "Alex" })
         .getByText("Here", { exact: true }),
-    ).toBeVisible();
+    ).toHaveCount(1);
     await bounds(a);
     await bounds(b);
     await a.screenshot({ path: "test-results/silent-drop-phone.png" });

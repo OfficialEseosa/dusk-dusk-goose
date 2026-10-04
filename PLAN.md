@@ -89,7 +89,7 @@ Each row is a separate approval-sized implementation request. The first playable
 | Step | Deliverable | Test before proceeding |
 | --- | --- | --- |
 | 1 | Fresh project, assets, title and real in-memory rooms | Create alone, Start enabled, second phone joins by code, leave/back/copy all work |
-| 2 | Mood A street, shared preparation room, thumb controls, lights-out and sound; Railway-ready production build | Two phones walk and see each other/real beams; no scrolling or cut-off controls; compare actual screenshot to Mood A; user deploys to Railway at this milestone |
+| 2 | Mood A street only, thumb/keyboard controls, synchronized lights-out, sound and reconnects; Railway-ready production build | Two independent sessions walk and turn; 667x375 fits; ten-minute soak and measured FPS; actual-versus-Mood-A screenshot. No deployment in this request. |
 | 3 | Single-server simulation and recovery hardened | Refresh, hidden tab, locked phone, network switch and ten-minute session; restart returns both phones to title with a clear message |
 | 4 | Hiding, preparation room, search and reveal | Complete both a one-person round and a human-hider round; inspect seeker network payloads for secrets |
 | 5 | Beam-only trails, decoys, shadow freeze and timed true clues | Both phones agree on lit clues; walls block beams; disconnected hider cannot stall |
@@ -128,4 +128,4 @@ These settings must be ready for your first Railway deployment **at the end of s
 
 ## Current scope
 
-Mood A and these amendments are approved. Build step 1 only: fresh project, asset intake, title screen, real in-memory rooms and verified create/join/start/leave/back/copy. A Start request can advance the room state, but step 1 does not implement the street or a playable round. The opening world belongs to step 2. Do not deploy or start step 2 in this request.
+Mood A and these amendments are approved. Step 1 and its reconnection fix are verified. The current request authorizes step 2 only: one street using the supplied Kenney characters, shared blackout, movement, flashlights, sound and recovery. Preparation, hiding, seeking, footprints, radio and scoring remain outside this step. Save verification and the visual comparison, commit, and stop. Do not deploy.
