@@ -21,7 +21,7 @@ async function bounds(page: Page) {
     await page.evaluate(() => ({
       x: document.documentElement.scrollWidth <= innerWidth,
       y: document.documentElement.scrollHeight <= innerHeight,
-      buttons: [...document.querySelectorAll("button")].every((b) => {
+      buttons: [...document.querySelectorAll("button")].filter(b=>b.getClientRects().length>0).every((b) => {
         const r = b.getBoundingClientRect();
         return (
           r.height >= 44 &&
@@ -67,10 +67,16 @@ test("two independent phone/laptop sessions: join, clipboard, start, refresh, le
   await expect(
     b.locator('canvas[data-ready="true"]'),
   ).toBeVisible();
+  await expect(a.locator('canvas')).toHaveAttribute('data-role','hider');
+  await expect(a.locator('canvas')).toHaveAttribute('data-location','street');
+  await expect(b.locator('canvas')).toHaveAttribute('data-role','seeker');
+  await expect(b.locator('canvas')).toHaveAttribute('data-location','prep');
   await b.reload();
   await expect(b.getByRole("list", { name: "Players" })).toContainText(
     "Sam (you)",
   );
+  await expect(b.locator('canvas[data-ready="true"]')).toHaveAttribute('data-role','seeker');
+  await expect(b.locator('canvas')).toHaveAttribute('data-location','prep');
   await b.getByRole("button", { name: "Back to title" }).click();
   await expect(a.getByRole("list", { name: "Players" })).not.toContainText(
     "Sam",
@@ -483,6 +489,8 @@ test("silent browser-side drop resumes before the stale server socket expires", 
       await a.evaluate(() => sessionStorage.getItem("maple:seat:v1")),
     ).toBe(seat);
     await expect(a.locator('canvas[data-ready="true"]')).toBeVisible();
+    await expect(a.locator('canvas')).toHaveAttribute('data-role','hider');
+    await expect(a.locator('canvas')).toHaveAttribute('data-location','street');
     const playerId = JSON.parse(seat!).playerId;
     await expect.poll(async()=>JSON.parse(await a.locator('canvas').getAttribute('data-playerposes') ?? '{}')[playerId]?.x).toBeCloseTo(beforeDrop[playerId].x,1);
     await expect(

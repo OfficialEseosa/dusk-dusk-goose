@@ -14,19 +14,20 @@ try {
   await a.getByTestId('room-code').waitFor();const code=await a.getByTestId('room-code').innerText();
   await b.goto(`http://localhost:5174/?room=${code}`);await b.getByLabel('Your name').fill('Sam');await b.getByRole('button',{name:'Join',exact:true}).click();
   await b.getByRole('list',{name:'Players'}).waitFor();await a.getByRole('button',{name:'Start the night',exact:true}).click();
-  for(const p of pages){await p.locator('canvas[data-ready="true"]').waitFor();await p.evaluate(()=>window.soakStick=document.querySelector('#move-stick'));}
+  for(const p of pages){await p.locator('canvas[data-ready="true"]').waitFor();await p.evaluate(()=>{window.soakStick=document.querySelector('#move-stick');window.soakAction=document.querySelector('#round-action');});}
   result.hardware.gpu=await a.evaluate(()=>{const gl=document.querySelector('canvas').getContext('webgl2');const ext=gl.getExtension('WEBGL_debug_renderer_info');return ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):'unavailable';});
   const start=Date.now();
   while(Date.now()-start<600000){
     await new Promise(resolve=>setTimeout(resolve,10000));
-    const sample=await Promise.all(pages.map(p=>p.evaluate(()=>({fps:Number(document.querySelector('canvas').dataset.fps),p95:Number(document.querySelector('canvas').dataset.frameP95),frames:Number(document.querySelector('canvas').dataset.sampleFrames),triangles:Number(document.querySelector('canvas').dataset.triangles),drawCalls:Number(document.querySelector('canvas').dataset.drawCalls),players:document.querySelector('#street-players').textContent,stable:window.soakStick===document.querySelector('#move-stick'),status:document.querySelector('#street-status').textContent,lit:document.querySelector('canvas').dataset.lit,poses:JSON.parse(document.querySelector('canvas').dataset.playerposes)}))));
+    const sample=await Promise.all(pages.map(p=>p.evaluate(()=>({fps:Number(document.querySelector('canvas').dataset.fps),p95:Number(document.querySelector('canvas').dataset.frameP95),frames:Number(document.querySelector('canvas').dataset.sampleFrames),triangles:Number(document.querySelector('canvas').dataset.triangles),drawCalls:Number(document.querySelector('canvas').dataset.drawCalls),players:document.querySelector('#street-players').textContent,stable:window.soakStick===document.querySelector('#move-stick')&&window.soakAction===document.querySelector('#round-action'),phase:document.querySelector('canvas').dataset.roundPhase,place:document.querySelector('canvas').dataset.location,status:document.querySelector('#street-status').textContent,lit:document.querySelector('canvas').dataset.lit,poses:JSON.parse(document.querySelector('canvas').dataset.playerposes)}))));
     result.samples.push({elapsed:Date.now()-start,devices:sample});
-    if(sample.some(s=>!s.stable||s.status||Object.keys(s.poses).length!==2||s.players.includes('Reconnecting')))throw new Error('Soak state failed: '+JSON.stringify(sample));
+    if(await a.locator('#next-round').isVisible()&&await a.locator('#next-round').isEnabled())await a.locator('#next-round').click();
+    if(sample.some(s=>!s.stable||s.status||Object.keys(s.poses).length<1||Object.keys(s.poses).length>2||s.players.includes('Reconnecting')))throw new Error('Soak state failed: '+JSON.stringify(sample));
     if(result.samples.length%6===0)console.log(`Soak ${Math.round((Date.now()-start)/1000)}s: ${sample.map(s=>s.fps+' fps').join(', ')}; both seats Here.`);
   }
   result.durationMs=Date.now()-start;
   await mkdir('test-results',{recursive:true});
   await a.screenshot({path:'test-results/soak-phone.png'});await b.screenshot({path:'test-results/soak-laptop.png'});
-  await writeFile('test-results/step2-soak.json',JSON.stringify(result,null,2));
+  await writeFile('test-results/step4-soak.json',JSON.stringify(result,null,2));
   console.log(JSON.stringify({durationMs:result.durationMs,disconnects:result.disconnects,errors:result.errors,hardware:result.hardware}));
 } finally {await browser.close();}

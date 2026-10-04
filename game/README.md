@@ -16,11 +16,15 @@ npm start
 
 Open http://localhost:5174. The same Node process serves the built page and `/live` WebSocket. On a second laptop/phone on the same local network, use this computer's LAN address and port 5174, if the firewall permits it. Deployment requires a separate authorization.
 
-## Test the street
+## Play a round
 
-Enter a name and Create a night. Start is enabled with one person. Copy the invite into a second independent browser session, enter another name and Join. Press Start the night: everyone enters Maple Street, and the streetlamps cut out ten seconds after Start. Walk using WASD or arrow keys, or drag the left thumb stick. Each player's flashlight follows their facing. The Sound button mutes the crickets, electric hum and flashlight click. Back to title leaves your seat. Friends joining after Start arrive directly on the street in its current state.
+Create a night alone or invite another independent browser/phone with the code. Start works with one person. Alone, you always seek and the game hides the capsule. With friends, the first joiner hides, then the role rotates each round.
 
-This step is street exploration only. Rounds, hiding, searching, preparation, radio and scoring come later. Recorded checks and current limitations are in STEP2_VERIFICATION.md. The ten-minute check can be repeated against port 5174 with `node tests/step2-soak.mjs`.
+Seekers start in a furnished room: walk to the table and use **Pick up**. A solo pickup starts seeking immediately. With a human hider, the street power cuts after ten seconds, followed by 25 seconds to bury beside a mailbox, hedge, porch corner or bin. If the hider misses the deadline, the server buries it. Seekers then reach the street and have two minutes to find it.
+
+Move with WASD/arrows or the left stick. The right action appears only within range. On laptop use **E**, or use the action button. Hold Search for two seconds. A wrong search makes a shared sound and blocks that seeker's searches for five seconds. A human hider can walk but cannot search during seeking and has no flashlight then. Finding the capsule or running out of time reveals its location to everyone; after five seconds the host can **Start next round**. Mid-round arrivals explore preparation and enter play next round.
+
+Sound starts on a gesture and can be muted. Back to title leaves. Footprints, radio, clues and scores are not included in this step. Full checks and limitations are in STEP4_VERIFICATION.md. Repeat the ten-minute connection/control/round-transition check against port 5174 with `node tests/step2-soak.mjs`, and the six-player rendering check with `node tests/street-render-budget.mjs`.
 
 Refresh to return to the same seat. Two tabs can be different players. Close one tab, open its invite in a new tab in the same browser, and use Return as name to reclaim its disconnected seat using the private browser credential. The same name in a different browser cannot recover that seat. Explicit leave removes the recovery credential. A restart discards all rooms; returning browsers receive an ended-night message and a working title screen.
 

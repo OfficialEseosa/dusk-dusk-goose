@@ -1,5 +1,6 @@
 import {test,expect,type Page} from '@playwright/test';
 import {SOLIDS,PLAYER_RADIUS} from '../shared/street-layout';
+import {pickUpFlashlight,seeking} from './round-regression-helpers';
 
 async function pose(page:Page){return page.locator('canvas').evaluate(c=>JSON.parse(c.dataset.playerposes??'{}')[c.dataset.localId!]);}
 async function walkTo(page:Page,axis:'x'|'z',target:number){
@@ -21,6 +22,7 @@ test('keyboard walking stops at every solid class and can move away',async({page
     {id:'house-2',x:-6,z:2,key:'w',axis:'z',limit:-11.41,sign:1}] as const;
   for(const item of cases){
     await create(page);await page.getByRole('button',{name:'Start the night',exact:true}).click();await page.locator('canvas[data-ready="true"]').waitFor();
+    await pickUpFlashlight(page);await seeking(page);
     await walkTo(page,'x',item.x);await walkTo(page,'z',item.z);
     await page.keyboard.down(item.key);await page.waitForTimeout(item.id==='house-2'?4300:item.id==='tree-2'?700:3300);await page.keyboard.up(item.key);
     const stopped=await pose(page);expect(stopped[item.axis]).toBeGreaterThanOrEqual(item.limit-.08);expect(stopped[item.axis]).toBeLessThan(item.limit+.4);
@@ -32,11 +34,13 @@ test('keyboard walking stops at every solid class and can move away',async({page
 });
 
 test('phone camera, separated labels and warm beams beside a house',async({browser})=>{
+  test.setTimeout(90000);
   const phone=await browser.newContext({viewport:{width:667,height:375},hasTouch:true}),laptop=await browser.newContext({viewport:{width:1366,height:768}});
-  const a=await phone.newPage(),b=await laptop.newPage();
+  const a=await phone.newPage(),b=await laptop.newPage(),host=await laptop.newPage();
   try{
-    const code=await create(a);await b.goto(`/?room=${code}`);await b.getByLabel('Your name').fill('Sam');await b.getByRole('button',{name:'Join',exact:true}).click();await expect(b.getByRole('list',{name:'Players'})).toContainText('Sam');
-    await a.getByRole('button',{name:'Start the night',exact:true}).click();for(const p of [a,b])await p.locator('canvas[data-ready="true"]').waitFor();
+    const code=await create(host);for(const [p,name] of [[a,'Alex'],[b,'Sam']] as const){await p.goto(`/?room=${code}`);await p.getByLabel('Your name').fill(name);await p.getByRole('button',{name:'Join',exact:true}).click();await expect(p.getByRole('list',{name:'Players'})).toContainText(`${name} (you)`);}
+    await host.getByRole('button',{name:'Start the night',exact:true}).click();for(const p of [a,b])await p.locator('canvas[data-ready="true"]').waitFor();
+    await Promise.all([pickUpFlashlight(a),pickUpFlashlight(b)]);await Promise.all([seeking(a),seeking(b)]);
     await walkTo(a,'z',-5.5);await walkTo(b,'z',-4.8);
     await expect(a.locator('canvas')).toHaveAttribute('data-lit','false',{timeout:15000});await a.waitForTimeout(400);
     expect(Number(await a.locator('canvas').getAttribute('data-character-height'))).toBeGreaterThanOrEqual(40);
@@ -45,9 +49,9 @@ test('phone camera, separated labels and warm beams beside a house',async({brows
     await walkTo(b,'x',(await pose(a)).x);
     await b.waitForTimeout(400);
     const rectangles=await a.locator('.player-label:not([hidden])').evaluateAll(labels=>labels.map(l=>{const r=l.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height};}));
-    expect(rectangles.length).toBe(2);const [r,s]=rectangles;expect(r.x<s.x+s.w&&r.x+r.w>s.x&&r.y<s.y+s.h&&r.y+r.h>s.y).toBe(false);
+    expect(rectangles.length).toBeGreaterThanOrEqual(2);for(let i=0;i<rectangles.length;i++)for(let j=i+1;j<rectangles.length;j++){const r=rectangles[i],s=rectangles[j];expect(r.x<s.x+s.w&&r.x+r.w>s.x&&r.y<s.y+s.h&&r.y+r.h>s.y).toBe(false);}
     await walkTo(b,'x',-2.4);await b.keyboard.down('w');await b.keyboard.down('a');await b.waitForTimeout(60);await b.keyboard.up('w');await b.keyboard.up('a');await a.waitForTimeout(400);
-    await a.screenshot({path:'../design/ground-beam-phone.png'});await b.screenshot({path:'../design/ground-beam-laptop.png'});
+    await a.screenshot({path:'../design/step4-ground-beam-phone.png'});await b.screenshot({path:'../design/step4-ground-beam-laptop.png'});
     for(const p of [a,b])expect(await p.evaluate(()=>document.documentElement.scrollWidth===innerWidth&&document.documentElement.scrollHeight===innerHeight)).toBe(true);
   }finally{await phone.close();await laptop.close();}
 });

@@ -82,11 +82,13 @@ APPROVED AMENDMENTS:
 - Replacement character downloads must be listed before use. Wait for the user
   to supply them, preserve source filenames and report mismatches.
 
-CURRENT AUTHORIZATION: A focused step 2 ground-first flashlight and full-beam
-camera framing follow-up only. Full lit-area visibility takes priority over
-character size; target at least about 40 pixels at 667x375. Preserve verified
-silhouettes, labels, collisions, controls, blackout, movement and recovery.
-Document exact world-space beam dimensions in PLAN.md, save four directional
-phone screenshots, measure rendering budget/FPS, run existing tests and update
-STEP2_VERIFICATION.md. No preparation, hiding, seeking, footprints, radio,
-scoring or deployment. Commit and stop.
+CURRENT AUTHORIZATION: Step 3 is satisfied by the existing recovery work. Build
+step 4 only: server-owned hiding, preparation, seeking and reveal for solo and
+human rounds, 24 reachable hiding spots, contextual pickup/bury/held-search
+controls, cooldown/noise, role rotation and recovery. Capsule location remains
+private to the hider until reveal; validate range, full server hold and round
+identity. Late joins wait in preparation until the next round. Keep controls
+persistent and all previous street checks working. Verify two independent
+phone/laptop sessions, record STEP4_VERIFICATION.md, commit and stop. No
+footprints, disturbed marks, false trails, freezing, radio, clues, scores or
+deployment.

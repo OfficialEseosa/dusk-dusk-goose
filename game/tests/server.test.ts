@@ -326,7 +326,9 @@ test("server rejects lamp penetration while accepting bounded legal corner trace
   try {
     const a = await connect(url);
     const created = await a.request({ type: "create", name: "Alex" });
-    assert.ok(created.ok);
+    assert.ok(created.ok && created.seat);
+    const b = await connect(url);
+    await b.request({ type: 'join', name: 'Sam', code: created.seat.room });
     const started = await a.request({ type: "start" });
     assert.ok(started.ok && started.room);
     let seq = 0;

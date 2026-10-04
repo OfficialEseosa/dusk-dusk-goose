@@ -1,8 +1,10 @@
 import {test,expect,type Page} from '@playwright/test';
 import {writeFile} from 'node:fs/promises';
+import {pickUpFlashlight,seeking} from './round-regression-helpers';
 
 async function begin(page:Page){await page.goto('/');await page.getByLabel('Your name').fill('Alex');await page.getByRole('button',{name:'Create a night',exact:true}).click();await expect(page.getByTestId('room-code')).toBeVisible();return page.getByTestId('room-code').innerText();}
 test('street: shared blackout, smooth poses, stable controls, refresh and late join',async({browser})=>{
+  test.setTimeout(90000);
   const phone=await browser.newContext({viewport:{width:667,height:375},hasTouch:true});const laptop=await browser.newContext({viewport:{width:1366,height:768}});
   const a=await phone.newPage(),b=await laptop.newPage();const errors:string[]=[];
   for(const p of [a,b])p.on('pageerror',e=>errors.push(e.message));
@@ -24,6 +26,11 @@ test('street: shared blackout, smooth poses, stable controls, refresh and late j
         if(!readings.blackout&&canvas.dataset.lit==='false')readings.blackout=Date.now();
       }).observe(canvas,{attributes:true,attributeFilter:['data-playerposes','data-lit']});
     },{id:identity.playerId,x:initial.x});
+    await pickUpFlashlight(b);
+    await Promise.all([expect(a.locator('canvas')).toHaveAttribute('data-lit','false',{timeout:15000}),expect(b.locator('canvas')).toHaveAttribute('data-lit','false',{timeout:15000})]);
+    const blackouts=await Promise.all([a,b].map(p=>p.evaluate(()=>(window as unknown as {readings:{blackout:number}}).readings.blackout)));
+    expect(Math.abs(blackouts[0]-blackouts[1])).toBeLessThan(150);
+    await Promise.all([seeking(a),seeking(b)]);
     const inputAt=await a.evaluate(()=>Date.now());
     await a.keyboard.down('ArrowRight');await a.waitForTimeout(800);await a.keyboard.up('ArrowRight');
     await a.evaluate(()=>{if((window as unknown as {stick:Element}).stick!==document.querySelector('#move-stick'))throw new Error('Stick remounted');});
@@ -40,28 +47,30 @@ test('street: shared blackout, smooth poses, stable controls, refresh and late j
     await expect.poll(async()=>JSON.parse(await a.locator('canvas').getAttribute('data-playerposes')??'{}')[identity.playerId]?.z).toBeLessThan(initial.z-1);
     for(const p of [a,b])expect(await p.evaluate(()=>document.documentElement.scrollWidth===innerWidth&&document.documentElement.scrollHeight===innerHeight)).toBe(true);
     const stick=await a.locator('#move-stick').boundingBox();expect(stick!.x).toBeLessThan(100);expect(stick!.y+stick!.height).toBeLessThanOrEqual(375);expect(stick!.height).toBeGreaterThanOrEqual(100);
-    await Promise.all([expect(a.locator('canvas')).toHaveAttribute('data-lit','false',{timeout:15000}),expect(b.locator('canvas')).toHaveAttribute('data-lit','false',{timeout:15000})]);
-    const blackouts=await Promise.all([a,b].map(p=>p.evaluate(()=>(window as unknown as {readings:{blackout:number}}).readings.blackout)));
-    expect(Math.abs(blackouts[0]-blackouts[1])).toBeLessThan(150);
     await writeFile('test-results/step2-timing.json',JSON.stringify({movementLatencyMs:movementAt-inputAt,blackoutSkewMs:Math.abs(blackouts[0]-blackouts[1])},null,2));
     console.log(`Remote movement ${movementAt-inputAt} ms; blackout skew ${Math.abs(blackouts[0]-blackouts[1])} ms.`);
     await a.screenshot({path:'test-results/street-phone.png'});await b.screenshot({path:'test-results/street-laptop.png'});
     const position=JSON.parse(await a.locator('canvas').getAttribute('data-poses')??'[]').find((p:{id:string})=>p.id===identity.playerId);
     await a.reload();await expect(a.locator('canvas[data-ready="true"]')).toBeVisible();expect(await a.evaluate(()=>JSON.parse(sessionStorage.getItem('maple:seat:v1')!).playerId)).toBe(identity.playerId);await expect(a.locator('canvas')).toHaveAttribute('data-lit','false');
+    await expect(a.locator('canvas')).toHaveAttribute('data-role','hider');await expect(a.locator('canvas')).toHaveAttribute('data-location','street');await expect(a.locator('canvas')).toHaveAttribute('data-round-phase','seeking');
     await expect.poll(async()=>JSON.parse(await a.locator('canvas').getAttribute('data-poses')??'[]').find((p:{id:string})=>p.id===identity.playerId)?.x).toBeCloseTo(position.x,1);
-    const late=await laptop.newPage();await late.goto(`/?room=${code}`);await late.getByLabel('Your name').fill('Late friend');await late.getByRole('button',{name:'Join',exact:true}).click();await expect(late.locator('canvas[data-ready="true"]')).toBeVisible();await expect(late.locator('canvas')).toHaveAttribute('data-lit','false');await late.close();expect(errors).toEqual([]);
+    const late=await laptop.newPage();await late.goto(`/?room=${code}`);await late.getByLabel('Your name').fill('Late friend');await late.getByRole('button',{name:'Join',exact:true}).click();await expect(late.locator('canvas[data-ready="true"]')).toBeVisible();await expect(late.locator('canvas')).toHaveAttribute('data-location','prep');await expect(late.locator('canvas')).toHaveAttribute('data-role','waiting');await expect(late.locator('canvas')).toHaveAttribute('data-lit','false');await late.close();expect(errors).toEqual([]);
   }finally{await phone.close();await laptop.close();}
 });
 
 test('a frozen device does not pause the other player or blackout',async({browser})=>{
+  test.setTimeout(65000);
   const c1=await browser.newContext({viewport:{width:667,height:375}}),c2=await browser.newContext({viewport:{width:1366,height:768}});
   const a=await c1.newPage(),b=await c2.newPage();
   try{
     const code=await begin(a);await b.goto(`/?room=${code}`);await b.getByLabel('Your name').fill('Sam');await b.getByRole('button',{name:'Join',exact:true}).click();await expect(b.getByRole('list',{name:'Players'})).toContainText('Sam');
     await a.getByRole('button',{name:'Start the night',exact:true}).click();await a.locator('canvas[data-ready="true"]').waitFor();await b.locator('canvas[data-ready="true"]').waitFor();
+    await pickUpFlashlight(b);
+    const devtools=await c1.newCDPSession(a);await devtools.send('Page.setWebLifecycleState',{state:'frozen'});
+    await expect(b.locator('canvas')).toHaveAttribute('data-lit','false',{timeout:15000});
+    await seeking(b);
     const id=await b.evaluate(()=>JSON.parse(sessionStorage.getItem('maple:seat:v1')!).playerId);
     const before=JSON.parse(await b.locator('canvas').getAttribute('data-playerposes')??'{}')[id];
-    const devtools=await c1.newCDPSession(a);await devtools.send('Page.setWebLifecycleState',{state:'frozen'});
     await b.keyboard.down('d');await b.waitForTimeout(700);await b.keyboard.up('d');
     await expect.poll(async()=>JSON.parse(await b.locator('canvas').getAttribute('data-playerposes')??'{}')[id]?.x).toBeGreaterThan(before.x+1);
     await expect(b.locator('canvas')).toHaveAttribute('data-lit','false',{timeout:15000});

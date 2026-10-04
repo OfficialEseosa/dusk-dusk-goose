@@ -12,7 +12,9 @@ export interface RoomSnapshot {
   serverTime: number;
   startedAt?: number;
   blackoutAt?: number;
-  players: (PlayerPose & { id: string; name: string; connected: boolean; skin: number })[];
+  roster?: { id: string; name: string; connected: boolean; skin: number }[];
+  round?: { number: number; phase: 'hiding' | 'seeking' | 'reveal'; hiderId: string | null; phaseEndsAt: number; revealReadyAt?: number; capsuleSpotId?: string; foundBy?: string | null; foundByName?: string };
+  players: (PlayerPose & { id: string; name: string; connected: boolean; skin: number; role?: 'hider' | 'seeker' | 'waiting'; place?: 'street' | 'prep'; flashlight?: boolean; cooldownUntil?: number; search?: { spotId: string; startedAt: number; endsAt: number } })[];
 }
 export interface SeatCredential {
   room: string;
@@ -22,7 +24,9 @@ export interface SeatCredential {
 }
 export interface ClientRequest {
   id: string;
-  type: "create" | "join" | "resume" | "recover" | "leave" | "start" | "move";
+  type: "create" | "join" | "resume" | "recover" | "leave" | "start" | "move" | "pickup" | "bury" | "search_begin" | "search_cancel" | "search_complete";
+  spotId?: string;
+  roundNumber?: number;
   x?: number;
   z?: number;
   facing?: number;
@@ -35,6 +39,7 @@ export interface ClientRequest {
   tokens?: string[];
 }
 export type ServerMessage =
+  | { type: 'search_noise'; eventId: string; playerId: string }
   | ({ type: "pose_rejected"; playerId: string } & PlayerPose)
   | { type: "seat_replaced"; message: string }
   | { type: "hello"; bootId: string }

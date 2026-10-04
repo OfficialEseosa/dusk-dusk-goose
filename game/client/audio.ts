@@ -45,6 +45,13 @@ export class NightSound {
       chirp.connect(gain);gain.connect(this.master!);chirp.start(time);chirp.stop(time+0.09);chirp.onended=()=>{chirp.disconnect();gain.disconnect();};
     }
   }
+  searchNoise(){
+    if(!this.context||!this.master)return;
+    const time=this.context.currentTime,oscillator=this.context.createOscillator(),gain=this.context.createGain();
+    oscillator.type="triangle";oscillator.frequency.setValueAtTime(180,time);oscillator.frequency.exponentialRampToValueAtTime(55,time+.3);
+    gain.gain.setValueAtTime(.15,time);gain.gain.exponentialRampToValueAtTime(.001,time+.35);
+    oscillator.connect(gain);gain.connect(this.master);oscillator.start(time);oscillator.stop(time+.36);oscillator.onended=()=>{oscillator.disconnect();gain.disconnect();};
+  }
   private click(){
     const context=this.context!;const buffer=context.createBuffer(1,Math.floor(context.sampleRate*0.035),context.sampleRate);const data=buffer.getChannelData(0);
     for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*(1-i/data.length)*0.18;

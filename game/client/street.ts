@@ -3,7 +3,9 @@ import { GLTFLoader, type GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { clone } from "three/addons/utils/SkeletonUtils.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import type { RoomSnapshot } from "../shared/protocol";
-import { MOVE_SPEED, moveOnStreet, HOUSE_X, HOUSE_MODELS, HOUSE_Z, LAMP_X, FLASHLIGHT_PROFILE as BEAM } from "../shared/street-layout";
+import { MOVE_SPEED, moveOnStreet, HOUSE_X, HOUSE_MODELS, HOUSE_Z, LAMP_X, SOLIDS, FLASHLIGHT_PROFILE as BEAM } from "../shared/street-layout";
+
+import { PREP_BOUNDS, HIDING_SPOTS } from "../shared/round";
 
 type Pose = { x: number; z: number; facing: number; seq: number };
 type Player = RoomSnapshot["players"][number];
@@ -23,6 +25,13 @@ type Figure = {
 /** Owns the persistent canvas and movement controls for the single street. */
 export class Street {
   private readonly scene = new THREE.Scene();
+  private readonly prep = new THREE.Scene();
+  private place = "street";
+  private roundNumber = 0;
+  private capsule?: THREE.Mesh;
+  private capsuleLabel?:HTMLSpanElement;
+  private prepAmbient?:THREE.HemisphereLight;
+  private prepLamp?:THREE.PointLight;
   private readonly camera = new THREE.OrthographicCamera();
   private readonly renderer: THREE.WebGLRenderer;
   private readonly loader = new GLTFLoader();
@@ -114,6 +123,7 @@ export class Street {
       ...["a", "b", "c", "d", "e", "f"].map(letter => `city-kit-suburban/building-type-${letter}.glb`),
       ...["tree-small", "tree-large", "fence-low", "planter", "driveway-short"].map(name => `city-kit-suburban/${name}.glb`),
       "city-kit-roads/light-curved.glb", "city-kit-roads/electricity-pole.glb",
+      ...["bedSingle","cabinetBedDrawerTable","books","rugRectangle","cardboardBoxClosed"].map(name=>`furniture-kit/${name}.glb`),
       "car-kit/sedan.glb", "car-kit/van.glb", "furniture-kit/trashcan.glb",
       ...["a", "b", "c", "d", "e", "f"].map(letter => `blocky-characters/character-${letter}.glb`),
     ];
@@ -125,6 +135,7 @@ export class Street {
     if (this.disposed) return;
     this.buildStreet();
     this.mergeStaticGeometry();
+    this.buildPreparation();
     this.ready = true;
     this.renderer.domElement.dataset.ready = "true";
     const current = this.snapshot ?? snapshot;
@@ -142,10 +153,19 @@ export class Street {
     this.snapshot = snapshot;
     this.serverOffset = snapshot.serverTime - Date.now();
     if (!this.ready) return;
+    const local=snapshot.players.find(p=>p.id===this.localId);
+    const nextPlace=local?.place??"street", nextRound=snapshot.round?.number??0;
+    if(local&&(this.place!==nextPlace||this.roundNumber!==nextRound)){
+      this.restorePose(this.fromPlayer(local));this.clearInput();
+      this.place=nextPlace;this.roundNumber=nextRound;
+    }
+    this.renderer.domElement.dataset.location=this.place;
+    this.renderer.domElement.dataset.roundPhase=snapshot.round?.phase??"";
+    this.renderer.domElement.dataset.role=local?.role??"";
     const present = new Set(snapshot.players.map(player => player.id));
     for (const [id, figure] of this.figures) {
       if (!present.has(id)) {
-        this.scene.remove(figure.group, figure.light, figure.target);
+        figure.group.removeFromParent();figure.light.removeFromParent();figure.target.removeFromParent();
         figure.mixer.stopAllAction(); figure.mixer.uncacheRoot(figure.model);
         for (const child of figure.group.children) if (child !== figure.model && child !== figure.batch.mesh) this.releaseObject(child);
         figure.batch.mesh.geometry.dispose();
@@ -157,6 +177,10 @@ export class Street {
     for (const player of snapshot.players) {
       let figure = this.figures.get(player.id);
       if (!figure) { figure = this.createFigure(player); this.figures.set(player.id, figure); }
+      const world=this.place==="prep"?this.prep:this.scene;
+      if(figure.group.parent!==world)world.add(figure.group,figure.light,figure.target);
+      figure.light.visible=player.flashlight??true;
+      figure.group.children.filter(c=>c.userData.flashlight).forEach(c=>c.visible=player.flashlight??true);
       figure.label.textContent = player.id === this.localId ? "You" : player.name;
       figure.label.dataset.connected = String(player.connected);
       if (player.id !== this.localId && player.seq !== figure.next.seq) {
@@ -168,9 +192,12 @@ export class Street {
       }
     }
     // The same two seats cast shadows on every device, independent of who is local.
-    const shadowSeats = snapshot.players.slice().sort((a,b)=>a.skin-b.skin).slice(0,BEAM.maxShadowLights).map(p=>p.id);
+    const shadowSeats = snapshot.players.filter(p=>p.flashlight!==false).sort((a,b)=>a.skin-b.skin).slice(0,BEAM.maxShadowLights).map(p=>p.id);
     for (const [id,figure] of this.figures) figure.light.castShadow=shadowSeats.includes(id);
   }
+
+  get localPose() { return {...this.pose}; }
+  get loaded() { return this.ready; }
 
   setConnection(connected: boolean) { this.connected = connected; if (!connected) this.clearInput(); }
 
@@ -238,6 +265,9 @@ export class Street {
       this.box(11.4, 0.03, 13, index % 2 ? 0x405340 : 0x465848, x, -0.04, -12.9);
       this.model(`city-kit-suburban/building-type-${HOUSE_MODELS[index]}.glb`, 8.5, x, HOUSE_Z);
       this.box(1.2, 0.05, 5.5, 0x8f969c, x + 1.9, 0.02, -8.2);
+      const front=SOLIDS.find(s=>s.id===`house-${index}`)!.maxZ;
+      const porchDepth=Math.max(.6,-9.8-front);
+      this.box(1.6,.18,porchDepth,0x8f969c,x-3,.025,front+porchDepth/2);
       this.model("city-kit-suburban/driveway-short.glb", 3.6, x - 3.6, -8.1);
       this.model("city-kit-suburban/planter.glb", 1.2, x + 3.4, -8.7);
       this.model("furniture-kit/trashcan.glb", 0.48, x + 4.1, -6.8);
@@ -269,6 +299,32 @@ export class Street {
       this.model("city-kit-suburban/tree-large.glb", 2.5 + (index % 3) * 0.25, -42 + index * 7.6, 17 + (index % 2) * 2);
     }
     for (const x of [-43, 43]) for (const z of [-15, -8, 0, 7]) this.model("city-kit-suburban/tree-large.glb", 5.5, x, z);
+  }
+
+  private buildPreparation() {
+    this.prep.background=new THREE.Color(0x0d192b);
+    this.prepAmbient=new THREE.HemisphereLight(0x718bd2,0x192334,.65);this.prep.add(this.prepAmbient);
+    const moon=new THREE.DirectionalLight(0x95b6ff,.8);moon.position.set(-15,26,-12);this.prep.add(moon);
+    this.prepLamp=new THREE.PointLight(0xffd09a,20,15,1);this.prepLamp.position.set(0,4,-1);this.prep.add(this.prepLamp);
+    const box=(w:number,h:number,d:number,color:number,x:number,y:number,z:number)=>{
+      const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color,roughness:1}));if(h<=.25&&w>1)this.groundMaterial(mesh.material);mesh.position.set(x,y,z);this.prep.add(mesh);return mesh;
+    };
+    box(11,.2,8,0x665342,0,-.1,0);box(11,3,.2,0x60717c,0,1.5,-3.8);box(.2,3,8,0x60717c,-5.4,1.5,0);
+    const furniture=(name:string,width:number,x:number,z:number)=>{
+      const asset=this.assets.get(`furniture-kit/${name}.glb`)!.scene.clone(true);
+      const bounds=new THREE.Box3().setFromObject(asset),scale=width/bounds.getSize(new THREE.Vector3()).x;
+      const centre=bounds.getCenter(new THREE.Vector3());asset.scale.setScalar(scale);asset.position.set(x-centre.x*scale,-bounds.min.y*scale,z-centre.z*scale);this.prep.add(asset);return asset;
+    };
+    furniture("bedSingle",2,-3.7,-2.1);const table=furniture("cabinetBedDrawerTable",1.8,0,-2.8);
+    const tableTop=new THREE.Box3().setFromObject(table).max.y;
+    furniture("cardboardBoxClosed",.9,4,-2.7);furniture("rugRectangle",3.5,0,1);
+    const books=furniture("books",.7,3,-2.9);books.position.y+=.05;
+    for(let i=0;i<6;i++) {
+      const torch=new THREE.Mesh(new THREE.CylinderGeometry(.06,.08,.38,6),new THREE.MeshStandardMaterial({color:0xc3974b}));
+      torch.rotation.z=Math.PI/2;torch.position.set(-.65+i*.26,tableTop+.085,-2.65);this.prep.add(torch);
+    }
+    this.capsule=new THREE.Mesh(new THREE.BoxGeometry(.48,.32,.28),new THREE.MeshBasicMaterial({color:0xffd181}));this.capsule.visible=false;this.scene.add(this.capsule);
+    this.capsuleLabel=document.createElement("span");this.capsuleLabel.className="capsule-label";this.capsuleLabel.textContent="Capsule";this.capsuleLabel.hidden=true;this.container.append(this.capsuleLabel);
   }
 
   /** Merge static meshes by palette/material rather than issuing one draw per kit object. */
@@ -306,8 +362,10 @@ export class Street {
     group.position.set(player.x, 0, player.z); group.rotation.y = player.facing;
     const batch = this.batchCharacter(model, group);
     const torch = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.055, 0.25, 6), new THREE.MeshStandardMaterial({ color: 0x303742, roughness: 0.65 }));
+    torch.userData.flashlight=true;
     torch.rotation.x = Math.PI / 2; torch.position.set(-0.38, 0.95, 0.35); group.add(torch);
     const glass = new THREE.Mesh(new THREE.CircleGeometry(0.07, 8), new THREE.MeshBasicMaterial({ color: 0xffdd99 }));
+    glass.userData.flashlight=true;
     glass.position.set(-0.38, 0.95, 0.49); group.add(glass);
     const target = new THREE.Object3D();
     const light = new THREE.SpotLight(BEAM.color, BEAM.intensity, BEAM.range, BEAM.halfAngle, BEAM.penumbra, 0);
@@ -399,6 +457,8 @@ export class Street {
     this.blackout = Boolean(this.snapshot?.blackoutAt && Date.now() + this.serverOffset >= this.snapshot.blackoutAt);
     this.ambient.intensity = this.blackout ? 0.32 : 0.7;
     this.moon.intensity = this.blackout ? 0.65 : 0.8;
+    if(this.prepAmbient)this.prepAmbient.intensity=this.blackout?.35:.65;
+    if(this.prepLamp)this.prepLamp.intensity=this.blackout?0:20;
     for (const lamp of this.lamps) lamp.intensity = this.blackout ? 0 : 90;
     for (const bulb of this.bulbs) bulb.emissiveIntensity = this.blackout ? 0 : 2;
     this.renderer.domElement.dataset.light = this.blackout ? "dark" : "lit";
@@ -409,10 +469,13 @@ export class Street {
     if (this.keys.has("w") || this.keys.has("arrowup")) dz -= 1;
     if (this.keys.has("s") || this.keys.has("arrowdown")) dz += 1;
     const length = Math.hypot(dx, dz);
-    const moving = length > 0.08 && this.connected && !document.hidden;
+    const revealViewing=this.snapshot?.round?.phase==="reveal"&&Date.now()+this.serverOffset<(this.snapshot.round.revealReadyAt??0);
+    const moving = length > 0.08 && this.connected && !document.hidden&&!revealViewing;
     if (moving) {
       dx /= Math.max(length, 1); dz /= Math.max(length, 1);
-      const next=moveOnStreet(this.pose,{x:this.pose.x+dx*MOVE_SPEED*dt,z:this.pose.z+dz*MOVE_SPEED*dt},point=>this.movePath.push(point));
+      const target={x:this.pose.x+dx*MOVE_SPEED*dt,z:this.pose.z+dz*MOVE_SPEED*dt};
+      const next=this.place==="prep"?{x:THREE.MathUtils.clamp(target.x,PREP_BOUNDS.minX,PREP_BOUNDS.maxX),z:THREE.MathUtils.clamp(target.z,PREP_BOUNDS.minZ,PREP_BOUNDS.maxZ)}:
+        moveOnStreet(this.pose,target,point=>this.movePath.push(point));
       this.pose.x=next.x;this.pose.z=next.z;
       this.pose.facing = Math.atan2(dx, dz);
     }
@@ -420,7 +483,30 @@ export class Street {
       this.lastSend = now; this.pose.seq++; this.onPose({ ...this.pose,path:this.movePath.length?this.movePath:[{x:this.pose.x,z:this.pose.z}] });this.movePath=[];
     }
     const labelWidth = this.container.clientWidth, labelHeight = this.container.clientHeight;
-    this.frameBeam(dt, labelWidth, labelHeight);
+    const revealed=this.snapshot?.round?.phase==="reveal"?this.snapshot.round.capsuleSpotId:undefined;
+    const revealedSpot=HIDING_SPOTS.find(s=>s.id===revealed);
+    if(revealViewing&&revealedSpot) {
+      this.cameraFocus.lerp(this.projected.set(revealedSpot.x,0,revealedSpot.z),1-Math.exp(-5*dt));
+      const halfHeight=labelHeight<=500?4.7:9.5,aspect=labelWidth/labelHeight;
+      this.camera.left=-halfHeight*aspect;this.camera.right=halfHeight*aspect;this.camera.top=halfHeight;this.camera.bottom=-halfHeight;
+      this.camera.position.copy(this.cameraFocus).add(this.cameraOffset);this.camera.lookAt(this.cameraFocus);this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();
+    }else if(this.place==="prep") {
+      const halfHeight=4.7,aspect=labelWidth/labelHeight;
+      this.camera.left=-halfHeight*aspect;this.camera.right=halfHeight*aspect;this.camera.top=halfHeight;this.camera.bottom=-halfHeight;
+      this.camera.position.set(6,11,10);this.camera.lookAt(0,0,0);this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();
+    }else this.frameBeam(dt, labelWidth, labelHeight);
+    if(this.capsule) {
+      this.capsule.visible=Boolean(revealedSpot);
+      if(revealedSpot)this.capsule.position.set(revealedSpot.x,.22,revealedSpot.z);
+    }
+    if(this.capsuleLabel) {
+      this.capsuleLabel.hidden=!revealedSpot||this.place==="prep"&&!revealViewing;
+      if(revealedSpot) {
+        this.projected.set(revealedSpot.x,.8,revealedSpot.z).project(this.camera);
+        this.capsuleLabel.hidden ||= Math.abs(this.projected.x)>1||Math.abs(this.projected.y)>1;
+        this.capsuleLabel.style.transform=`translate(${(this.projected.x*.5+.5)*labelWidth}px,${(-this.projected.y*.5+.5)*labelHeight}px)`;
+      }
+    }
     const observed: Record<string, Pose> = {};
     for (const [id, figure] of this.figures) {
       const local = id === this.localId;
@@ -444,7 +530,7 @@ export class Street {
       this.projected.copy(figure.group.position).add(new THREE.Vector3(0, 2, 0)).project(this.camera);
       figure.label.dataset.screenX=String((this.projected.x*.5+.5)*labelWidth);
       figure.label.dataset.screenY=String((-this.projected.y*.5+.5)*labelHeight);
-      figure.label.hidden = Math.abs(this.projected.x) > 1.05 || Math.abs(this.projected.y) > 1.05;
+      figure.label.hidden = this.place==="prep"&&revealViewing || Math.abs(this.projected.x) > 1.05 || Math.abs(this.projected.y) > 1.05;
       observed[id] = { x: figure.group.position.x, z: figure.group.position.z, facing, seq: local ? this.pose.seq : figure.next.seq };
       if(local){
         const feet=figure.group.position.clone().project(this.camera),head=figure.group.position.clone().add(new THREE.Vector3(0,1.65,0)).project(this.camera);
@@ -452,7 +538,7 @@ export class Street {
       }
     }
     this.placeLabels(labelWidth,labelHeight);
-    this.renderer.render(this.scene, this.camera);
+    this.renderer.render(this.place==="prep"&&!revealViewing?this.prep:this.scene, this.camera);
     if (now - this.lastObservation >= 50) {
       const poses = JSON.stringify(observed);
       this.renderer.domElement.dataset.players = poses;
@@ -468,7 +554,7 @@ export class Street {
         fps: (1000 / average).toFixed(1), frameP95: String(sorted[Math.floor(sorted.length * 0.95)]?.toFixed(2) ?? 0),
         sampleFrames: String(this.allFrames.length), drawCalls: String(this.renderer.info.render.calls),
         triangles: String(this.renderer.info.render.triangles), localId: this.localId,
-        shadowLights:String([...this.figures.values()].filter(f=>f.light.castShadow).length),
+        shadowLights:String([...this.figures.values()].filter(f=>f.light.castShadow&&f.light.visible).length),
       });
       this.frames = []; this.lastMetrics = now;
     }
@@ -477,13 +563,15 @@ export class Street {
 
   private placeLabels(width:number,height:number){
     const occupied:{x:number;y:number;w:number;h:number}[]=[];
+    const hud=this.container.parentElement?.querySelector(".round-hud")?.getBoundingClientRect();
+    if(hud)occupied.push({x:hud.x,y:hud.y,w:hud.width,h:hud.height});
     for(const figure of [...this.figures.values()].sort((a,b)=>Number(b.label.textContent==='You')-Number(a.label.textContent==='You'))){
       if(figure.label.hidden)continue;
       const w=Math.min(160,figure.label.offsetWidth),h=22;
       const anchorX=Number(figure.label.dataset.screenX),anchorY=Number(figure.label.dataset.screenY);
       let placed={x:anchorX-w/2,y:anchorY-h,w,h};
       find:for(let row=0;row<12;row++)for(const column of [0,-1,1]){
-        const x=THREE.MathUtils.clamp(anchorX-w/2+column*(w+8),8,width-w-8),y=THREE.MathUtils.clamp(anchorY-h-row*26,64,height-h-8);
+        const x=THREE.MathUtils.clamp(anchorX-w/2+column*(w+8),8,width-w-8),y=THREE.MathUtils.clamp(anchorY-h+(row%2?-1:1)*Math.ceil(row/2)*26,64,height-h-8);
         if(occupied.some(r=>x<r.x+r.w+6&&x+w+6>r.x&&y<r.y+r.h+4&&y+h+4>r.y))continue;
         placed={x,y,w,h};break find;
       }
@@ -590,7 +678,7 @@ export class Street {
       figure.mixer.stopAllAction(); figure.light.shadow.dispose(); figure.label.remove();
       for (const part of figure.batch.parts) part.geometry.dispose();
     }
-    this.releaseObject(this.scene); for (const asset of this.assets.values()) this.releaseObject(asset.scene);
-    this.renderer.dispose(); this.renderer.domElement.remove(); this.stick.remove();
+    this.releaseObject(this.scene); this.releaseObject(this.prep); for (const asset of this.assets.values()) this.releaseObject(asset.scene);
+    this.capsuleLabel?.remove();this.renderer.dispose(); this.renderer.domElement.remove(); this.stick.remove();
   }
 }

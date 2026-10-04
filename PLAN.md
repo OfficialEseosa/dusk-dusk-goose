@@ -1,6 +1,6 @@
 # Last Night on Maple Street: build plan
 
-October 3, 2026. Approved with the user's amendments. Step 1 only is authorized now.
+October 3, 2026. Approved with the user's amendments. Step 4 is authorized; step 3 is satisfied by the verified recovery work.
 
 The new brief replaces GAME_SPEC.md. The retired game is preserved in commit `c3da94123cc2f3113f85d8e2cf94ca7f3afaa501`. AGENTS.md records the standing rules and the approved amendments below. The fresh game lives in `game/`.
 
@@ -136,4 +136,6 @@ These settings must be ready for your first Railway deployment **at the end of s
 
 ## Current scope
 
-Mood A and these amendments are approved. Step 1 and its reconnection fix are verified. The current request authorizes step 2 only: one street using the supplied Kenney characters, shared blackout, movement, flashlights, sound and recovery. Preparation, hiding, seeking, footprints, radio and scoring remain outside this step. Save verification and the visual comparison, commit, and stop. Do not deploy.
+Step 3 is satisfied by the verified recovery work. Step 4 adds one complete hiding/searching round only, with no deployment. The first round has a shared ten-second power-cut lead-in, then 25 seconds of human hiding; burial does not shorten that deadline. A solo game hides its capsule privately and starts seeking immediately on flashlight pickup. At the hiding deadline, a missed burial is chosen by the server and seekers receive a spare flashlight if they missed pickup, so the round cannot stall. Seeking lasts 120 seconds, server holds last two seconds, wrong searches impose five seconds of cooldown, and reveal lasts five seconds before the host can start again. During reveal everyone briefly views the capsule location, then can explore again. Roles rotate in original join order among connected participants, including after departures. New arrivals wait in preparation and join the next round.
+
+Per-recipient snapshots explicitly exclude the capsule identity from seekers before reveal and exclude hiding-phase street poses from the preparation room. All round actions carry the current round number; stale actions cannot affect a later round. The preparation room is a separate furnished scene and bounded movement space. Street and preparation share persistent canvas, stick and action/HUD elements. Record the checks in game/STEP4_VERIFICATION.md, commit and stop. Footprints, disturbed marks, false trails, freezing, radio, clues and scoring are not authorized.
