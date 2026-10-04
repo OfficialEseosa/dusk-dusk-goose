@@ -82,9 +82,9 @@ APPROVED AMENDMENTS:
 - Replacement character downloads must be listed before use. Wait for the user
   to supply them, preserve source filenames and report mismatches.
 
-CURRENT AUTHORIZATION: Step 2 street only, using supplied Kenney characters and
-one layout. Include shared blackout, local movement/validated reports, persistent
-controls, smoothing, first-tap sound and reconnects. No preparation room, hiding,
-seeking, footprints, radio or scoring. No deployment. Test a ten-minute session,
-measure frame rate, save actual-versus-Mood-A comparison and STEP2_VERIFICATION.md,
-commit and stop before step 3.
+CURRENT AUTHORIZATION: A focused step 2 flashlight, camera, moonlight, solid-object
+and label pass. Keep the verified street flows working. Share collision rules
+between device and server; confirm restart recovery from the street. Preserve
+controls, measure frame rate and scene budget, save a new Mood A comparison and
+update STEP2_VERIFICATION.md. No preparation, hiding, seeking, footprints, radio,
+scoring or deployment. Commit and stop before mechanics.

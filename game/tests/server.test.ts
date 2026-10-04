@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createGameServer } from "../server/index.js";
 import type { ClientRequest, ServerMessage } from "../shared/protocol.js";
+import {SOLIDS} from '../shared/street-layout.js';
 
 async function setup(options: Parameters<typeof createGameServer>[0] = {}) {
   const game = createGameServer(options);
@@ -317,5 +318,72 @@ test("20 Hz movement has its own budget and invalid speed, boundaries and replay
     assert.ok(current.ok && current.room);
     assert.equal(current.room.players[0].x, pose.x + 3);
     assert.equal(current.room.players[0].seq, 60);
+  } finally { await game.close(); }
+});
+
+test("server rejects lamp penetration while accepting bounded legal corner traces", async () => {
+  const { game, url } = await setup();
+  try {
+    const a = await connect(url);
+    const created = await a.request({ type: "create", name: "Alex" });
+    assert.ok(created.ok);
+    const started = await a.request({ type: "start" });
+    assert.ok(started.ok && started.room);
+    let seq = 0;
+    const origin = started.room.players[0];
+    for (let index = 1; index <= 25; index++) {
+      await new Promise(resolve => setTimeout(resolve, 50));
+      a.socket.send(JSON.stringify({ type: "move", id: "move", seq: ++seq, x: origin.x - index * 0.2, z: 2, facing: -Math.PI / 2 }));
+    }
+    for (let index = 1; index <= 27; index++) {
+      await new Promise(resolve => setTimeout(resolve, 50));
+      a.socket.send(JSON.stringify({ type: "move", id: "move", seq: ++seq, x: -9, z: 2 - index * 0.2, facing: Math.PI }));
+    }
+    await new Promise(resolve => setTimeout(resolve, 280));
+    assert.ok(!a.messages.some(message => message.type === "pose_rejected"));
+    // Both endpoints are outside the lamp body. The one-metre move fits the
+    // accumulated speed allowance, but its segment passes through the pole.
+    a.socket.send(JSON.stringify({ type: "move", id: "move", seq: ++seq, x: -9, z: -4.4, facing: Math.PI }));
+    await new Promise(resolve => setTimeout(resolve, 80));
+    assert.ok(a.messages.some(message => message.type === "pose_rejected" && message.seq === seq - 1));
+    const result = await a.request({ type: "start" });
+    assert.ok(result.ok && result.room);
+    assert.ok(Math.abs(result.room.players[0].z + 3.4) < 0.001);
+    await new Promise(resolve => setTimeout(resolve, 280));
+    const before = a.messages.filter(message => message.type === "pose_rejected").length;
+    // The direct chord clips the corner. The two-segment walking trace does not.
+    a.socket.send(JSON.stringify({ type: "move", id: "move", seq: ++seq, x: -8.5, z: -3.9, facing: 0 }));
+    await new Promise(resolve => setTimeout(resolve, 60));
+    assert.equal(a.messages.filter(message => message.type === "pose_rejected").length, before + 1);
+    a.socket.send(JSON.stringify({ type: "move", id: "move", seq: ++seq, x: -8.5, z: -3.9, facing: 0,
+      path: [{ x: -8.5, z: -3.4 }, { x: -8.5, z: -3.9 }] }));
+    await new Promise(resolve => setTimeout(resolve, 120));
+    const corner = await a.request({ type: "start" });
+    assert.ok(corner.ok && corner.room);
+    assert.equal(corner.room.players[0].seq, seq);
+    assert.equal(corner.room.players[0].x, -8.5);
+    assert.equal(corner.room.players[0].z, -3.9);
+    for (const invalid of [
+      { x: -9, z: -3.4, path: [{ x: -9, z: -3.9 }, { x: -9, z: -3.4 }] },
+      { x: -8.5, z: -3.7, path: [{ x: -8.5, z: -3.8 }] },
+      { x: -8.5, z: -3.9, path: Array.from({ length: 33 }, () => ({ x: -8.5, z: -3.9 })) },
+      { x: -8.5, z: -3.9, path: [{ x: -7, z: -3.9 }, { x: -8.5, z: -3.9 }] },
+      { x: -8.5, z: -3.9, path: [null] },
+    ]) {
+      const count = a.messages.filter(message => message.type === "pose_rejected").length;
+      a.socket.send(JSON.stringify({ type: "move", id: "move", seq: ++seq, facing: 0, ...invalid }));
+      await new Promise(resolve => setTimeout(resolve, 60));
+      assert.equal(a.messages.filter(message => message.type === "pose_rejected").length, count + 1);
+    }
+    for(const kind of ['car','lamp','tree','planter','mailbox','house']){
+      const solid=SOLIDS.find(s=>s.kind===kind)!;
+      const count=a.messages.filter(m=>m.type==='pose_rejected').length;
+      a.socket.send(JSON.stringify({type:'move',id:'forged',seq:++seq,x:(solid.minX+solid.maxX)/2,z:(solid.minZ+solid.maxZ)/2,facing:0}));
+      await new Promise(resolve=>setTimeout(resolve,60));
+      assert.equal(a.messages.filter(m=>m.type==='pose_rejected').length,count+1,`${kind} occupied endpoint rejected`);
+    }
+    const unchanged=await a.request({type:'start'});
+    assert.ok(unchanged.ok&&unchanged.room);
+    assert.equal(unchanged.room.players[0].x,-8.5);assert.equal(unchanged.room.players[0].z,-3.9);
   } finally { await game.close(); }
 });

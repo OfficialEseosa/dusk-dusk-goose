@@ -1,5 +1,7 @@
 # Step 2 verification
 
+The original step 2 record below is historical. The focused flashlight/camera/solid-object pass at the end supersedes its camera, shadow, label and collision limitations.
+
 October 4, 2026. Street exploration only. No deployment was performed. Preparation, hiding, seeking, footprints, radio and scoring were not implemented.
 
 ## Running and testing
@@ -39,3 +41,39 @@ See `../design/step2-mood-comparison.png` or `../design/STEP2_COMPARISON.html`. 
 The next visual improvement should be a phone-tested environment pass: richer tree and hedge silhouettes, compact ground-detail atlases, authored materials and baked ambient shading, then softer beams and character upgrades within the measured rendering budget. No additional packs were downloaded or renamed for this step.
 
 Physical Android/iPhone frame rate, touch comfort, browser chrome/safe-area behavior, lock-screen recovery, Wi-Fi-to-cellular switching, WAN blackout synchronization and thermal/battery behavior remain unverified. Receipt-time clock alignment can add one-way network latency to blackout timing. There are no house interiors or house/prop collision navigation in this street step. The production bundle includes a Three.js chunk over Vite's 500 kB warning threshold. No Railway deployment or public endpoint was used.
+
+## Focused flashlight, camera and solid-object pass
+
+October 4, 2026. No deployment and no hide-and-seek mechanics. Only the requested street presentation, collisions, labels and verification were changed.
+
+### What changed
+
+- Removed the translucent cone meshes. Genuine warm spotlights now light ground and props with a soft penumbra. A single shared world-space profile defines all players' beams: 12.5 metre outer range, 0.40 radian half-angle and 0.55 penumbra. Camera size does not change the beam. Authored constant distance falloff avoids the old near-wall intensity spike. The two lowest occupied character slots cast shadows consistently on every device; additional beams still illuminate surfaces but do not cast dynamic shadows.
+- At 667x375, the camera projects a 1.65 metre character to 63.29 pixels vertically. It looks farther ahead while keeping a close phone view. Laptop framing remains wider. Raised blue hemisphere/moon illumination makes unlit buildings, cars and road edges readable.
+- Shared static collision envelopes cover cars, grounded lamp poles, tree trunks, planters, mailboxes and houses, with 0.30 metre player clearance. The client slides along solid faces. The server validates the whole reported path and its total distance, not just the endpoint. Bounded substep traces preserve legitimate corner sliding. Pole envelopes are aligned with the actual grounded model, not the centre of its overhead arm. House envelopes are conservative exterior bounds; there are no interiors.
+- Persistent name labels separate into unobstructed rows when characters stand together. Long names are truncated to fit. No HUD or control remounting was introduced.
+- Static meshes share merged palette batches. The supplied characters keep their full animation hierarchy while their six rigid limbs draw as one dynamic mesh each. Actual animated geometry and shadows are preserved; no character assets were replaced.
+
+### Checks performed
+
+Production build and all 13 server tests passed. All 13 browser tests passed on the final batched rendering build, including every earlier step 2 check.
+
+Two independent browser contexts at 667x375 and 1366x768 verified movement, facing, shared blackout, drag stick, no scrolling, refresh, late join, hidden/frozen-page independence, seat takeover, first-tap audio and persistent controls. Final local timing: remote movement 117 ms, blackout skew 1 ms, silent-drop recovery 868 ms. The silent-drop relay still left the server connection open rather than sending a clean close.
+
+Actual keyboard walking stopped at a car, pole, tree, planter, mailbox and house; movement away worked in every case. Shared tests check occupied footprints and player clearance for all 30 bodies. Real WebSocket tests reject forged occupied endpoints for every solid class, crossing a pole with clear endpoints, forged corner paths, oversized traces and excessive path distance. A legitimate corner trace succeeds.
+
+The production restart browser test now starts both players on the street and moves a character before killing and restarting the separate Node process. Both return to the title with “The street has gone quiet after a restart. Create a new night to play again.” Their room URLs clear and Create works again.
+
+The phone screenshot shows two players with warm ground and house illumination after the power cut. Inspected the phone and laptop screenshots. Checked projected character height, matching beam profiles between devices and non-overlapping close-player label rectangles.
+
+### Performance and limits
+
+A fresh two-context connection run completed 600813 ms (10 minutes 0.81 seconds), with zero disconnects or browser errors and stable controls throughout. Console samples stayed around 60 FPS. This run covered the new collision/path protocol before the final character draw batching; it was not repeated for ten minutes after that rendering-only optimization.
+
+Final six-player rendering was separately measured for 30 seconds: two independent rendered contexts and four WebSocket test clients, with both shadow casters aimed through the group. See `../design/flashlight-pass-six-player-metrics.json`. The recorded scene used at most **69,054 rendered triangle submissions, 80 draw calls and two shadow-casting lights**. Triangle submissions include shadow passes. These are below PLAN.md's roughly 100,000 triangle and fewer-than-100-draw budgets. Both viewports measured median **60 FPS** on Windows, Intel Core Ultra 7 155H / Intel Arc graphics, Chromium 153.0.8010.12 using ANGLE D3D11. The final metrics file includes frame-time p95 and hardware details. The initial six-player attempt reached 153 draw calls; character batching resolved that budget failure.
+
+No physical Android/iPhone frame-rate, thermal, battery or touch-comfort claim is made. Six actual phones, cellular latency, lock-screen recovery and near-wall lighting on other GPU/browser combinations remain untested. The earlier network clock-alignment limitation remains. Dynamic occlusion is limited to two consistent beams; additional beams can illuminate through an intervening solid. The future reveal system must respect this explicit rendering limit. No footprint visibility or wall filtering for clues was built in this pass.
+
+New comparison: `../design/flashlight-pass-mood-comparison.png`, with source page `../design/FLASHLIGHT_PASS_COMPARISON.html`. The game remains simpler than Mood A: blocky proportions, sparse foliage, flat surfaces, teal kit roofs, limited garden detail and no atmospheric scattering. The closer phone framing crops more of the houses than the reference's broad diorama. Bright facade areas are still stylized rather than subtle cinematic lighting. The next visual pass should address materials, foliage and physical-phone tuning; mechanics were not started.
+
+Repeat the render budget check with the local server on port 5174 using `node tests/street-render-budget.mjs`.

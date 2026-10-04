@@ -27,6 +27,7 @@ export interface ClientRequest {
   z?: number;
   facing?: number;
   seq?: number;
+  path?: { x: number; z: number }[];
   name?: string;
   code?: string;
   token?: string;

@@ -462,3 +462,4 @@ h1 {
   }
 }
 .player-label { position:absolute; left:0; top:0; pointer-events:none; font-size:16px; color:#e4e8e7; text-shadow:0 2px 4px #000; white-space:nowrap; }
+.player-label { max-width:160px; overflow:hidden; text-overflow:ellipsis; line-height:22px; padding:0 3px; border-radius:3px; background:#07132288; }

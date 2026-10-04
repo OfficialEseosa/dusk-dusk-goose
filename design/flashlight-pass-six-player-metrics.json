@@ -1,0 +1,332 @@
+{
+  "hardware": {
+    "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+    "platform": "win32",
+    "browser": "153.0.8010.12",
+    "gpu": "ANGLE (Intel, Intel(R) Arc(TM) Graphics (0x00007D55) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "playerCount": 6,
+  "durationMs": 30000,
+  "devices": [
+    {
+      "viewport": "667x375",
+      "medianFps": 60,
+      "maxTriangles": 69054,
+      "maxDrawCalls": 80,
+      "shadowLights": 2,
+      "characterHeight": 63.2919692378507,
+      "frameP95Ms": 17.9
+    },
+    {
+      "viewport": "1366x768",
+      "medianFps": 60,
+      "maxTriangles": 69054,
+      "maxDrawCalls": 80,
+      "shadowLights": 2,
+      "characterHeight": 49.80211878387173,
+      "frameP95Ms": 18
+    }
+  ],
+  "samples": [
+    [
+      {
+        "fps": 60.1,
+        "p95": 17.9,
+        "triangles": 68910,
+        "drawCalls": 78,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 59.9,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 60.1,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 60.1,
+        "p95": 17.9,
+        "triangles": 68982,
+        "drawCalls": 79,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 60,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 59.9,
+        "p95": 17.8,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 59.9,
+        "p95": 17.9,
+        "triangles": 68982,
+        "drawCalls": 79,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 60,
+        "p95": 17.8,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 59.9,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 59.9,
+        "p95": 17.8,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 60.1,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 60.1,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 60.1,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 60,
+        "p95": 17.9,
+        "triangles": 68982,
+        "drawCalls": 79,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 59.9,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 60,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 60.1,
+        "p95": 17.9,
+        "triangles": 68982,
+        "drawCalls": 79,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 60.1,
+        "p95": 18,
+        "triangles": 68982,
+        "drawCalls": 79,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 60.1,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 60,
+        "p95": 18,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 59.9,
+        "p95": 17.9,
+        "triangles": 68982,
+        "drawCalls": 79,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 59.9,
+        "p95": 18,
+        "triangles": 68910,
+        "drawCalls": 78,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 59.9,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 60,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 60,
+        "p95": 17.9,
+        "triangles": 68982,
+        "drawCalls": 79,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 60.1,
+        "p95": 17.9,
+        "triangles": 68910,
+        "drawCalls": 78,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 59.9,
+        "p95": 17.9,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 60.1,
+        "p95": 18,
+        "triangles": 69054,
+        "drawCalls": 80,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ],
+    [
+      {
+        "fps": 59.9,
+        "p95": 17.9,
+        "triangles": 68910,
+        "drawCalls": 78,
+        "shadowLights": 2,
+        "characterHeight": 63.2919692378507,
+        "players": 6
+      },
+      {
+        "fps": 59.9,
+        "p95": 18,
+        "triangles": 68982,
+        "drawCalls": 79,
+        "shadowLights": 2,
+        "characterHeight": 49.80211878387173,
+        "players": 6
+      }
+    ]
+  ]
+}

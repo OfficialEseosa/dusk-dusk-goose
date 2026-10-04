@@ -9,7 +9,7 @@ import type {
   RoomSnapshot,
   ServerMessage,
 } from "../shared/protocol.js";
-import { BLACKOUT_DELAY_MS, MOVE_SPEED, insideStreet } from "../shared/street-layout.js";
+import { BLACKOUT_DELAY_MS, MOVE_SPEED, legalStreetMove } from "../shared/street-layout.js";
 
 interface Seat {
   id: string;
@@ -210,13 +210,14 @@ export function createGameServer(options: ServerOptions = {}) {
       const credit = Math.min(1, seat.distanceCredit + Math.max(0, now - seat.moveAt) * MOVE_SPEED / 1000);
       seat.moveAt = now;
       seat.distanceCredit = credit;
+      const distance = typeof x === "number" && typeof z === "number" ? legalReportedPath(seat, { x, z }, request.path) : undefined;
       if (typeof x !== "number" || typeof z !== "number" || typeof facing !== "number" ||
           !Number.isFinite(facing) || typeof seq !== "number" || !Number.isSafeInteger(seq) ||
-          seq <= seat.seq || !insideStreet(x, z) || Math.hypot(x - seat.x, z - seat.z) > credit + 0.001) {
+          seq <= seat.seq || distance === undefined || distance > credit + 0.001) {
         send(socket, { type: "pose_rejected", playerId: seat.id, x: seat.x, z: seat.z, facing: seat.facing, seq: seat.seq });
         return;
       }
-      seat.distanceCredit -= Math.hypot(x - seat.x, z - seat.z);
+      seat.distanceCredit -= distance;
       seat.x = x;
       seat.z = z;
       seat.facing = Math.atan2(Math.sin(facing), Math.cos(facing));
@@ -566,6 +567,20 @@ export function createGameServer(options: ServerOptions = {}) {
 }
 function initialPose(skin: number) {
   return { skin, x: (skin - 2.5) * 1.6, z: 2, facing: Math.PI, seq: 0, moveAt: Date.now(), distanceCredit: 0.25 };
+}
+/** Bounded client traces preserve legitimate sliding around a corner. */
+function legalReportedPath(from: { x: number; z: number }, to: { x: number; z: number }, supplied: unknown): number | undefined {
+  const path = supplied === undefined ? [to] : supplied;
+  if (!Array.isArray(path) || path.length < 1 || path.length > 32) return;
+  let previous = from, distance = 0;
+  for (const point of path) {
+    if (!point || typeof point !== "object" || typeof point.x !== "number" || typeof point.z !== "number" ||
+        !legalStreetMove(previous, point)) return;
+    distance += Math.hypot(point.x - previous.x, point.z - previous.z);
+    previous = point;
+  }
+  if (Math.hypot(previous.x - to.x, previous.z - to.z) > 0.00001) return;
+  return distance;
 }
 function missing(response: ServerResponse) {
   response.writeHead(404);

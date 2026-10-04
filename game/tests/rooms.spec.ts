@@ -265,6 +265,10 @@ test("real production restart returns two sessions to title and both can create 
     await expect(b.getByRole("list", { name: "Players" })).toContainText(
       "Sam (you)",
     );
+    await a.getByRole('button',{name:'Start the night',exact:true}).click();
+    await a.locator('canvas[data-ready="true"]').waitFor();
+    await b.locator('canvas[data-ready="true"]').waitFor();
+    await a.keyboard.down('d');await a.waitForTimeout(300);await a.keyboard.up('d');
     await stop();
     await start();
     for (const p of [a, b]) {
