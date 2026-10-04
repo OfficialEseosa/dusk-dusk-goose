@@ -6,6 +6,7 @@ import type { RoomSnapshot } from "../shared/protocol";
 import { MOVE_SPEED, moveOnStreet, HOUSE_X, HOUSE_MODELS, HOUSE_Z, LAMP_X, SOLIDS, FLASHLIGHT_PROFILE as BEAM } from "../shared/street-layout";
 
 import { PREP_BOUNDS, HIDING_SPOTS } from "../shared/round";
+import { TrailView } from "./trail-view";
 
 type Pose = { x: number; z: number; facing: number; seq: number };
 type Player = RoomSnapshot["players"][number];
@@ -29,6 +30,7 @@ export class Street {
   private place = "street";
   private roundNumber = 0;
   private capsule?: THREE.Mesh;
+  private trailView?: TrailView;
   private capsuleLabel?:HTMLSpanElement;
   private prepAmbient?:THREE.HemisphereLight;
   private prepLamp?:THREE.PointLight;
@@ -136,6 +138,7 @@ export class Street {
     this.buildStreet();
     this.mergeStaticGeometry();
     this.buildPreparation();
+    this.trailView = new TrailView(this.scene);
     this.ready = true;
     this.renderer.domElement.dataset.ready = "true";
     const current = this.snapshot ?? snapshot;
@@ -150,11 +153,14 @@ export class Street {
   }
 
   update(snapshot: RoomSnapshot) {
+    const previousFrozen = this.snapshot?.players.find(p=>p.id===this.localId)?.frozenUntil??0;
     this.snapshot = snapshot;
+    this.trailView?.update(snapshot);
     this.serverOffset = snapshot.serverTime - Date.now();
     if (!this.ready) return;
     const local=snapshot.players.find(p=>p.id===this.localId);
     const nextPlace=local?.place??"street", nextRound=snapshot.round?.number??0;
+    if(local&&(local.frozenUntil??0)>snapshot.serverTime&&(local.frozenUntil??0)>previousFrozen)this.restorePose(this.fromPlayer(local));
     if(local&&(this.place!==nextPlace||this.roundNumber!==nextRound)){
       this.restorePose(this.fromPlayer(local));this.clearInput();
       this.place=nextPlace;this.roundNumber=nextRound;
@@ -470,10 +476,13 @@ export class Street {
     if (this.keys.has("s") || this.keys.has("arrowdown")) dz += 1;
     const length = Math.hypot(dx, dz);
     const revealViewing=this.snapshot?.round?.phase==="reveal"&&Date.now()+this.serverOffset<(this.snapshot.round.revealReadyAt??0);
-    const moving = length > 0.08 && this.connected && !document.hidden&&!revealViewing;
-    if (moving) {
+    const serverNow=Date.now()+this.serverOffset;
+    const frozen=(this.snapshot?.players.find(p=>p.id===this.localId)?.frozenUntil??0)>serverNow;
+    const turning = length > 0.08 && this.connected && !document.hidden&&!revealViewing;
+    const moving = turning&&!frozen;
+    if (turning) {
       dx /= Math.max(length, 1); dz /= Math.max(length, 1);
-      const target={x:this.pose.x+dx*MOVE_SPEED*dt,z:this.pose.z+dz*MOVE_SPEED*dt};
+      const target={x:this.pose.x+dx*MOVE_SPEED*dt*(frozen?0:1),z:this.pose.z+dz*MOVE_SPEED*dt*(frozen?0:1)};
       const next=this.place==="prep"?{x:THREE.MathUtils.clamp(target.x,PREP_BOUNDS.minX,PREP_BOUNDS.maxX),z:THREE.MathUtils.clamp(target.z,PREP_BOUNDS.minZ,PREP_BOUNDS.maxZ)}:
         moveOnStreet(this.pose,target,point=>this.movePath.push(point));
       this.pose.x=next.x;this.pose.z=next.z;
@@ -504,12 +513,18 @@ export class Street {
       if(revealedSpot) {
         this.projected.set(revealedSpot.x,.8,revealedSpot.z).project(this.camera);
         this.capsuleLabel.hidden ||= Math.abs(this.projected.x)>1||Math.abs(this.projected.y)>1;
-        this.capsuleLabel.style.transform=`translate(${(this.projected.x*.5+.5)*labelWidth}px,${(-this.projected.y*.5+.5)*labelHeight}px)`;
+        const x=THREE.MathUtils.clamp((this.projected.x*.5+.5)*labelWidth,10,labelWidth-this.capsuleLabel.offsetWidth-10);
+        const y=THREE.MathUtils.clamp((-this.projected.y*.5+.5)*labelHeight,70,labelHeight-36);
+        this.capsuleLabel.style.transform=`translate(${x}px,${y}px)`;
       }
     }
     const observed: Record<string, Pose> = {};
     for (const [id, figure] of this.figures) {
       const local = id === this.localId;
+      const player=this.snapshot?.players.find(p=>p.id===id);
+      const playerFrozen=(player?.frozenUntil??0)>serverNow;
+      figure.label.dataset.frozen=String(playerFrozen);
+      figure.label.textContent=(playerFrozen?"Frozen · ":"")+(local?"You":player?.name??"");
       if (local) {
         figure.group.position.set(this.pose.x, 0, this.pose.z); figure.group.rotation.y = this.pose.facing;
         this.setMoving(figure, moving);
@@ -519,7 +534,7 @@ export class Street {
         figure.group.position.z = THREE.MathUtils.lerp(figure.previous.z, figure.next.z, t);
         const delta = Math.atan2(Math.sin(figure.next.facing - figure.previous.facing), Math.cos(figure.next.facing - figure.previous.facing));
         figure.group.rotation.y = figure.previous.facing + delta * t;
-        this.setMoving(figure, now - figure.received < 180 && Math.hypot(figure.previous.x - figure.next.x, figure.previous.z - figure.next.z) > 0.01);
+        this.setMoving(figure, !playerFrozen && now - figure.received < 180 && Math.hypot(figure.previous.x - figure.next.x, figure.previous.z - figure.next.z) > 0.01);
       }
       figure.mixer.update(dt);
       this.updateCharacterBatch(figure.group, figure.batch);
@@ -537,6 +552,9 @@ export class Street {
         this.renderer.domElement.dataset.characterHeight=String(Math.abs(head.y-feet.y)*labelHeight/2);
       }
     }
+    const trailCounts=this.trailView?.frame(serverNow);
+    if(trailCounts)Object.assign(this.renderer.domElement.dataset,Object.fromEntries(Object.entries(trailCounts).map(([key,value])=>[key,String(value)])));
+    this.renderer.domElement.dataset.frozen=String(frozen);
     this.placeLabels(labelWidth,labelHeight);
     this.renderer.render(this.place==="prep"&&!revealViewing?this.prep:this.scene, this.camera);
     if (now - this.lastObservation >= 50) {
@@ -565,6 +583,10 @@ export class Street {
     const occupied:{x:number;y:number;w:number;h:number}[]=[];
     const hud=this.container.parentElement?.querySelector(".round-hud")?.getBoundingClientRect();
     if(hud)occupied.push({x:hud.x,y:hud.y,w:hud.width,h:hud.height});
+    if(this.capsuleLabel&&!this.capsuleLabel.hidden){const capsule=this.capsuleLabel.getBoundingClientRect();occupied.push({x:capsule.x,y:capsule.y,w:capsule.width,h:capsule.height});}
+    for(const control of Array.from(this.container.parentElement?.querySelectorAll("#round-instruction,#clue-transmission,#clue-choices")??[])){
+      const rect=control.getBoundingClientRect();if(rect.width&&rect.height)occupied.push({x:rect.x,y:rect.y,w:rect.width,h:rect.height});
+    }
     for(const figure of [...this.figures.values()].sort((a,b)=>Number(b.label.textContent==='You')-Number(a.label.textContent==='You'))){
       if(figure.label.hidden)continue;
       const w=Math.min(160,figure.label.offsetWidth),h=22;

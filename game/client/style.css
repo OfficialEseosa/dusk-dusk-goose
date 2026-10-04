@@ -465,14 +465,19 @@ h1 {
 .player-label { max-width:160px; overflow:hidden; text-overflow:ellipsis; line-height:22px; padding:0 3px; border-radius:3px; background:#07132288; }
 .round-hud {position:absolute;top:62px;left:50%;transform:translateX(-50%);max-width:calc(100% - 32px);text-align:center;pointer-events:none;color:#f0e5c9;text-shadow:0 2px 5px #000;font-size:16px;}
 #round-phase {margin-right:10px;} #round-clock {font-variant-numeric:tabular-nums;font-size:22px;}
-#round-instruction {margin:4px 0;line-height:1.25;font-size:16px;background:#07132299;border-radius:6px;padding:4px 8px;}
+#round-instruction {position:absolute;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:calc(100% - 330px);max-width:540px;min-width:260px;margin:0;line-height:1.25;font-size:16px;text-align:center;background:#071322bb;border-radius:6px;padding:4px 8px;pointer-events:none;}
 .round-action {position:absolute;right:max(28px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));width:118px;height:96px;overflow:hidden;touch-action:none;background:#273b47e8;border:1px solid #c8b385;border-radius:24px;color:#fff1cc;font-size:18px;user-select:none;}
 .round-action[hidden],.next-round[hidden] {display:none;}
 .action-name,.action-key {position:relative;z-index:1;}.action-key {display:block;font-size:16px;opacity:.8;}
 .action-progress {position:absolute;inset:0;background:#a8863d99;transform:scaleX(0);transform-origin:left;pointer-events:none;}
-.next-round {position:absolute;bottom:28px;left:50%;transform:translateX(-50%);min-height:48px;background:#bca673;color:#10202a;}
+.next-round {position:absolute;bottom:70px;left:50%;transform:translateX(-50%);min-height:48px;background:#bca673;color:#10202a;}
 @media (pointer:coarse) {.action-key {display:none;}}
 
 .capsule-label {position:absolute;left:0;top:0;color:#ffdf94;background:#12202ddd;border:1px solid #ae9a68;border-radius:5px;padding:3px 8px;font-size:16px;pointer-events:none;}
 
 .action-spot {display:block;position:relative;font-size:16px;}
+
+#clue-transmission {position:absolute;top:99px;left:50%;transform:translateX(-50%);width:calc(100% - 180px);max-width:480px;padding:8px 12px;background:#10232ded;border:1px solid #c8b385;border-radius:8px;color:#ffdfaa;text-align:center;font-size:16px;line-height:1.25;pointer-events:none;}
+#clue-choices {position:absolute;bottom:64px;left:50%;transform:translateX(-50%);display:flex;gap:5px;width:calc(100% - 330px);max-width:540px;}
+#clue-choices button {flex:1;min-width:0;min-height:66px;padding:6px;background:#182f3cee;border:1px solid #c8b385;border-radius:8px;color:#ffdfaa;font-size:16px;line-height:1.15;}
+#clue-choices[hidden],#clue-transmission[hidden] {display:none;}

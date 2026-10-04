@@ -3,10 +3,19 @@ import assert from 'node:assert/strict';
 import { WebSocket } from 'ws';
 import { createGameServer } from '../server/index.js';
 import { HIDING_SPOTS } from '../shared/round.js';
-import type { ClientRequest, RoomSnapshot, ServerMessage } from '../shared/protocol.js';
+import type { ClientRequest, ServerMessage } from '../shared/protocol.js';
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+async function until(predicate: () => boolean, description: string, timeoutMs = 5000) {
+  const deadline = Date.now() + timeoutMs;
+  while (!predicate()) { assert.ok(Date.now() < deadline, `Timed out waiting for ${description}`); await wait(10); }
+}
+// The test and its in-process server share a clock. Use the server's actual
+// deadline rather than assuming a request, broadcast and fixed sleep align.
+async function afterServerDeadline(deadline: number) {
+  await wait(Math.max(0, deadline - Date.now()) + 20);
+}
 async function setup(roundDurations: Parameters<typeof createGameServer>[0]['roundDurations'] = {}) {
-  const game = createGameServer({ roundDurations: { blackoutMs: 0, hidingMs: 20_000, seekingMs: 20_000, revealMs: 40, ...roundDurations } });
+  const game = createGameServer({ roundDurations: { blackoutMs: 0, hidingMs: 20_000, seekingMs: 60_000, revealMs: 40, ...roundDurations } });
   await new Promise<void>(resolve => game.server.listen(0, '127.0.0.1', resolve));
   const address = game.server.address(); assert.ok(address && typeof address !== 'string');
   async function connect() {
@@ -20,49 +29,62 @@ async function setup(roundDurations: Parameters<typeof createGameServer>[0]['rou
       for (let i = 0; i < 400; i++) { const message = messages.find(m => m.type === 'result' && m.id === id); if (message?.type === 'result') return message; await wait(5); }
       throw new Error('No response: ' + body.type);
     }
-    const room = () => { const message = [...messages].reverse().find(m => m.type === 'room'); assert.ok(message?.type === 'room'); return message.room; };
+    const room = () => {
+      const message = [...messages].reverse().find(m => m.type === 'room' || (m.type === 'result' && m.ok && m.room));
+      assert.ok(message && 'room' in message && message.room); return message.room;
+    };
     return { socket, messages, request, room };
   }
   return { game, connect };
 }
 type Client = Awaited<ReturnType<Awaited<ReturnType<typeof setup>>['connect']>>;
 async function move(client: Client, playerId: string, axis: 'x' | 'z', target: number) {
+  const deadline = Date.now() + 20_000;
   while (Math.abs(client.room().players.find(p => p.id === playerId)![axis] - target) > .01) {
+    assert.ok(Date.now() < deadline, `Player failed to move on ${axis} toward ${target}`);
     await wait(205); const pose = client.room().players.find(p => p.id === playerId)!;
     const value = pose[axis] + Math.sign(target - pose[axis]) * Math.min(.75, Math.abs(target - pose[axis]));
-    client.socket.send(JSON.stringify({ id: 'move', type: 'move', x: axis === 'x' ? value : pose.x, z: axis === 'z' ? value : pose.z, facing: 0, seq: pose.seq + 1 }));
-    await wait(105);
+    client.socket.send(JSON.stringify({ id: 'move', type: 'move', x: axis === 'x' ? value : pose.x, z: axis === 'z' ? value : pose.z, facing: Math.PI / 2, seq: pose.seq + 1 }));
+    await until(() => client.room().players.find(p => p.id === playerId)!.seq >= pose.seq + 1, 'accepted movement snapshot');
   }
 }
 async function create(client: Client, name: string) { const result = await client.request({ type: 'create', name }); assert.ok(result.ok && result.seat && result.room); return result; }
 async function atSpot(client: Client, id: string, spot = HIDING_SPOTS[8]) { await move(client, id, 'z', -5.5); await move(client, id, 'x', spot.x); await move(client, id, 'z', spot.z); }
 
 test('human burial, private projection, full server hold, wrong cooldown, one reveal and rotation', async () => {
-  const { game, connect } = await setup({ cooldownMs: 180, hidingMs: 6000 });
+  const { game, connect } = await setup({ cooldownMs: 2000, hidingMs: 12_000 });
   try {
     const a = await connect(), b = await connect(), c = await create(a, 'Alex');
     const joined = await b.request({ type: 'join', name: 'Sam', code: c.room.code }); assert.ok(joined.ok && joined.seat);
     const started = await a.request({ type: 'start' }); assert.ok(started.ok && started.room?.round?.hiderId === c.seat.playerId);
-    await wait(20); assert.equal(b.room().players.some(p => p.id === c.seat.playerId), false);
+    await until(() => b.room().round?.phase === 'hiding', 'seeker hiding-phase projection');
+    assert.equal(b.room().players.some(p => p.id === c.seat.playerId), false);
     assert.equal((await b.request({ type: 'bury', spotId: HIDING_SPOTS[8].id })).ok, false);
     await atSpot(a, c.seat.playerId); assert.ok((await a.request({ type: 'bury', spotId: HIDING_SPOTS[8].id })).ok);
-    await wait(2100);
+    await until(() => b.room().round?.phase === 'seeking', 'hiding timer to start seeking', 15_000);
     const prior = b.messages.filter(m => m.type === 'room' || (m.type === 'result' && m.ok && m.room));
     assert.ok(prior.every(m => !JSON.stringify(m).includes('capsuleSpotId')));
     assert.equal(b.room().round?.phase, 'seeking');
     assert.equal((await b.request({ type: 'search_complete', spotId: HIDING_SPOTS[8].id })).ok, false);
     const wrong = HIDING_SPOTS[9]; await atSpot(b, joined.seat.playerId, wrong);
-    assert.ok((await b.request({ type: 'search_begin', spotId: wrong.id })).ok);
+    const wrongBegin = await b.request({ type: 'search_begin', spotId: wrong.id });
+    assert.ok(wrongBegin.ok && wrongBegin.room);
+    const wrongSearch = wrongBegin.room.players.find(p => p.id === joined.seat!.playerId)?.search; assert.ok(wrongSearch);
+    assert.equal(wrongSearch.endsAt - wrongSearch.startedAt, 2000, 'production hold duration is unchanged');
     assert.equal((await b.request({ type: 'search_complete', spotId: wrong.id })).ok, false);
-    await wait(2010); assert.ok((await b.request({ type: 'search_complete', spotId: wrong.id })).ok);
-    assert.ok(b.messages.some(m => m.type === 'search_noise')); assert.ok(a.messages.some(m => m.type === 'search_noise'));
+    await afterServerDeadline(wrongSearch.endsAt);
+    const wrongComplete = await b.request({ type: 'search_complete', spotId: wrong.id }); assert.ok(wrongComplete.ok && wrongComplete.room);
+    await until(() => a.messages.some(m => m.type === 'search_noise') && b.messages.some(m => m.type === 'search_noise'), 'noise on both independent sockets');
     assert.deepEqual(a.messages.filter(m => m.type === 'search_noise'), b.messages.filter(m => m.type === 'search_noise'));
     const blocked = await b.request({ type: 'search_begin', spotId: wrong.id }); assert.ok(!blocked.ok && blocked.error.code === 'cooldown');
-    await atSpot(b, joined.seat.playerId); await b.request({ type: 'search_begin', spotId: HIDING_SPOTS[8].id });
-    await wait(2010); assert.ok((await b.request({ type: 'search_complete', spotId: HIDING_SPOTS[8].id })).ok);
+    const cooldownUntil = wrongComplete.room.players.find(p => p.id === joined.seat!.playerId)?.cooldownUntil; assert.ok(cooldownUntil);
+    await atSpot(b, joined.seat.playerId); await afterServerDeadline(cooldownUntil);
+    const rightBegin = await b.request({ type: 'search_begin', spotId: HIDING_SPOTS[8].id }); assert.ok(rightBegin.ok && rightBegin.room);
+    const rightSearch = rightBegin.room.players.find(p => p.id === joined.seat!.playerId)?.search; assert.ok(rightSearch);
+    await afterServerDeadline(rightSearch.endsAt); assert.ok((await b.request({ type: 'search_complete', spotId: HIDING_SPOTS[8].id })).ok);
     assert.equal((await b.request({ type: 'search_complete', spotId: HIDING_SPOTS[8].id })).ok, false);
     assert.equal(b.room().round?.capsuleSpotId, HIDING_SPOTS[8].id); assert.equal(b.room().round?.foundBy, joined.seat.playerId); assert.equal(b.room().round?.foundByName, 'Sam');
-    await wait(50); const next = await a.request({ type: 'start' }); assert.ok(next.ok && next.room?.round?.hiderId === joined.seat.playerId);
+    assert.ok(b.room().round?.revealReadyAt); await afterServerDeadline(b.room().round!.revealReadyAt!); const next = await a.request({ type: 'start' }); assert.ok(next.ok && next.room?.round?.hiderId === joined.seat.playerId);
     for (const type of ['pickup','bury','search_begin','search_cancel','search_complete'] as const) {
       const stale = await b.request({ type, spotId: HIDING_SPOTS[8].id, roundNumber: 1 });
       assert.ok(!stale.ok && stale.error.code === 'stale_round', `${type} cannot mutate the next round`);

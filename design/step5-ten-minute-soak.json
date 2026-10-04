@@ -1,0 +1,3445 @@
+{
+  "hardware": {
+    "platform": "win32",
+    "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+    "browser": "153.0.8010.12",
+    "gpu": "ANGLE (Intel, Intel(R) Arc(TM) Graphics (0x00007D55) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "durationMs": 600998,
+  "disconnects": 0,
+  "errors": [],
+  "samples": [
+    {
+      "elapsed": 10008,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 545,
+          "triangles": 45412,
+          "drawCalls": 40,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 162
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 545,
+          "triangles": 756,
+          "drawCalls": 28,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "prep",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -1.7999999999999998,
+              "z": 0,
+              "facing": 3.141592653589793,
+              "seq": 164
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 20016,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 1158,
+          "triangles": 45412,
+          "drawCalls": 40,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 330
+            }
+          }
+        },
+        {
+          "fps": 60.1,
+          "p95": 18,
+          "frames": 1157,
+          "triangles": 756,
+          "drawCalls": 28,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "prep",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -1.7999999999999998,
+              "z": 0,
+              "facing": 3.141592653589793,
+              "seq": 333
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 30032,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 1739,
+          "triangles": 45412,
+          "drawCalls": 40,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 496
+            }
+          }
+        },
+        {
+          "fps": 60.1,
+          "p95": 18,
+          "frames": 1758,
+          "triangles": 756,
+          "drawCalls": 28,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "prep",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -1.7999999999999998,
+              "z": 0,
+              "facing": 3.141592653589793,
+              "seq": 499
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 40070,
+      "devices": [
+        {
+          "fps": 51.1,
+          "p95": 18.1,
+          "frames": 2310,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 654
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 648
+            }
+          }
+        },
+        {
+          "fps": 40,
+          "p95": 18,
+          "frames": 2289,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 650
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 652
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 50099,
+      "devices": [
+        {
+          "fps": 60.1,
+          "p95": 18.1,
+          "frames": 2913,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 822
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 819
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 2893,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 820
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 821
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 60117,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 3493,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 990
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 986
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 3477,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 988
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 988
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 70127,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 4105,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1156
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1154
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 4089,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1154
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1154
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 80139,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 4717,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1324
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1320
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 4671,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1322
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1324
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 90148,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 5297,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1494
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1487
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 5279,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1488
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1493
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 100165,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 5863,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1655
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1650
+            }
+          }
+        },
+        {
+          "fps": 60.1,
+          "p95": 18.1,
+          "frames": 5846,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1651
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1654
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 110173,
+      "devices": [
+        {
+          "fps": 60.3,
+          "p95": 18.1,
+          "frames": 6477,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1823
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1818
+            }
+          }
+        },
+        {
+          "fps": 60.3,
+          "p95": 18.1,
+          "frames": 6457,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1820
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1822
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 120194,
+      "devices": [
+        {
+          "fps": 60.2,
+          "p95": 18.1,
+          "frames": 7060,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1991
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1988
+            }
+          }
+        },
+        {
+          "fps": 60.2,
+          "p95": 18.1,
+          "frames": 7040,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1989
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 1990
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 130201,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 7671,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2158
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2157
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 7651,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2159
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2157
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 140213,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 8283,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2326
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2324
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 8263,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2326
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2324
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 150231,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 8864,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2495
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2494
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 8844,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2495
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2494
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 160248,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 9479,
+          "triangles": 45484,
+          "drawCalls": 41,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "reveal",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2664
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2661
+            }
+          }
+        },
+        {
+          "fps": 60.1,
+          "p95": 18.1,
+          "frames": 9456,
+          "triangles": 45484,
+          "drawCalls": 41,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "reveal",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2661
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2662
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 170321,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 10082,
+          "triangles": 756,
+          "drawCalls": 28,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "prep",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -3,
+              "z": 0,
+              "facing": 3.141592653589793,
+              "seq": 2834
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 10066,
+          "triangles": 45412,
+          "drawCalls": 40,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 2832
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 180332,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 10666,
+          "triangles": 756,
+          "drawCalls": 28,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "prep",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -3,
+              "z": 0,
+              "facing": 3.141592653589793,
+              "seq": 3003
+            }
+          }
+        },
+        {
+          "fps": 60.1,
+          "p95": 18.1,
+          "frames": 10676,
+          "triangles": 45412,
+          "drawCalls": 40,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 190339,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 11280,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3173
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3166
+            }
+          }
+        },
+        {
+          "fps": 59.8,
+          "p95": 18.1,
+          "frames": 11259,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3168
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3171
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 200350,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 11893,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3343
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3334
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 11871,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3335
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3341
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 210357,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 12473,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3511
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3501
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 12452,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3503
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3510
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 220368,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 13087,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3680
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3669
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 13062,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3671
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3678
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 230375,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 13670,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3849
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3839
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 13672,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3840
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 3848
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 240393,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 14283,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4016
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4005
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 14254,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4008
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4016
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 250405,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 14893,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4187
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4178
+            }
+          }
+        },
+        {
+          "fps": 60.1,
+          "p95": 18.1,
+          "frames": 14864,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4178
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4185
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 260416,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 15470,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4356
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4345
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 15474,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4347
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4354
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 270431,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 16071,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4523
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.400000000000001,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4512
+            }
+          }
+        },
+        {
+          "fps": 60.3,
+          "p95": 18.1,
+          "frames": 16060,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4512
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4520
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 280443,
+      "devices": [
+        {
+          "fps": 60.1,
+          "p95": 18.1,
+          "frames": 16658,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4686
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4678
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 16617,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4679
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4685
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 290460,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 17236,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4854
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4846
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 17228,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4848
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 4852
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 300467,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 17848,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5027
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5019
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 17839,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5019
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5025
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 310480,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 18425,
+          "triangles": 45320,
+          "drawCalls": 38,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "reveal",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5191
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5182
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 18414,
+          "triangles": 45320,
+          "drawCalls": 38,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "reveal",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5184
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5189
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 320539,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 19027,
+          "triangles": 45412,
+          "drawCalls": 40,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5363
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 19016,
+          "triangles": 756,
+          "drawCalls": 28,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "prep",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -1.7999999999999998,
+              "z": 0,
+              "facing": 3.141592653589793,
+              "seq": 5356
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 330554,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 19639,
+          "triangles": 45412,
+          "drawCalls": 40,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5531
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 19628,
+          "triangles": 756,
+          "drawCalls": 28,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "prep",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -1.7999999999999998,
+              "z": 0,
+              "facing": 3.141592653589793,
+              "seq": 5526
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 340568,
+      "devices": [
+        {
+          "fps": 60.2,
+          "p95": 18.1,
+          "frames": 20221,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5699
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5694
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 20213,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5696
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5699
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 350588,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 20831,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5866
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5863
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 20827,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5864
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 5865
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 360603,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 21445,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6033
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6033
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 21411,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6033
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6031
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 370622,
+      "devices": [
+        {
+          "fps": 60.1,
+          "p95": 18.1,
+          "frames": 22025,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6202
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6201
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 22022,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6201
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6199
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 380643,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18.1,
+          "frames": 22637,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6370
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6369
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 22637,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6371
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6369
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 390654,
+      "devices": [
+        {
+          "fps": 60.2,
+          "p95": 18.1,
+          "frames": 23248,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6538
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6536
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 23219,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6537
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6536
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 400669,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 23827,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6704
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6702
+            }
+          }
+        },
+        {
+          "fps": 60.1,
+          "p95": 18,
+          "frames": 23827,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6705
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6704
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 410679,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18.1,
+          "frames": 24418,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6867
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6864
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 24417,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6866
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 6865
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 420692,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 25031,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7035
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7032
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 25000,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7033
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7034
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 430703,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 25615,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7205
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7198
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 25614,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7201
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7202
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 440718,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 26226,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7376
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7368
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 26198,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7370
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7374
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 450734,
+      "devices": [
+        {
+          "fps": 34,
+          "p95": 18,
+          "frames": 26784,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7539
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7531
+            }
+          }
+        },
+        {
+          "fps": 41.2,
+          "p95": 18,
+          "frames": 26767,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7532
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7538
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 460747,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 27396,
+          "triangles": 45320,
+          "drawCalls": 38,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "reveal",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7709
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7697
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 27378,
+          "triangles": 45320,
+          "drawCalls": 38,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "reveal",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7699
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7707
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 470799,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 28009,
+          "triangles": 756,
+          "drawCalls": 28,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "prep",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -3,
+              "z": 0,
+              "facing": 3.141592653589793,
+              "seq": 7879
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 27989,
+          "triangles": 45412,
+          "drawCalls": 40,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 7870
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 480815,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 28590,
+          "triangles": 756,
+          "drawCalls": 28,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "prep",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -3,
+              "z": 0,
+              "facing": 3.141592653589793,
+              "seq": 8049
+            }
+          }
+        },
+        {
+          "fps": 60.1,
+          "p95": 18,
+          "frames": 28572,
+          "triangles": 45412,
+          "drawCalls": 40,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "hiding",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8040
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 490830,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 29206,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8219
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8207
+            }
+          }
+        },
+        {
+          "fps": 60.1,
+          "p95": 18,
+          "frames": 29185,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8208
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8217
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 500849,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 29787,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8385
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8374
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 29799,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8375
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8383
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 510857,
+      "devices": [
+        {
+          "fps": 59.8,
+          "p95": 18,
+          "frames": 30395,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8555
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8545
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 30377,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8546
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8554
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 520873,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 30980,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8722
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8714
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 30989,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8716
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8720
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 530882,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 31588,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8890
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8883
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 31572,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8884
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 8889
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 540896,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 32198,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9058
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9052
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 32185,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9053
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9057
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 550913,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 32782,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9226
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9220
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 32768,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9222
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9224
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 560925,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 33397,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9393
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9390
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 33381,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9391
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9392
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 570946,
+      "devices": [
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 33976,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9562
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9557
+            }
+          }
+        },
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 33963,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9559
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9560
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 580961,
+      "devices": [
+        {
+          "fps": 60.1,
+          "p95": 18,
+          "frames": 34590,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9730
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9724
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 34574,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9726
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9728
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 590978,
+      "devices": [
+        {
+          "fps": 59.9,
+          "p95": 18,
+          "frames": 35201,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9901
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9895
+            }
+          }
+        },
+        {
+          "fps": 59.8,
+          "p95": 18,
+          "frames": 35185,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9896
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 9900
+            }
+          }
+        }
+      ]
+    },
+    {
+      "elapsed": 600995,
+      "devices": [
+        {
+          "fps": 60.1,
+          "p95": 18,
+          "frames": 35772,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex (you) HereSam Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 10065
+            },
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 10057
+            }
+          }
+        },
+        {
+          "fps": 60,
+          "p95": 18,
+          "frames": 35759,
+          "triangles": 45508,
+          "drawCalls": 43,
+          "players": "Alex HereSam (you) Here",
+          "stable": true,
+          "phase": "seeking",
+          "place": "street",
+          "status": "",
+          "lit": "false",
+          "poses": {
+            "aa614945-740f-41a9-9562-af8d03864491": {
+              "x": -2.4000000000000004,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 10058
+            },
+            "8ff895a7-5000-4786-9a12-0753f2d35f96": {
+              "x": -4,
+              "z": 2,
+              "facing": 3.141592653589793,
+              "seq": 10063
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

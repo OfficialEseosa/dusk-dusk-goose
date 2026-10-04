@@ -1,0 +1,23 @@
+import {chromium} from '@playwright/test';
+import {writeFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({args:['--use-angle=d3d11']});
+try{
+ const page=await browser.newPage({viewport:{width:667,height:375}});
+ await page.addInitScript(()=>{window.traceTest=true;const Native=window.WebSocket;window.WebSocket=class extends Native{set onmessage(handler){super.onmessage=event=>{const m=JSON.parse(event.data);if(m.room?.round?.phase==='seeking'){m.room.round.footprints=[];m.room.round.marks=window.traceTest?[{id:'lit',x:-16.65,z:2,createdAt:0},{id:'shadow',x:-17,z:-3.3,createdAt:0}]:[];}handler?.call(this,{data:JSON.stringify(m)});};}get onmessage(){return super.onmessage;}};});
+ await page.goto('http://localhost:5174');await page.getByLabel('Your name').fill('Shadow check');await page.getByRole('button',{name:'Create a night',exact:true}).click();await page.getByRole('button',{name:'Start the night',exact:true}).click();await page.locator('canvas[data-ready="true"]').waitFor();
+ const pose=()=>page.locator('canvas').evaluate(c=>JSON.parse(c.dataset.playerposes)[c.dataset.localId]);
+ const walk=async(axis,target)=>{const p=await pose(),dir=Math.sign(target-p[axis]);if(Math.abs(target-p[axis])<.08)return;const key=axis==='x'?(dir>0?'d':'a'):(dir>0?'s':'w');await page.keyboard.down(key);try{await page.waitForFunction(({axis,target,dir})=>{const c=document.querySelector('canvas'),p=JSON.parse(c.dataset.playerposes)[c.dataset.localId];return(p[axis]-target)*dir>=-.06;},{axis,target,dir},{timeout:12000});}finally{await page.keyboard.up(key);}};
+ await walk('x',0);await walk('z',-1.1);await page.locator('#round-action').click();await page.locator('canvas[data-location="street"]').waitFor();await walk('z',4);await walk('x',-17);await page.keyboard.down('w');await page.waitForTimeout(50);await page.keyboard.up('w');await page.waitForTimeout(2000);
+ const capture=()=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>{const c=document.querySelector('canvas'),gl=c.getContext('webgl2'),data=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,data);resolve({width:gl.drawingBufferWidth,height:gl.drawingBufferHeight,data:Array.from(data),bounds:JSON.parse(c.dataset.beamBounds),pose:JSON.parse(c.dataset.playerposes)[c.dataset.localId]});})));
+ const withMarks=await capture();await page.screenshot({path:'../design/step5-shadow-marks-phone.png'});await page.evaluate(()=>window.traceTest=false);await page.waitForTimeout(400);const withoutMarks=await capture();
+ // Recover the affine ground projection from three shared cone-boundary samples.
+ const p=withMarks.pose,pitch=Math.atan2(1.55,2.8),fx=Math.sin(p.facing),fz=Math.cos(p.facing);
+ const world=i=>{const theta=i*Math.PI*2/64,side=Math.sin(.375)*Math.cos(theta),down=-Math.sin(pitch)*Math.cos(.375)+Math.cos(pitch)*Math.sin(.375)*Math.sin(theta),along=Math.cos(pitch)*Math.cos(.375)+Math.sin(pitch)*Math.sin(.375)*Math.sin(theta),distance=1.275/-down;return{x:p.x+fx*(.4+along*distance)+fz*side*distance,z:p.z+fz*(.4+along*distance)-fx*side*distance};};
+ const points=[0,16,32].map(i=>({...world(i),screen:withMarks.bounds[i]}));
+ const fit=axis=>{const[a,b,c]=points,det=(b.x-a.x)*(c.z-a.z)-(c.x-a.x)*(b.z-a.z),u=((b.screen[axis]-a.screen[axis])*(c.z-a.z)-(c.screen[axis]-a.screen[axis])*(b.z-a.z))/det,v=((b.x-a.x)*(c.screen[axis]-a.screen[axis])-(c.x-a.x)*(b.screen[axis]-a.screen[axis]))/det;return{u,v,o:a.screen[axis]-u*a.x-v*a.z};};
+ const X=fit('x'),Y=fit('y'),scale=Math.hypot(X.u,X.v),upY=Math.hypot(9,23)/Math.hypot(9,22,23);
+ const count=(x,z)=>{const cx=X.u*x+X.v*z+X.o,cy=Y.u*x+Y.v*z+Y.o-scale*upY*.128;let changed=0;for(let sy=Math.round(cy)-17;sy<=Math.round(cy)+17;sy++)for(let sx=Math.round(cx)-17;sx<=Math.round(cx)+17;sx++){if(sx<0||sy<0||sx>=withMarks.width||sy>=withMarks.height)continue;const i=((withMarks.height-1-sy)*withMarks.width+sx)*4;if(Math.max(...[0,1,2].map(channel=>Math.abs(withMarks.data[i+channel]-withoutMarks.data[i+channel])))>8)changed++;}return{cx,cy,changed};};
+ const lit=count(-16.65,2),shadow=count(-17,-3.3),result={viewport:'667x375',description:'Client-only synthetic public marks in a real solo room, compared with marks absent. Car blocks the far mark.',lit,shadow};
+ await writeFile('../design/step5-shadow-check.json',JSON.stringify(result,null,2));console.log(result);assert(lit.changed>15,'Unshadowed beam mark must render');assert(shadow.changed<5,'Car-shadowed beam mark must not render');
+}finally{await browser.close();}

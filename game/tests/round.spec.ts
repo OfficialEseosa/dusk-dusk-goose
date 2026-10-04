@@ -27,6 +27,10 @@ test('two independent sessions complete a human round, secret search, cooldown, 
  await spot(b,-7.8,-6.5);await expect(b.locator('#round-action')).toBeVisible();expect(frames.every(m=>!JSON.stringify(m).includes('capsuleSpotId'))).toBe(true);
  const rightButton=await b.locator('#round-action').boundingBox();await touch.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:rightButton!.x+rightButton!.width/2,y:rightButton!.y+rightButton!.height/2}]});await expect(b.locator('canvas')).toHaveAttribute('data-round-phase','reveal',{timeout:4000});await touch.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await expect(a.locator('canvas')).toHaveAttribute('data-round-phase','reveal');await expect(a.locator('#round-instruction')).toContainText('Sam found it');
  expect(frames.some(m=>JSON.stringify(m).includes('capsuleSpotId'))).toBe(true);await b.screenshot({path:'../design/step4-reveal-phone.png'});
+ const capsuleBox=await b.locator('.capsule-label:not([hidden])').boundingBox();expect(capsuleBox).not.toBeNull();
+ for(const box of await b.locator('.player-label:not([hidden])').evaluateAll(labels=>labels.map(label=>{const r=label.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};}))){const c=capsuleBox!;expect(box.x<c.x+c.width&&box.x+box.width>c.x&&box.y<c.y+c.height&&box.y+box.height>c.y).toBe(false);}
+ await b.screenshot({path:'../design/step5-reveal-labels-phone.png'});
+
  await expect(a.locator('#next-round')).toBeEnabled({timeout:6000});await a.locator('#next-round').click();await expect(b.locator('canvas')).toHaveAttribute('data-role','hider');await expect(a.locator('canvas')).toHaveAttribute('data-role','seeker');await expect(late.locator('canvas')).toHaveAttribute('data-role','seeker');
  for(const p of [a,b,late])expect(await p.evaluate(()=>document.documentElement.scrollWidth===innerWidth&&document.documentElement.scrollHeight===innerHeight)).toBe(true);
  }finally{await phone.close();await laptop.close();}

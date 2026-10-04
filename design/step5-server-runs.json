@@ -1,0 +1,62 @@
+[
+  {
+    "run": 1,
+    "exitCode": 0,
+    "passedTests": 22,
+    "completedAt": "2026-10-04T15:03:26.605730+00:00"
+  },
+  {
+    "run": 2,
+    "exitCode": 0,
+    "passedTests": 22,
+    "completedAt": "2026-10-04T15:03:57.651376+00:00"
+  },
+  {
+    "run": 3,
+    "exitCode": 0,
+    "passedTests": 22,
+    "completedAt": "2026-10-04T15:04:28.841575+00:00"
+  },
+  {
+    "run": 4,
+    "exitCode": 0,
+    "passedTests": 22,
+    "completedAt": "2026-10-04T15:04:59.995593+00:00"
+  },
+  {
+    "run": 5,
+    "exitCode": 0,
+    "passedTests": 22,
+    "completedAt": "2026-10-04T15:05:30.846952+00:00"
+  },
+  {
+    "run": 6,
+    "exitCode": 0,
+    "passedTests": 22,
+    "completedAt": "2026-10-04T15:06:01.896523+00:00"
+  },
+  {
+    "run": 7,
+    "exitCode": 0,
+    "passedTests": 22,
+    "completedAt": "2026-10-04T15:06:32.926093+00:00"
+  },
+  {
+    "run": 8,
+    "exitCode": 0,
+    "passedTests": 22,
+    "completedAt": "2026-10-04T15:07:03.958482+00:00"
+  },
+  {
+    "run": 9,
+    "exitCode": 0,
+    "passedTests": 22,
+    "completedAt": "2026-10-04T15:07:34.526383+00:00"
+  },
+  {
+    "run": 10,
+    "exitCode": 0,
+    "passedTests": 22,
+    "completedAt": "2026-10-04T15:08:05.274243+00:00"
+  }
+]

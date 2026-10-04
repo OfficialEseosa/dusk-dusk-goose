@@ -1,0 +1,14 @@
+{
+  "viewport": "667x375",
+  "description": "Client-only synthetic public marks in a real solo room, compared with marks absent. Car blocks the far mark.",
+  "lit": {
+    "cx": 295.1141675341132,
+    "cy": 269.91580990165045,
+    "changed": 335
+  },
+  "shadow": {
+    "cx": 359.15858689548327,
+    "cy": 135.56638341550158,
+    "changed": 0
+  }
+}

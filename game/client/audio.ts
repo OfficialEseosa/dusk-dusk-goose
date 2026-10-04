@@ -8,6 +8,7 @@ export class NightSound {
   private lit:boolean|null=null;
   private room?:RoomSnapshot;
   private offset=0;
+  private clueKey="";
   muted=false;
   constructor(){
     document.addEventListener('pointerdown',()=>this.unlock());
@@ -26,7 +27,7 @@ export class NightSound {
     }
     void this.context.resume().catch(()=>{});this.volume();
   }
-  setRoom(room?:RoomSnapshot){this.room=room;this.active=room?.phase==='started';if(room)this.offset=room.serverTime-Date.now();if(!this.active)this.lit=null;this.tick();}
+  setRoom(room?:RoomSnapshot){const clue=room?.round?.clues?.at(-1),key=clue?`${room?.code}:${room?.round?.number}:${clue.id}`:'';if(key&&key!==this.clueKey&&room!.serverTime-clue!.sentAt<1500)this.radioCrackle();this.clueKey=key;this.room=room;this.active=room?.phase==='started';if(room)this.offset=room.serverTime-Date.now();if(!this.active)this.lit=null;this.tick();}
   toggle(){this.muted=!this.muted;this.unlock();this.volume();}
   private volume(){this.master?.gain.setTargetAtTime(this.muted||document.hidden?0:0.4,this.context!.currentTime,0.04);}
   private tick(){
@@ -51,6 +52,13 @@ export class NightSound {
     oscillator.type="triangle";oscillator.frequency.setValueAtTime(180,time);oscillator.frequency.exponentialRampToValueAtTime(55,time+.3);
     gain.gain.setValueAtTime(.15,time);gain.gain.exponentialRampToValueAtTime(.001,time+.35);
     oscillator.connect(gain);gain.connect(this.master);oscillator.start(time);oscillator.stop(time+.36);oscillator.onended=()=>{oscillator.disconnect();gain.disconnect();};
+  }
+  radioCrackle(){
+    if(!this.context||!this.master)return;
+    const context=this.context,buffer=context.createBuffer(1,Math.floor(context.sampleRate*.32),context.sampleRate),data=buffer.getChannelData(0);
+    for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*.10*Math.sin(Math.PI*i/data.length);
+    const source=context.createBufferSource(),filter=context.createBiquadFilter();filter.type='bandpass';filter.frequency.value=1400;filter.Q.value=.7;
+    source.buffer=buffer;source.connect(filter);filter.connect(this.master);source.start();source.onended=()=>{source.disconnect();filter.disconnect();};
   }
   private click(){
     const context=this.context!;const buffer=context.createBuffer(1,Math.floor(context.sampleRate*0.035),context.sampleRate);const data=buffer.getChannelData(0);

@@ -11,6 +11,7 @@ import type {
 } from "../shared/protocol.js";
 import { BLACKOUT_DELAY_MS, MOVE_SPEED, legalStreetMove } from "../shared/street-layout.js";
 import { HIDING_SPOTS, HIDING_MS, SEEKING_MS, SEARCH_MS, REVEAL_MS, COOLDOWN_MS, FLASHLIGHT_PICKUP, insidePrep, nearSpot } from '../shared/round.js';
+import { FOOTPRINT_LIFE_MS, MAX_FOOTPRINTS, FOOTPRINT_SPACING, FREEZE_MS, FREEZE_IMMUNITY_MS, CLUE_INTERVAL_MS, CLUE_CHOICE_MS, groundBeamStrength, groundHeight, streetRoute, trueCluePool, type TrueClue } from '../shared/trails.js';
 
 interface Seat {
   id: string;
@@ -31,6 +32,8 @@ interface Seat {
   flashlight?: boolean;
   cooldownUntil?: number;
   search?: { spotId: string; startedAt: number; endsAt: number };
+  frozenUntil?: number;
+  immunityUntil?: number;
 }
 interface Room {
   code: string;
@@ -44,6 +47,7 @@ interface Room {
   round?: { number: number; phase: 'hiding' | 'seeking' | 'reveal'; hiderId: string | null; phaseEndsAt: number; capsuleSpotId?: string; foundBy?: string | null; foundByName?: string; revealReadyAt?: number };
   previousHiderOrder?: number;
   nextJoinOrder: number;
+  trails?: { footprints: { id: string; x: number; z: number; facing: number; fadeAt: number; expiresAt: number }[]; marks: { id: string; x: number; z: number; createdAt: number }[]; disturbed: Set<string>; decoys: number; lastStep?: { x: number; z: number }; seekingStartedAt?: number; clues: { id: string; text: string; sentAt: number }[]; clueCount: number; offer?: { id: string; options: TrueClue[]; deadlineAt: number } };
 }
 interface Session {
   revoked?: boolean;
@@ -63,6 +67,8 @@ export interface ServerOptions {
   abandonedMs?: number;
   heartbeatMs?: number;
   roundDurations?: { hidingMs?: number; seekingMs?: number; searchMs?: number; cooldownMs?: number; revealMs?: number; blackoutMs?: number };
+  clueIntervalMs?: number;
+  clueChoiceMs?: number;
 }
 const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const mime: Record<string, string> = {
@@ -114,7 +120,10 @@ export function createGameServer(options: ServerOptions = {}) {
       serverTime: Date.now(),
       startedAt: room.startedAt,
       blackoutAt: room.blackoutAt,
-      round: visibleRound,
+      round: visibleRound && { ...visibleRound, seekingStartedAt: room.trails?.seekingStartedAt,
+        ...(recipient?.place === 'street' ? { footprints: room.trails?.footprints, marks: room.trails?.marks } : {}),
+        clues: room.trails?.clues,
+        ...(recipient?.role === 'hider' ? { decoysRemaining: 3 - (room.trails?.decoys ?? 0), clueOffer: room.trails?.offer && { id: room.trails.offer.id, deadlineAt: room.trails.offer.deadlineAt, options: room.trails.offer.options.map(({ id, text }) => ({ id, text })) } } : {}) },
       roster: [...room.seats.values()].map(seat => ({ id: seat.id, name: seat.name, connected: !!seat.socket, skin: seat.skin })),
       players: [...room.seats.values()].filter(seat => !round || seat.place === recipient?.place).map((seat) => ({
         id: seat.id,
@@ -126,6 +135,7 @@ export function createGameServer(options: ServerOptions = {}) {
         facing: seat.facing,
         seq: seat.seq,
         role: seat.role, place: seat.place, flashlight: seat.flashlight,
+        frozenUntil: seat.frozenUntil, immunityUntil: seat.immunityUntil,
         ...(seat.id === recipient?.id ? { cooldownUntil: seat.cooldownUntil, search: seat.search } : {}),
       })),
     };
@@ -147,10 +157,42 @@ export function createGameServer(options: ServerOptions = {}) {
     seat.place = place; seat.x = (seat.skin - 2.5) * (place === 'prep' ? 1.2 : 1.6); seat.z = place === 'prep' ? 0 : 2;
     seat.facing = Math.PI; seat.moveAt = Date.now(); seat.distanceCredit = .25; seat.search = undefined;
   }
-  function buryAutomatically(room: Room) { if (room.round && !room.round.capsuleSpotId) room.round.capsuleSpotId = HIDING_SPOTS[randomBytes(1)[0] % HIDING_SPOTS.length].id; }
+  function addMark(room: Room, spotId: string) {
+    const traces = room.trails, spot = HIDING_SPOTS.find(item => item.id === spotId);
+    if (!traces || !spot || traces.disturbed.has(spotId) || traces.marks.length >= 4) return;
+    traces.disturbed.add(spotId); traces.marks.push({ id: randomUUID(), x: spot.x, z: spot.z, createdAt: room.startedAt ?? Date.now() });
+    // Random stable order: neither insertion order nor timestamp identifies burial.
+    traces.marks.sort((a,b) => a.id.localeCompare(b.id));
+  }
+  function leaveSteps(room: Room, path: { x: number; z: number }[], now: number) {
+    const traces = room.trails;
+    if (!traces) return;
+    for (const point of path) {
+      const previous = traces.lastStep;
+      if (!previous) { traces.lastStep = { ...point }; continue; }
+      const distance = Math.hypot(point.x - previous.x, point.z - previous.z);
+      if (distance < FOOTPRINT_SPACING) continue;
+      const facing = Math.atan2(point.x - previous.x, point.z - previous.z);
+      const count = Math.floor(distance / FOOTPRINT_SPACING);
+      for (let i = 1; i <= count; i++) {
+        const t = i * FOOTPRINT_SPACING / distance, fadeAt = room.round?.phase === 'seeking' ? now : 0;
+        traces.footprints.push({ id: randomUUID(), x: previous.x + (point.x - previous.x) * t, z: previous.z + (point.z - previous.z) * t, facing, fadeAt, expiresAt: fadeAt ? fadeAt + FOOTPRINT_LIFE_MS : 0 });
+        if (traces.footprints.length > MAX_FOOTPRINTS) traces.footprints.shift();
+      }
+      traces.lastStep = { ...point };
+    }
+  }
+  function buryAutomatically(room: Room) {
+    if (room.round && !room.round.capsuleSpotId) {
+      room.round.capsuleSpotId = HIDING_SPOTS.filter(spot => !room.trails?.disturbed.has(spot.id))[randomBytes(1)[0] % (HIDING_SPOTS.length - (room.trails?.disturbed.size ?? 0))].id;
+      addMark(room, room.round.capsuleSpotId);
+    }
+  }
   function beginSeeking(room: Room) {
     if (!room.round || room.round.phase !== 'hiding') return;
     buryAutomatically(room); room.round.phase = 'seeking'; room.round.phaseEndsAt = Date.now() + durations.seekingMs;
+    const traces = room.trails!; traces.seekingStartedAt = Date.now();
+    for (const step of traces.footprints) if (!step.fadeAt) { step.fadeAt = traces.seekingStartedAt; step.expiresAt = step.fadeAt + FOOTPRINT_LIFE_MS; }
     room.blackoutAt = Math.min(room.blackoutAt ?? Date.now(), Date.now());
     for (const seat of room.seats.values()) if (seat.role !== 'waiting') { if (seat.place === 'prep') resetPosition(seat, 'street'); seat.flashlight = seat.role === 'seeker'; }
     broadcast(room);
@@ -159,6 +201,7 @@ export function createGameServer(options: ServerOptions = {}) {
     if (!room.round || room.round.phase !== 'seeking') return;
     room.round.phase = 'reveal'; room.round.foundBy = foundBy; room.round.foundByName = foundBy ? room.seats.get(foundBy)?.name : undefined; room.round.phaseEndsAt = Date.now() + durations.revealMs; room.round.revealReadyAt = room.round.phaseEndsAt;
     for (const seat of room.seats.values()) seat.search = undefined;
+    if (room.trails) room.trails.offer = undefined;
     broadcast(room);
   }
   function startRound(room: Room) {
@@ -167,11 +210,46 @@ export function createGameServer(options: ServerOptions = {}) {
     if (hider) room.previousHiderOrder = hider.joinOrder;
     room.phase = 'started'; room.startedAt ??= Date.now(); room.blackoutAt = room.round ? Date.now() : Date.now() + durations.blackoutMs;
     room.round = { number: (room.round?.number ?? 0) + 1, phase: 'hiding', hiderId: hider?.id ?? null, phaseEndsAt: (room.blackoutAt ?? Date.now()) + durations.hidingMs };
+    room.trails = { footprints: [], marks: [], disturbed: new Set(), decoys: 0, clues: [], clueCount: 0 };
     for (const seat of room.seats.values()) {
-      seat.role = !seat.socket ? 'waiting' : seat.id === hider?.id ? 'hider' : 'seeker'; seat.flashlight = seat.role === 'hider'; seat.cooldownUntil = 0;
+      seat.role = !seat.socket ? 'waiting' : seat.id === hider?.id ? 'hider' : 'seeker'; seat.flashlight = seat.role === 'hider'; seat.cooldownUntil = 0; seat.frozenUntil = 0; seat.immunityUntil = 0;
       resetPosition(seat, seat.role === 'hider' ? 'street' : 'prep');
     }
-    if (!hider) buryAutomatically(room);
+    if (hider) room.trails.lastStep = { x: hider.x, z: hider.z };
+    if (!hider) {
+      buryAutomatically(room);
+      const capsule = HIDING_SPOTS.find(spot => spot.id === room.round!.capsuleSpotId)!;
+      const alternatives = shuffled(HIDING_SPOTS.filter(spot => spot.id !== capsule.id)).slice(0,3);
+      for (const spot of alternatives) addMark(room, spot.id);
+      room.trails.decoys = 3;
+      for (const spot of shuffled([capsule, alternatives[0]])) { const route = streetRoute({x:-4,z:2},spot); room.trails.lastStep = undefined; leaveSteps(room, route, Date.now()); }
+    }
+  }
+  function sendClue(room: Room, clue: TrueClue) {
+    if (!room.trails || room.round?.phase !== 'seeking') return;
+    room.trails.clues.push({ id: randomUUID(), text: clue.text, sentAt: Date.now() });
+    room.trails.clues = room.trails.clues.slice(-3); room.trails.offer = undefined;
+    room.movementDirty = true;
+  }
+  function updateTrails(room: Room, now: number) {
+    const traces = room.trails, round = room.round;
+    if (!traces || !round || round.phase !== 'seeking') return;
+    const alive = traces.footprints.filter(step => step.expiresAt > now);
+    if (alive.length !== traces.footprints.length) { traces.footprints = alive; room.movementDirty = true; }
+    const hider = round.hiderId ? room.seats.get(round.hiderId) : undefined;
+    if (hider && (hider.immunityUntil ?? 0) <= now && [...room.seats.values()].some(seat => seat.socket && seat.role === 'seeker' && seat.place === 'street' && seat.flashlight && groundBeamStrength(hider, seat, groundHeight(hider.x,hider.z)) > .05)) {
+      hider.frozenUntil = now + FREEZE_MS; hider.immunityUntil = now + FREEZE_MS + FREEZE_IMMUNITY_MS; room.movementDirty = true;
+    }
+    const interval = options.clueIntervalMs ?? CLUE_INTERVAL_MS;
+    if (!traces.offer && traces.clueCount < 3 && now >= (traces.seekingStartedAt ?? now) + interval * (traces.clueCount + 1)) {
+      const spot = HIDING_SPOTS.find(item => item.id === round.capsuleSpotId)!;
+      const pool = trueCluePool(spot), offset = traces.clueCount % pool.length;
+      traces.clueCount++;
+      const offered = Array.from({length:3},(_,i)=>pool[(offset+i)%pool.length]);
+      if (!hider?.socket) sendClue(room, offered[0]);
+      else { traces.offer = { id: randomUUID(), options: offered, deadlineAt: now + (options.clueChoiceMs ?? CLUE_CHOICE_MS) }; room.movementDirty = true; }
+    }
+    if (traces.offer && now >= traces.offer.deadlineAt) sendClue(room, traces.offer.options[0]);
   }
   function disconnect(socket: WebSocket, remove = false) {
     const session = sessions.get(socket);
@@ -250,6 +328,7 @@ export function createGameServer(options: ServerOptions = {}) {
     if (session.revoked) return;
     if (session.room?.round?.phase === 'hiding' && Date.now() >= session.room.round.phaseEndsAt) beginSeeking(session.room);
     if (session.room?.round?.phase === 'seeking' && Date.now() >= session.room.round.phaseEndsAt) reveal(session.room, null);
+    if (session.room) updateTrails(session.room, Date.now());
     const id = request.id;
     if (request.type === "move") {
       const now = Date.now();
@@ -266,11 +345,12 @@ export function createGameServer(options: ServerOptions = {}) {
       const distance = typeof x === "number" && typeof z === "number" ? legalReportedPath(seat, { x, z }, request.path, seat.place === 'prep') : undefined;
       if (typeof x !== "number" || typeof z !== "number" || typeof facing !== "number" ||
           !Number.isFinite(facing) || typeof seq !== "number" || !Number.isSafeInteger(seq) ||
-          seq <= seat.seq || distance === undefined || distance > credit + 0.001) {
+          seq <= seat.seq || distance === undefined || distance > credit + 0.001 || ((seat.frozenUntil ?? 0) > now && distance > .00001)) {
         send(socket, { type: "pose_rejected", playerId: seat.id, x: seat.x, z: seat.z, facing: seat.facing, seq: seat.seq });
         return;
       }
       seat.distanceCredit -= distance;
+      if (seat.role === 'hider' && seat.place === 'street' && room.round?.phase !== 'reveal') leaveSteps(room, request.path ?? [{x,z}], now);
       seat.x = x;
       seat.z = z;
       seat.facing = Math.atan2(Math.sin(facing), Math.cos(facing));
@@ -313,7 +393,7 @@ export function createGameServer(options: ServerOptions = {}) {
       broadcast(session.room);
       return;
     }
-    if (['pickup', 'bury', 'search_begin', 'search_cancel', 'search_complete'].includes(request.type)) {
+    if (['pickup', 'bury', 'disturb', 'choose_clue', 'search_begin', 'search_cancel', 'search_complete'].includes(request.type)) {
       const { room, seat } = session; const round = room?.round; const now = Date.now();
       if (!room || !seat || !round) return fail(socket, id, 'no_round', 'Start a round first.');
       if (request.roundNumber !== round.number) return fail(socket, id, 'stale_round', 'That action belonged to an earlier round.');
@@ -325,11 +405,24 @@ export function createGameServer(options: ServerOptions = {}) {
         success(); return;
       }
       const spot = HIDING_SPOTS.find(item => item.id === request.spotId);
+      if (request.type === 'choose_clue') {
+        const offer = room.trails?.offer, clue = offer?.options.find(item => item.id === request.clueId);
+        if (seat.role !== 'hider' || round.phase !== 'seeking' || !offer || !clue || now >= offer.deadlineAt) return fail(socket, id, 'no_clue_offer', 'That radio choice has already passed.');
+        sendClue(room, clue); success(); return;
+      }
+      if (request.type === 'disturb') {
+        if (seat.role !== 'hider' || seat.place !== 'street' || round.phase === 'reveal' || now < (room.blackoutAt ?? 0) || (seat.frozenUntil ?? 0) > now) return fail(socket, id, 'wrong_phase', 'You cannot disturb a spot now.');
+        if (!spot || !nearSpot(seat, spot)) return fail(socket, id, 'out_of_range', 'Move closer to a hiding spot.');
+        if (room.trails!.decoys >= 3) return fail(socket, id, 'decoy_limit', 'All three decoys are already laid.');
+        if (room.trails!.disturbed.has(spot.id)) return fail(socket, id, 'already_disturbed', 'That ground is already disturbed.');
+        addMark(room, spot.id); room.trails!.decoys++; success(); return;
+      }
       if (request.type === 'bury') {
         if (seat.role !== 'hider' || round.phase !== 'hiding' || now < (room.blackoutAt ?? 0)) return fail(socket, id, 'wrong_phase', 'You cannot bury the capsule now.');
         if (!spot || seat.place !== 'street' || !nearSpot(seat, spot)) return fail(socket, id, 'out_of_range', 'Move closer to a hiding spot.');
         if (round.capsuleSpotId) return fail(socket, id, 'already_buried', 'The capsule is already buried.');
-        round.capsuleSpotId = spot.id; success(); return;
+        if (room.trails!.disturbed.has(spot.id)) return fail(socket, id, 'already_disturbed', 'Bury the capsule at a fresh spot.');
+        round.capsuleSpotId = spot.id; addMark(room, spot.id); success(); return;
       }
       if (request.type === 'search_cancel') { seat.search = undefined; success(); return; }
       if (seat.role !== 'seeker' || seat.place !== 'street' || round.phase !== 'seeking') return fail(socket, id, 'wrong_phase', 'You cannot search now.');
@@ -630,6 +723,7 @@ export function createGameServer(options: ServerOptions = {}) {
     for (const room of rooms.values()) {
       if (room.round?.phase === 'hiding' && Date.now() >= room.round.phaseEndsAt) beginSeeking(room);
       if (room.round?.phase === 'seeking' && Date.now() >= room.round.phaseEndsAt) reveal(room, null);
+      updateTrails(room, Date.now());
       if (room.phase === "started" && room.movementDirty) {
         room.movementDirty = false;
         broadcast(room);
@@ -655,6 +749,10 @@ export function createGameServer(options: ServerOptions = {}) {
 }
 function initialPose(skin: number) {
   return { skin, x: (skin - 2.5) * 1.6, z: 2, facing: Math.PI, seq: 0, moveAt: Date.now(), distanceCredit: 0.25 };
+}
+function shuffled<T>(items: T[]): T[] {
+  for (let i = items.length - 1; i > 0; i--) { const j = randomBytes(4).readUInt32BE(0) % (i + 1); [items[i],items[j]] = [items[j],items[i]]; }
+  return items;
 }
 /** Bounded client traces preserve legitimate sliding around a corner. */
 function legalReportedPath(from: { x: number; z: number }, to: { x: number; z: number }, supplied: unknown, prep = false): number | undefined {

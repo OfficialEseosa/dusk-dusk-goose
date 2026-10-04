@@ -82,13 +82,13 @@ APPROVED AMENDMENTS:
 - Replacement character downloads must be listed before use. Wait for the user
   to supply them, preserve source filenames and report mismatches.
 
-CURRENT AUTHORIZATION: Step 3 is satisfied by the existing recovery work. Build
-step 4 only: server-owned hiding, preparation, seeking and reveal for solo and
-human rounds, 24 reachable hiding spots, contextual pickup/bury/held-search
-controls, cooldown/noise, role rotation and recovery. Capsule location remains
-private to the hider until reveal; validate range, full server hold and round
-identity. Late joins wait in preparation until the next round. Keep controls
-persistent and all previous street checks working. Verify two independent
-phone/laptop sessions, record STEP4_VERIFICATION.md, commit and stop. No
-footprints, disturbed marks, false trails, freezing, radio, clues, scores or
+CURRENT AUTHORIZATION: Step 4 is independently verified. Build step 5 only:
+beam-only bounded footprints and disturbed marks, three decoys, server-owned
+2-second freezes with 5-second subsequent immunity, scheduled true clues at
+30/60/90 seconds and computer-generated trails/clues for solo rounds. Fix the
+flaky round test, move instructions away from the character and separate reveal
+labels. Preserve prior flow and persistent controls. Inspect seeker payloads,
+run server tests ten consecutive times and all browser tests, report rendering
+budget and limitations in STEP5_VERIFICATION.md, save phone evidence, commit and
+stop. No typed chat, quick phrases, scoring, match length, extra layouts or
 deployment.

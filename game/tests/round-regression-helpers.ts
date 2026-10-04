@@ -25,4 +25,10 @@ export async function pickUpFlashlight(page:Page){
 export async function seeking(page:Page){
   await expect(page.locator('canvas')).toHaveAttribute('data-round-phase','seeking',{timeout:45000});
   await expect(page.locator('canvas')).toHaveAttribute('data-location','street');
+  // Location changes in the snapshot handler; pose observations publish on the
+  // next render sample. Do not mistake the old preparation x=0 for street x=0.
+  await page.waitForFunction(()=>{const c=document.querySelector('canvas')!;
+    const pose=JSON.parse(c.dataset.playerposes??'{}')[c.dataset.localId!];
+    return c.dataset.role==='hider'||pose&&Math.abs(pose.z-2)<.1;
+  });
 }

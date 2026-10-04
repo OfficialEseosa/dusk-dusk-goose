@@ -390,14 +390,14 @@ test("returning from page cache keeps exactly one connection and the same seat",
   await context.close();
 });
 test("silent browser-side drop resumes before the stale server socket expires", async ({
-  browser,
+  browser, baseURL,
 }) => {
   const sockets = new Set<Socket>();
   const tunnels: { client: Socket; upstream: Socket; blackhole: boolean }[] =
     [];
   let staleOpenAtReconnect = false;
   const relay = createTcpServer((client) => {
-    const upstream = connectTcp(5175, "127.0.0.1");
+    const upstream = connectTcp(Number(new URL(baseURL!).port), "127.0.0.1");
     const tunnel = { client, upstream, blackhole: false };
     sockets.add(client);
     sockets.add(upstream);
