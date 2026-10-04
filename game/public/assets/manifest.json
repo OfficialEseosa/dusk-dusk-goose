@@ -1,0 +1,1578 @@
+{
+  "schemaVersion": 1,
+  "policy": "Selected original files only; names preserved; no model optimization or asset substitution performed.",
+  "packs": [
+    {
+      "id": "city-kit-suburban",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "licenseFile": "/assets/kenney/city-kit-suburban/License.txt",
+      "officialPage": "https://kenney.nl/assets/city-kit-suburban",
+      "sourceModelFolder": "Models/GLB format",
+      "runtimeBase": "/assets/kenney/city-kit-suburban/",
+      "models": [
+        {
+          "file": "building-type-a.glb",
+          "bytes": 98604,
+          "sha256": "49f32e20b9dcd24b1c8f6d6488807b8c8cb684cbb595bfb0bb36ad903e470faa",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/building-type-a.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.6499999761581421,
+              0,
+              -0.5140689015388489
+            ],
+            "max": [
+              0.6499999761581421,
+              0.8335409760475159,
+              0.5140689015388489
+            ]
+          },
+          "triangles": 1174,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "building-type-b.glb",
+          "bytes": 146720,
+          "sha256": "a964a10c51bb334be677657fd8fa483531974dd15b4243575990192818e2300e",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/building-type-b.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.9140000343322754,
+              0,
+              -0.5699999928474426
+            ],
+            "max": [
+              0.9140000343322754,
+              1.1375000476837158,
+              0.5699999928474426
+            ]
+          },
+          "triangles": 1748,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "building-type-c.glb",
+          "bytes": 99592,
+          "sha256": "86a69f30f1a09461283e158514945ae5cc9d56357b0ddc83a9a3f0eecd113591",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/building-type-c.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.6431901454925537,
+              0,
+              -0.5140689015388489
+            ],
+            "max": [
+              0.6431901454925537,
+              1.033540964126587,
+              0.5140689015388489
+            ]
+          },
+          "triangles": 1196,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "building-type-d.glb",
+          "bytes": 147368,
+          "sha256": "a41cd28265b2b224e700373c3a8356562619699998b7fa4d70ed41de629a6731",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/building-type-d.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.8781901597976685,
+              0,
+              -0.5139999985694885
+            ],
+            "max": [
+              0.8781901597976685,
+              1.2375000715255737,
+              0.5139999985694885
+            ]
+          },
+          "triangles": 1757,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "building-type-e.glb",
+          "bytes": 145512,
+          "sha256": "9ec43994c8c332b1ae5b058d8b9646255831fd91047c1a35b1fc1ecae4c082fc",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/building-type-e.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.6499999761581421,
+              2.707167856703783e-16,
+              -0.5139999985694885
+            ],
+            "max": [
+              0.6499999761581421,
+              1.1375000476837158,
+              0.5139999985694885
+            ]
+          },
+          "triangles": 1731,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "building-type-f.glb",
+          "bytes": 138536,
+          "sha256": "6f778f50d7f03c86f9a018e428cf8ffdd9e918df09954c0651d1c9559584a22b",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/building-type-f.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.7139999866485596,
+              0,
+              -0.7029455900192261
+            ],
+            "max": [
+              0.7140000462532043,
+              1.1375000476837158,
+              0.7029456496238708
+            ]
+          },
+          "triangles": 1616,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "driveway-short.glb",
+          "bytes": 2956,
+          "sha256": "7c7e81602cd6b1024fc98f3f32803db2e21222a3e30cfc838fb7f2282f593823",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/driveway-short.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.17999999225139618,
+              0,
+              -0.10000000149011612
+            ],
+            "max": [
+              0.17999999225139618,
+              0.009999999776482582,
+              0.10000000149011612
+            ]
+          },
+          "triangles": 12,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "fence.glb",
+          "bytes": 9672,
+          "sha256": "073bd2000ac51879516d49f835d5156dac4d5038085380b1232858fc3f562d02",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/fence.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.23750001192092896,
+              0,
+              -0.03750000149011612
+            ],
+            "max": [
+              0.23750001192092896,
+              0.26999998092651367,
+              0.03750000149011612
+            ]
+          },
+          "triangles": 88,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "fence-low.glb",
+          "bytes": 18552,
+          "sha256": "fe0272d73820bb4c8db3bed408a28cbd5c042da1373142bd13122a1ac9d1a168",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/fence-low.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.6375000476837158,
+              0,
+              -0.4375
+            ],
+            "max": [
+              0.6375000476837158,
+              0.17000000178813934,
+              0.3999999761581421
+            ]
+          },
+          "triangles": 180,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "path-short.glb",
+          "bytes": 2944,
+          "sha256": "0f657ebadf8c56adcd54335b8da2e54120f539918ea50509812731790ef99c2b",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/path-short.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.10000000149011612,
+              0,
+              -0.10000000149011612
+            ],
+            "max": [
+              0.10000000149011612,
+              0.009999999776482582,
+              0.10000000149011612
+            ]
+          },
+          "triangles": 12,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "path-stones-short.glb",
+          "bytes": 4284,
+          "sha256": "63148e02c35d4ad249ee1dcbb0c5ee921cd719f501b25eb8b66bc0e1b20ce28c",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/path-stones-short.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.07000000029802322,
+              0,
+              -0.10000000149011612
+            ],
+            "max": [
+              0.07000000029802322,
+              0.009999999776482582,
+              0.10000000149011612
+            ]
+          },
+          "triangles": 24,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "planter.glb",
+          "bytes": 20368,
+          "sha256": "a876e87d908f0397dcaf94b7705835447825c4c5b39195319535415386542c17",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/planter.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.20000000298023224,
+              0,
+              -0.15057337284088135
+            ],
+            "max": [
+              0.20000000298023224,
+              0.17710953950881958,
+              0.1494266241788864
+            ]
+          },
+          "triangles": 204,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "tree-small.glb",
+          "bytes": 5812,
+          "sha256": "5f63359e5f392609d7617cc98070855ca1ffd4f4b4bc3978a5ff56ece88a58d6",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/tree-small.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.10522209107875824,
+              0,
+              -0.12149999290704727
+            ],
+            "max": [
+              0.10522209107875824,
+              0.5670000314712524,
+              0.12149999290704727
+            ]
+          },
+          "triangles": 42,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "tree-large.glb",
+          "bytes": 5812,
+          "sha256": "16d1f95c149bc727a953a473cf20bf21de9bf1a88747c4f9d2eeb4ac7d43e291",
+          "source": "assets/source/kenney/city-kit-suburban/Models/GLB format/tree-large.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.10522209107875824,
+              0,
+              -0.12149999290704727
+            ],
+            "max": [
+              0.10522209107875824,
+              0.7669999599456787,
+              0.12149999290704727
+            ]
+          },
+          "triangles": 42,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        }
+      ],
+      "textures": [
+        {
+          "file": "Textures/colormap.png",
+          "bytes": 11784,
+          "sha256": "9b5de86078c25ef02351a80d35ff3c978693a1044565b73eedd9ae9b5b80665d"
+        }
+      ]
+    },
+    {
+      "id": "furniture-kit",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "licenseFile": "/assets/kenney/furniture-kit/License.txt",
+      "officialPage": "https://kenney.nl/assets/furniture-kit",
+      "sourceModelFolder": "Models/GLTF format",
+      "runtimeBase": "/assets/kenney/furniture-kit/",
+      "models": [
+        {
+          "file": "bedSingle.glb",
+          "bytes": 18636,
+          "sha256": "ca00c63f9a12da3138d902b2f5f18e0360fb6e8a5ac42ccb4bc3f185724b65d1",
+          "source": "assets/source/kenney/furniture-kit/Models/GLTF format/bedSingle.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.0585505441,
+              -0.13,
+              -1.892
+            ],
+            "max": [
+              1.56469381,
+              0.375,
+              0
+            ]
+          },
+          "triangles": 214,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 4,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "cabinetBedDrawerTable.glb",
+          "bytes": 12200,
+          "sha256": "fec6271639df5aff9f8ac75d6679385eab2abb7c8d2f51abeba3ed689ddb6f0d",
+          "source": "assets/source/kenney/furniture-kit/Models/GLTF format/cabinetBedDrawerTable.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.01,
+              0,
+              -0.205000013
+            ],
+            "max": [
+              0.255999982,
+              0.263199985,
+              0.176299989
+            ]
+          },
+          "triangles": 140,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 3,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "books.glb",
+          "bytes": 6864,
+          "sha256": "b8dc56e5d29f6fc1f4727fccb1b9642627fee9942c48060a00034e98df02701c",
+          "source": "assets/source/kenney/furniture-kit/Models/GLTF format/books.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              0,
+              0,
+              -0.0945
+            ],
+            "max": [
+              0.150447592,
+              0.103902258,
+              0
+            ]
+          },
+          "triangles": 62,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 4,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "radio.glb",
+          "bytes": 25020,
+          "sha256": "1ba93d6ba6f049750853b4652b92f286f2898e527695a0705b75cc7615897fed",
+          "source": "assets/source/kenney/furniture-kit/Models/GLTF format/radio.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              0,
+              0,
+              -0.0975000039
+            ],
+            "max": [
+              0.315,
+              0.228191078,
+              0
+            ]
+          },
+          "triangles": 432,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 3,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "rugRectangle.glb",
+          "bytes": 3188,
+          "sha256": "a989d2d59c04e3071e0c90388b113a9a8f339ce1814ef984c51cb6dcd7c8e0eb",
+          "source": "assets/source/kenney/furniture-kit/Models/GLTF format/rugRectangle.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              0,
+              0,
+              -0.92
+            ],
+            "max": [
+              1.56999993,
+              0.01,
+              0
+            ]
+          },
+          "triangles": 28,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 2,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "trashcan.glb",
+          "bytes": 6452,
+          "sha256": "e0ccc1fe50cbd05386477fdff527171d1cf7c0de2ba7ff3233f8d9561feb2561",
+          "source": "assets/source/kenney/furniture-kit/Models/GLTF format/trashcan.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.259491116,
+              -5.30947631e-18,
+              -0.219999984
+            ],
+            "max": [
+              0.236502588,
+              0.9064368,
+              0.219999984
+            ]
+          },
+          "triangles": 68,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 2,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "cardboardBoxClosed.glb",
+          "bytes": 5400,
+          "sha256": "4af079dca52960912764574950f0549ff2ae1224b3db1528718629473a2d5d81",
+          "source": "assets/source/kenney/furniture-kit/Models/GLTF format/cardboardBoxClosed.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              0,
+              0,
+              -0.212499991
+            ],
+            "max": [
+              0.212499991,
+              0.281,
+              9.02389264e-17
+            ]
+          },
+          "triangles": 60,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 2,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "wall.glb",
+          "bytes": 3340,
+          "sha256": "69273d5d623bddfce41d12d4e5eeb5621ea04f1edcbd8f35c00a60c2fd3258b7",
+          "source": "assets/source/kenney/furniture-kit/Models/GLTF format/wall.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              0,
+              0,
+              -0.05
+            ],
+            "max": [
+              1,
+              1.28953171,
+              0
+            ]
+          },
+          "triangles": 12,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 3,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "wallCorner.glb",
+          "bytes": 4460,
+          "sha256": "0e6521caee1f9282784c52e0f651084e49f575b091ad97bf25540b8049757aef",
+          "source": "assets/source/kenney/furniture-kit/Models/GLTF format/wallCorner.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              0,
+              -9.02389264e-17,
+              -0.55
+            ],
+            "max": [
+              0.55,
+              1.28953171,
+              0
+            ]
+          },
+          "triangles": 28,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 3,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "wallDoorway.glb",
+          "bytes": 6444,
+          "sha256": "a55be1da05aa80c74749d0c38bd093fa5e2b1eaf21cbc9a7c3a0e6fbcfbe38e2",
+          "source": "assets/source/kenney/furniture-kit/Models/GLTF format/wallDoorway.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              0,
+              0,
+              -0.06955
+            ],
+            "max": [
+              1,
+              1.28953171,
+              0.01955
+            ]
+          },
+          "triangles": 60,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 3,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "wallWindow.glb",
+          "bytes": 10744,
+          "sha256": "166a10fddb8a78d942bc2791186913f7015dfee8501d20efd7a7b8f196fc5c3e",
+          "source": "assets/source/kenney/furniture-kit/Models/GLTF format/wallWindow.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              0,
+              0,
+              -0.06955
+            ],
+            "max": [
+              1,
+              1.28953171,
+              0.01955
+            ]
+          },
+          "triangles": 108,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 4,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "floorFull.glb",
+          "bytes": 2260,
+          "sha256": "99fc5df646d8dc605d6fe35001fe5b15bb7b269cc5c65f4f7793fbc76ff3d822",
+          "source": "assets/source/kenney/furniture-kit/Models/GLTF format/floorFull.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              0,
+              0,
+              -1
+            ],
+            "max": [
+              1,
+              0.05,
+              0
+            ]
+          },
+          "triangles": 12,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        }
+      ],
+      "textures": []
+    },
+    {
+      "id": "car-kit",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "licenseFile": "/assets/kenney/car-kit/License.txt",
+      "officialPage": "https://kenney.nl/assets/car-kit",
+      "sourceModelFolder": "Models/GLB format",
+      "runtimeBase": "/assets/kenney/car-kit/",
+      "models": [
+        {
+          "file": "sedan.glb",
+          "bytes": 172216,
+          "sha256": "b532ea7d2c59f7f6b22b138cf1955218a2c1898f1cea932af4d3fd563c3959b7",
+          "source": "assets/source/kenney/car-kit/Models/GLB format/sedan.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.75,
+              -0.30000001192092896,
+              -1.274999976158142
+            ],
+            "max": [
+              0.75,
+              1.149999976158142,
+              1.274999976158142
+            ]
+          },
+          "triangles": 2032,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "van.glb",
+          "bytes": 175664,
+          "sha256": "ed4ed56e8e5ed98db050af09ed2062b3b6bb7b93eab1e563cb6774b387b233a1",
+          "source": "assets/source/kenney/car-kit/Models/GLB format/van.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.75,
+              -0.30000001192092896,
+              -1.5000001192092896
+            ],
+            "max": [
+              0.75,
+              1.149999976158142,
+              1.2500001192092896
+            ]
+          },
+          "triangles": 2082,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "box.glb",
+          "bytes": 14108,
+          "sha256": "b773815c791d2708a2a70f1a9bb6d197d7211269ad96e273f9e364ea536c1b18",
+          "source": "assets/source/kenney/car-kit/Models/GLB format/box.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.35749998688697815,
+              0,
+              -0.35749998688697815
+            ],
+            "max": [
+              0.35749998688697815,
+              0.7149999737739563,
+              0.35749998688697815
+            ]
+          },
+          "triangles": 124,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "wheel-default.glb",
+          "bytes": 26820,
+          "sha256": "7d61941bc27bcc3b235e2e26c598cbcb4166bd66eb8f9920e26842a11015c62b",
+          "source": "assets/source/kenney/car-kit/Models/GLB format/wheel-default.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.20000000298023224,
+              -0.30000001192092896,
+              -0.30000001192092896
+            ],
+            "max": [
+              0.20000000298023224,
+              0.30000001192092896,
+              0.30000001192092896
+            ]
+          },
+          "triangles": 332,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        }
+      ],
+      "textures": [
+        {
+          "file": "Textures/colormap.png",
+          "bytes": 12371,
+          "sha256": "f3622a03a20c6696065cae9cbe391351be873508af190c2ebd1d420c055787a5"
+        }
+      ]
+    },
+    {
+      "id": "blocky-characters",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "licenseFile": "/assets/kenney/blocky-characters/License.txt",
+      "officialPage": "https://kenney.nl/assets/blocky-characters",
+      "sourceModelFolder": "Models/GLB format",
+      "runtimeBase": "/assets/kenney/blocky-characters/",
+      "models": [
+        {
+          "file": "character-a.glb",
+          "bytes": 113596,
+          "sha256": "8ee5dae167ec589863f6bba222467eb90ace8be357a4c5abfcab289290181616",
+          "source": "assets/source/kenney/blocky-characters/Models/GLB format/character-a.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -4,
+              -1,
+              -4
+            ],
+            "max": [
+              4,
+              8,
+              4
+            ]
+          },
+          "triangles": 72,
+          "animationClips": [
+            "static",
+            "idle",
+            "walk",
+            "sprint",
+            "sit",
+            "drive",
+            "die",
+            "pick-up",
+            "emote-yes",
+            "emote-no",
+            "holding-right",
+            "holding-left",
+            "holding-both",
+            "holding-right-shoot",
+            "holding-left-shoot",
+            "holding-both-shoot",
+            "attack-melee-right",
+            "attack-melee-left",
+            "attack-kick-right",
+            "attack-kick-left",
+            "interact-right",
+            "interact-left",
+            "wheelchair-sit",
+            "wheelchair-move-forward",
+            "wheelchair-move-back",
+            "wheelchair-move-left",
+            "wheelchair-move-right"
+          ],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "character-b.glb",
+          "bytes": 113596,
+          "sha256": "30ed390a741a1b285f587544819aa8a02c8f7f270e552ed742eb84785034f62a",
+          "source": "assets/source/kenney/blocky-characters/Models/GLB format/character-b.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -4,
+              -1,
+              -4
+            ],
+            "max": [
+              4,
+              8,
+              4
+            ]
+          },
+          "triangles": 72,
+          "animationClips": [
+            "static",
+            "idle",
+            "walk",
+            "sprint",
+            "sit",
+            "drive",
+            "die",
+            "pick-up",
+            "emote-yes",
+            "emote-no",
+            "holding-right",
+            "holding-left",
+            "holding-both",
+            "holding-right-shoot",
+            "holding-left-shoot",
+            "holding-both-shoot",
+            "attack-melee-right",
+            "attack-melee-left",
+            "attack-kick-right",
+            "attack-kick-left",
+            "interact-right",
+            "interact-left",
+            "wheelchair-sit",
+            "wheelchair-move-forward",
+            "wheelchair-move-back",
+            "wheelchair-move-left",
+            "wheelchair-move-right"
+          ],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "character-c.glb",
+          "bytes": 113580,
+          "sha256": "ad2425ba0da5d9adff791b949bd62389ddcb09963ff89265930eab0d6484398c",
+          "source": "assets/source/kenney/blocky-characters/Models/GLB format/character-c.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -4,
+              -1,
+              -4
+            ],
+            "max": [
+              4,
+              8,
+              4
+            ]
+          },
+          "triangles": 72,
+          "animationClips": [
+            "static",
+            "idle",
+            "walk",
+            "sprint",
+            "sit",
+            "drive",
+            "die",
+            "pick-up",
+            "emote-yes",
+            "emote-no",
+            "holding-right",
+            "holding-left",
+            "holding-both",
+            "holding-right-shoot",
+            "holding-left-shoot",
+            "holding-both-shoot",
+            "attack-melee-right",
+            "attack-melee-left",
+            "attack-kick-right",
+            "attack-kick-left",
+            "interact-right",
+            "interact-left",
+            "wheelchair-sit",
+            "wheelchair-move-forward",
+            "wheelchair-move-back",
+            "wheelchair-move-left",
+            "wheelchair-move-right"
+          ],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "character-d.glb",
+          "bytes": 113596,
+          "sha256": "bd7cbf0d45e58f6809e3249a84502ce629ac53bfa13bc39fb0a83d171faf84bf",
+          "source": "assets/source/kenney/blocky-characters/Models/GLB format/character-d.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -4,
+              -1,
+              -4
+            ],
+            "max": [
+              4,
+              8,
+              4
+            ]
+          },
+          "triangles": 72,
+          "animationClips": [
+            "static",
+            "idle",
+            "walk",
+            "sprint",
+            "sit",
+            "drive",
+            "die",
+            "pick-up",
+            "emote-yes",
+            "emote-no",
+            "holding-right",
+            "holding-left",
+            "holding-both",
+            "holding-right-shoot",
+            "holding-left-shoot",
+            "holding-both-shoot",
+            "attack-melee-right",
+            "attack-melee-left",
+            "attack-kick-right",
+            "attack-kick-left",
+            "interact-right",
+            "interact-left",
+            "wheelchair-sit",
+            "wheelchair-move-forward",
+            "wheelchair-move-back",
+            "wheelchair-move-left",
+            "wheelchair-move-right"
+          ],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "character-e.glb",
+          "bytes": 113596,
+          "sha256": "9a12684981bc7763aebeceaffed82abfcc458d27b1ed3e169b92bebcc4870675",
+          "source": "assets/source/kenney/blocky-characters/Models/GLB format/character-e.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -4,
+              -1,
+              -4
+            ],
+            "max": [
+              4,
+              8,
+              4
+            ]
+          },
+          "triangles": 72,
+          "animationClips": [
+            "static",
+            "idle",
+            "walk",
+            "sprint",
+            "sit",
+            "drive",
+            "die",
+            "pick-up",
+            "emote-yes",
+            "emote-no",
+            "holding-right",
+            "holding-left",
+            "holding-both",
+            "holding-right-shoot",
+            "holding-left-shoot",
+            "holding-both-shoot",
+            "attack-melee-right",
+            "attack-melee-left",
+            "attack-kick-right",
+            "attack-kick-left",
+            "interact-right",
+            "interact-left",
+            "wheelchair-sit",
+            "wheelchair-move-forward",
+            "wheelchair-move-back",
+            "wheelchair-move-left",
+            "wheelchair-move-right"
+          ],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "character-f.glb",
+          "bytes": 113592,
+          "sha256": "04223c1c6cdce5da6fe9c9729a24e1aa9c765dec93af952379112f7da24a828a",
+          "source": "assets/source/kenney/blocky-characters/Models/GLB format/character-f.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -4,
+              -1,
+              -4
+            ],
+            "max": [
+              4,
+              8,
+              4
+            ]
+          },
+          "triangles": 72,
+          "animationClips": [
+            "static",
+            "idle",
+            "walk",
+            "sprint",
+            "sit",
+            "drive",
+            "die",
+            "pick-up",
+            "emote-yes",
+            "emote-no",
+            "holding-right",
+            "holding-left",
+            "holding-both",
+            "holding-right-shoot",
+            "holding-left-shoot",
+            "holding-both-shoot",
+            "attack-melee-right",
+            "attack-melee-left",
+            "attack-kick-right",
+            "attack-kick-left",
+            "interact-right",
+            "interact-left",
+            "wheelchair-sit",
+            "wheelchair-move-forward",
+            "wheelchair-move-back",
+            "wheelchair-move-left",
+            "wheelchair-move-right"
+          ],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        }
+      ],
+      "textures": [
+        {
+          "file": "Textures/texture-a.png",
+          "bytes": 20171,
+          "sha256": "257e944c582ce7cda206fbd8ceb717be648f9721756baf377a36478c11c0059a"
+        },
+        {
+          "file": "Textures/texture-b.png",
+          "bytes": 15606,
+          "sha256": "c614148428fbf63ab701ab95e2ebe0b6103ea0e2e6212c986d8931899bad7692"
+        },
+        {
+          "file": "Textures/texture-c.png",
+          "bytes": 12829,
+          "sha256": "582a62eae6ca086f65e6bfdde16d0d1d15a95fdaf484c0def4769d5a47ba1c8e"
+        },
+        {
+          "file": "Textures/texture-d.png",
+          "bytes": 13151,
+          "sha256": "c61bc29ec4d96229b979fc9196500afac13c2b448bbab1085832354fb4ef849a"
+        },
+        {
+          "file": "Textures/texture-e.png",
+          "bytes": 14509,
+          "sha256": "6bbdb4f76b8d2ba7feb1ad8e4a341ca87afd655a4f061c77a86c400ad3125049"
+        },
+        {
+          "file": "Textures/texture-f.png",
+          "bytes": 15886,
+          "sha256": "54404f22588bac5a7f8df09c2aac0520e101a6f32944ce4070f550d7ad80c6f7"
+        }
+      ]
+    },
+    {
+      "id": "city-kit-roads",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "licenseFile": "/assets/kenney/city-kit-roads/License.txt",
+      "officialPage": "https://kenney.nl/assets/city-kit-roads",
+      "sourceModelFolder": "Models/GLB format",
+      "runtimeBase": "/assets/kenney/city-kit-roads/",
+      "models": [
+        {
+          "file": "road-straight.glb",
+          "bytes": 5248,
+          "sha256": "f8f744fb6fc96dedd5ad1f763b550166f2624a3757bf36b4b39969d2e7cacac5",
+          "source": "assets/source/kenney/city-kit-roads/Models/GLB format/road-straight.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.5,
+              0,
+              -0.5
+            ],
+            "max": [
+              0.5,
+              0.019999999552965164,
+              0.5
+            ]
+          },
+          "triangles": 44,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "road-end.glb",
+          "bytes": 4940,
+          "sha256": "bdf62518cfcc2c1a1425a4c8bc845e8e344f9c8b34dfb364b6b7d442e6171f11",
+          "source": "assets/source/kenney/city-kit-roads/Models/GLB format/road-end.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.5,
+              0,
+              -0.5
+            ],
+            "max": [
+              0.5,
+              0.019999999552965164,
+              0.5
+            ]
+          },
+          "triangles": 42,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "road-bend.glb",
+          "bytes": 20164,
+          "sha256": "9752f63448c8e7a3d30ca2e0e1bb6784c5adb72b56a2b05667be8d546c1674bc",
+          "source": "assets/source/kenney/city-kit-roads/Models/GLB format/road-bend.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.5,
+              0,
+              -0.5
+            ],
+            "max": [
+              0.5,
+              0.019999999552965164,
+              0.5
+            ]
+          },
+          "triangles": 260,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "road-driveway-single.glb",
+          "bytes": 6568,
+          "sha256": "59f22734d5c22b55ae007914939227e7742fdddf4c371ace106e8161bdfb5ad2",
+          "source": "assets/source/kenney/city-kit-roads/Models/GLB format/road-driveway-single.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.5,
+              0,
+              -0.5
+            ],
+            "max": [
+              0.5,
+              0.019999999552965164,
+              0.5
+            ]
+          },
+          "triangles": 60,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "light-curved.glb",
+          "bytes": 9492,
+          "sha256": "154dcce9d58ec2cd165e26c91a89c97bdd2838cf06d255099b3570df84f82ec6",
+          "source": "assets/source/kenney/city-kit-roads/Models/GLB format/light-curved.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.02500000037252903,
+              0,
+              -0.20000000298023224
+            ],
+            "max": [
+              0.02500000037252903,
+              0.6749999523162842,
+              0.02500000037252903
+            ]
+          },
+          "triangles": 92,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "dumpster.glb",
+          "bytes": 24456,
+          "sha256": "c60ebecc23487c38b5e0750856a3b50744d2ea12b3c83ad03d537e5a4670777a",
+          "source": "assets/source/kenney/city-kit-roads/Models/GLB format/dumpster.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.23192012310028076,
+              -0.044999998062849045,
+              -0.1849999576807022
+            ],
+            "max": [
+              0.14500001072883606,
+              0.20609240233898163,
+              0.1850001960992813
+            ]
+          },
+          "triangles": 234,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        },
+        {
+          "file": "electricity-pole.glb",
+          "bytes": 43652,
+          "sha256": "08c9b924e297eaa46bbd79ac09795c045848a4e38a72b2ce4f973517f840c2d3",
+          "source": "assets/source/kenney/city-kit-roads/Models/GLB format/electricity-pole.glb",
+          "geometryBounds": {
+            "space": "mesh-local accessor union; not transformed scene bounds",
+            "min": [
+              -0.29736000299453735,
+              4.511975103434207e-16,
+              -0.10711249709129333
+            ],
+            "max": [
+              0.2817249894142151,
+              0.5249999761581421,
+              0.10711249709129333
+            ]
+          },
+          "triangles": 416,
+          "animationClips": [],
+          "hasSkin": false,
+          "materialCount": 1,
+          "scale": {
+            "unitsPerMetre": null,
+            "status": "verify scene dimensions during step 2"
+          },
+          "collision": {
+            "status": "authored gameplay collider required in step 2; never infer from decorative mesh"
+          }
+        }
+      ],
+      "textures": [
+        {
+          "file": "Textures/colormap.png",
+          "bytes": 11428,
+          "sha256": "a48e2962661ae44368ffddf3054f80ed8491d082b757dcc3011184cd9a98b185"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "models": 43,
+    "triangles": 17200,
+    "bytes": 2264359
+  }
+}

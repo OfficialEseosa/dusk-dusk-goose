@@ -8,7 +8,7 @@ Everything in sections 1–3 is a proposed default. Change anything you dislike 
 
 It is the last night of summer, 2002, and the power is out on Maple Street. One player secretly buries the friends' time capsule somewhere on the dark street; everyone else has a few minutes to find it with flashlights and walkie-talkies. Then the roles rotate, and the best night wins.
 
-- **Players:** 2 to 6, each on their own phone or laptop, joined by room code. No login, no install.
+- **Players:** 1 to 6, each on their own phone or laptop, joined by room code. No login, no install.
 - **Length:** a round is about 3 minutes. A full game is one round per player as the hider (two rounds each with two players).
 - **One person:** there is no separate single-player mode. The normal game works with one person in the room. They create a night and get a code as usual, and can press start even if nobody has joined. With one person, the game itself is the hider every round: it buries the capsule, lays the footprints including one false trail, and radios a true clue every 30 seconds. The lone player always seeks and is scored on how fast they find it. If a friend joins with the code between rounds, the next round is a normal round with a human hider.
 
@@ -38,19 +38,23 @@ It is the last night of summer, 2002, and the power is out on Maple Street. One 
 - **View:** real 3D, low-poly, seen from a fixed raised angle that follows your character along the street.
 - **Screen:** fills the display, never scrolls or zooms. Fullscreen button on Android and desktop. On iPhone, a one-time "Add to Home Screen" tip instead, because iPhone Safari cannot fullscreen a web page.
 
-## 4. Two things to settle before building
+## 4. Settled before building
 
-1. **Is Vercel allowed?** The public mission page asks for "a ChatGPT account with Work mode" and the rules PDF does not define "built in ChatGPT". I could not see the signed-in mission page or the Code of Conduct. Read both. If hosting elsewhere is not clearly allowed, ask the organizers in writing, or publish on ChatGPT Sites.
-2. **Where does ChatGPT work?** I still do not know whether ChatGPT is editing this local folder or building separately. The prompts below assume it can create a fresh project and that you will deploy it to Vercel.
+1. **Hosting.** You confirmed on Oct 3 that hosting outside ChatGPT is allowed (you confirmed Vercel; Railway is assumed to fall under the same allowance). The game will be hosted on **Railway**.
+2. **Where ChatGPT works.** ChatGPT edits this local folder. You deploy to Railway.
 
-## 5. What Vercel needs from the game
+## 5. What Railway needs from the game
 
-Vercel can hold live connections, but not the way the current server does:
+Railway runs one always-on Node server, which is the simplest fit for a room-based realtime game:
 
-- Room state must live in an external store (Redis from Vercel's marketplace), never in server memory. A reconnect or a new deploy can land on a different server copy.
-- Players in one room may be connected to different server copies, so updates must be passed between copies through that store.
-- Connections are cut at the function time limit (5 minutes on the free plan). Every device must reconnect quietly and carry on in the same seat, without the player noticing.
-- The client must connect by WebSocket directly.
+- **Exactly one server instance.** Rooms live in that server's memory, so there must never be two copies running. No external store is needed.
+- **Live connections stay open.** Each device keeps one WebSocket to the server. Devices must still reconnect quietly after a phone lock or a network switch and keep their seat.
+- **The same server serves the game page and the live connection**, from one public address.
+- **A restart or redeploy drops every room in progress.** Never deploy while people are playing, and freeze deployments during judging. After a restart, players are returned to the title screen with a clear, friendly message.
+- **Production settings.** The server starts without development-only tools, reads its port from the host, and has no development or debugging endpoints reachable in public.
+- **Abandoned rooms are cleaned up** so memory does not grow, and the number of rooms and players per room is capped.
+
+Railway's pricing is usage-based; check its pricing page for the current cost of one small always-on service.
 
 ## 6. Standing rules for ChatGPT
 
@@ -58,8 +62,9 @@ Paste once and keep as the project's instruction file.
 
 ```
 PROJECT: Last Night on Maple Street. A replayable hide-and-seek party game in the
-dark for 2 to 6 players on their own phones or laptops, for the Handshake x OpenAI
-"Create a Multiplayer Game" challenge. Hosted on Vercel.
+dark for 1 to 6 players on their own phones or laptops, for the Handshake x OpenAI
+"Create a Multiplayer Game" challenge. Hosted on Railway as one always-on Node
+server.
 
 WHAT IT IS: The last night of summer, 2002. The power is out on Maple Street. Each
 round, one player secretly buries a time capsule somewhere on the dark street. The
@@ -81,8 +86,11 @@ ALWAYS TRUE:
 - The server decides everything players share: where the capsule is, positions,
   footprints, timers, scores. A player's device never learns where the capsule is
   until it is found or the round ends.
-- Room state lives in an external store, never in server memory. A dropped or
-  recycled connection reconnects by itself and the player keeps their seat.
+- One server instance holds all rooms in memory and keeps a live connection to
+  each device. A dropped connection reconnects by itself and the player keeps
+  their seat. If the server has restarted, players are sent to the title screen
+  with a clear, friendly message.
+- No development or debugging endpoints are reachable on the public site.
 - Real 3D, low-poly, built from the asset kits I supply. Properly dark after the
   power cut. Flashlights are real lights.
 - Landscape. The game fills the screen. The page never scrolls or zooms.
@@ -118,8 +126,10 @@ PROMPT 1: Plan and look, for my approval (build nothing yet)
 This is a fresh project. Do not reuse the earlier story-game code.
 
 Write a short plan covering:
-- How 2 to 6 players stay in sync on Vercel, given that room state must live in
-  an external store and connections will be recycled every few minutes.
+- How 1 to 6 players stay in sync on a single always-on Node server on Railway
+  with a live connection to each device.
+- How the game plays the hider when only one person is in the room.
+- What I need to set up on Railway myself, step by step.
 - What the server decides and what each device decides. How you keep the capsule
   location secret from seekers' devices.
 - How often positions and flashlight directions are shared, and how other
@@ -209,7 +219,7 @@ After Prompt 3: scoring and rotating hiders, the radio, the solo practice night,
 
 | Dates | Goal |
 |---|---|
-| Oct 3–5 | Settle the Vercel question. Prompt 1. Pick the look. Download the kits. |
+| Oct 3–5 | Prompt 1. Pick the look. Download the kits. Create the Railway account. |
 | Oct 6–12 | Prompt 2 live on two real phones. If walking 3D is not smooth by the 12th, simplify the scene before adding anything. |
 | Oct 13–18 | Prompt 3, then scoring and rotation. Audit. |
 | Oct 19–24 | Radio, solo practice night, end screen, sound. Audit. Strangers playtest with 3 or more players. |
@@ -221,4 +231,5 @@ After Prompt 3: scoring and rotating hiders, the radio, the solo practice night,
 - **Smooth movement over the network** is the hardest part of this design and is proven or disproven by Prompt 2. Everything else is ordinary.
 - **Two-player rounds** may feel thin with one seeker. If so, give the lone seeker the game's own clues more often.
 - **Balance** (round length, footprint fade time, number of hiding spots) can only be tuned by playing with real people. Budget time for it.
-- **Eligibility** of a Vercel-hosted entry is unconfirmed.
+- **Server restarts** drop every room. Freeze deployments before judging starts.
+- **Eligibility:** you confirmed outside hosting is allowed; I have not seen the signed-in mission page or the Code of Conduct myself.

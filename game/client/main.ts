@@ -1,0 +1,369 @@
+import "@fontsource/fraunces/latin-600.css";
+import "@fontsource/dm-sans/latin-400.css";
+import "@fontsource/dm-sans/latin-600.css";
+import "./style.css";
+
+type Seat = { room: string; playerId: string; token: string; bootId: string };
+type Room = {
+  code: string;
+  phase: "lobby" | "started";
+  hostId: string;
+  players: { id: string; name: string; connected: boolean }[];
+};
+type Offer = { playerId: string; name: string; token: string };
+type Result = {
+  ok: boolean;
+  seat?: Seat;
+  room?: Room;
+  offers?: Offer[];
+  error?: { code: string; message: string };
+};
+const app = document.querySelector<HTMLDivElement>("#app")!;
+const key = "maple:seat:v1",
+  ownedKey = "maple:owned:v1";
+const esc = (s: string) =>
+  s.replace(
+    /[&<>"']/g,
+    (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        c
+      ]!,
+  );
+const read = <T>(storage: Storage, k: string, fallback: T): T => {
+  try {
+    return JSON.parse(storage.getItem(k) ?? "null") ?? fallback;
+  } catch {
+    return fallback;
+  }
+};
+let seat = read<Seat | null>(sessionStorage, key, null),
+  room: Room | null = null,
+  offers: Offer[] = [];
+let name = localStorage.getItem("maple:name") ?? "",
+  code = new URL(location.href).searchParams.get("room") ?? "";
+let notice = "",
+  connected = false,
+  busy = false,
+  copied = false,
+  showLink = false,
+  bootId = "",
+  recovering = false;
+let socket: WebSocket,
+  retry = 0,
+  timer: ReturnType<typeof setTimeout>;
+const pending = new Map<
+  string,
+  {
+    resolve: (r: Result) => void;
+    reject: (e: Error) => void;
+    timer: ReturnType<typeof setTimeout>;
+  }
+>();
+function owned(): Seat[] {
+  return read<Seat[]>(localStorage, ownedKey, []).filter(
+    (s) => s && typeof s.token === "string" && typeof s.room === "string",
+  );
+}
+function availableOffers(list: Offer[] = []) {
+  const recent = [...owned()].reverse();
+  return recent
+    .map((s) => list.find((o) => o.token === s.token))
+    .filter((o): o is Offer => !!o)
+    .slice(0, 1);
+}
+function save(s: Seat) {
+  seat = s;
+  sessionStorage.setItem(key, JSON.stringify(s));
+  localStorage.setItem(
+    ownedKey,
+    JSON.stringify(
+      [...owned().filter((x) => x.token !== s.token), s].slice(-36),
+    ),
+  );
+}
+function forget(removeOwned = false) {
+  if (removeOwned && seat)
+    localStorage.setItem(
+      ownedKey,
+      JSON.stringify(owned().filter((s) => s.token !== seat!.token)),
+    );
+  seat = null;
+  sessionStorage.removeItem(key);
+  room = null;
+  offers = [];
+}
+function address(c: string) {
+  const url = new URL(location.href);
+  url.search = "";
+  if (c) url.searchParams.set("room", c);
+  history.replaceState(null, "", url);
+}
+function invite() {
+  return `${location.origin}/?room=${room?.code ?? code}`;
+}
+function request(
+  type: string,
+  fields: Record<string, unknown> = {},
+): Promise<Result> {
+  return new Promise((resolve, reject) => {
+    if (socket?.readyState !== WebSocket.OPEN)
+      return reject(
+        new Error("Connecting to the street. Try again in a moment."),
+      );
+    const id = crypto.randomUUID();
+    const timeout = setTimeout(() => {
+      pending.delete(id);
+      reject(new Error("No reply yet. Please try again."));
+    }, 8000);
+    pending.set(id, { resolve, reject, timer: timeout });
+    socket.send(JSON.stringify({ id, type, ...fields }));
+  });
+}
+async function restore() {
+  if (recovering) return;
+  recovering = true;
+  try {
+    if (seat) {
+      const candidate = seat;
+      const result = await request("resume", {
+        code: candidate.room,
+        token: candidate.token,
+        bootId: candidate.bootId,
+      });
+      if (seat?.token !== candidate.token) return;
+      if (result.ok && result.seat) {
+        save(result.seat);
+        room = result.room!;
+        code = room.code;
+        address(code);
+        notice = "";
+      } else if (result.error?.code === "seat_connected") {
+        notice =
+          "Your seat is still reconnecting. You can also join as another player.";
+        setTimeout(() => {
+          if (!room) void restore();
+        }, 2000);
+      } else {
+        notice = result.error?.message ?? "That night has ended.";
+        forget(true);
+        code = "";
+        address("");
+      }
+    } else if (code) {
+      const result = await request("recover", {
+        code,
+        tokens: owned()
+          .filter((s) => s.room === code)
+          .map((s) => s.token),
+      });
+      offers = availableOffers(result.offers);
+    }
+  } catch {
+  } finally {
+    recovering = false;
+    render();
+  }
+}
+function connect() {
+  if (
+    socket &&
+    (socket.readyState === WebSocket.OPEN ||
+      socket.readyState === WebSocket.CONNECTING)
+  )
+    return;
+  clearTimeout(timer);
+  const current = new WebSocket(
+    `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/live`,
+  );
+  socket = current;
+  connected = false;
+  render();
+  current.onmessage = (e) => {
+    if (socket !== current) return;
+    const message = JSON.parse(e.data);
+    if (message.type === "hello") {
+      connected = true;
+      bootId = message.bootId;
+      retry = 0;
+      render();
+      void restore();
+    } else if (message.type === "result") {
+      const p = pending.get(message.id);
+      if (p) {
+        clearTimeout(p.timer);
+        pending.delete(message.id);
+        p.resolve(message);
+      }
+    } else if (message.type === "room") {
+      room = message.room;
+      render();
+    } else if (message.type === "shutdown") {
+      notice = "The street is reconnecting.";
+      render();
+    }
+  };
+  current.onclose = () => {
+    if (socket !== current) return;
+    connected = false;
+    for (const p of pending.values()) {
+      clearTimeout(p.timer);
+      p.reject(new Error("Connection lost. Reconnecting."));
+    }
+    pending.clear();
+    render();
+    timer = setTimeout(
+      connect,
+      Math.min(5000, 500 * 2 ** retry++) + Math.random() * 200,
+    );
+  };
+  current.onerror = () => current.close();
+}
+async function action(type: string, fields: Record<string, unknown> = {}) {
+  if (busy) return;
+  busy = true;
+  notice = "";
+  render();
+  try {
+    const r = await request(type, fields);
+    if (!r.ok) throw new Error(r.error?.message ?? "Please try again.");
+    if (r.seat) {
+      save(r.seat);
+      room = r.room!;
+      code = room.code;
+      address(code);
+      offers = [];
+    } else if (r.room) room = r.room;
+  } catch (e) {
+    notice = (e as Error).message;
+  } finally {
+    busy = false;
+    render();
+  }
+}
+async function leave() {
+  const old = seat;
+  forget(true);
+  code = "";
+  address("");
+  notice = "";
+  copied = false;
+  showLink = false;
+  render();
+  if (old && connected)
+    await request("leave", { token: old.token }).catch(() => {});
+}
+async function copy() {
+  const link = invite();
+  try {
+    await navigator.clipboard.writeText(link);
+    copied = true;
+    notice = "";
+  } catch {
+    showLink = true;
+    notice = "Select and copy the invite link.";
+  }
+  render();
+  if (showLink) {
+    const input = app.querySelector<HTMLInputElement>("#invite");
+    input?.focus();
+    input?.select();
+  }
+}
+const mark =
+  '<svg class="street-mark" viewBox="0 0 120 80" aria-hidden="true"><path d="M20 65V33L48 12l28 21v32M76 65V42l17-13 17 13v23M35 65V44h23v21"/><path class="window" d="M42 28h12v10H42z"/></svg>';
+function render() {
+  const status = connected
+    ? ""
+    : `<div class="connection" role="status">Reconnecting to the street...</div>`;
+  const message = notice
+    ? `<p class="notice" role="status">${esc(notice)}</p>`
+    : "";
+  if (room && seat) {
+    app.innerHTML = `<main class="screen room-screen"><header><button class="back" id="leave">← Back to title</button><span class="date">SUMMER 2002</span></header><section class="room-body"><div class="room-heading">${mark}<p class="eyebrow">LAST NIGHT ON MAPLE STREET</p><h1>${room.phase === "started" ? "The night is open." : "Bring your friends."}</h1><div class="invite"><div><span class="label">ROOM CODE</span><strong data-testid="room-code">${room.code}</strong></div><button id="copy">${copied ? "Link copied" : "Copy invite"}</button></div>${showLink ? `<input id="invite" aria-label="Invite link" readonly value="${esc(invite())}">` : ""}${message}</div><div class="room-panel"><ul aria-label="Players">${room.players.map((p) => `<li><span class="avatar" aria-hidden="true">${esc(p.name.slice(0, 1))}</span><span>${esc(p.name)}${p.id === seat!.playerId ? " <small>(you)</small>" : ""}</span><span class="presence">${p.connected ? "Here" : "Reconnecting"}</span></li>`).join("")}</ul>${room.hostId === seat.playerId ? `<button class="primary" id="start" ${!connected || busy || room.phase === "started" ? "disabled" : ""}>${room.phase === "started" ? "Night started" : "Start the night"}</button>` : `<p class="host-note">${room.phase === "started" ? "Night started" : `${esc(room.players.find((p) => p.id === room!.hostId)?.name ?? "Your friend")} can start the night.`}</p>`}</div></section>${status}</main>`;
+    app.querySelector("#leave")?.addEventListener("click", () => void leave());
+    app.querySelector("#copy")?.addEventListener("click", () => void copy());
+    app
+      .querySelector("#start")
+      ?.addEventListener("click", () => void action("start"));
+    return;
+  }
+  app.innerHTML = `<main class="screen title-screen"><section class="title-copy">${mark}<p class="eyebrow">THE LAST NIGHT OF SUMMER</p><h1>Last Night<br><span>on Maple Street</span></h1><p class="date">2002</p></section><section class="menu ${offers.length || seat ? "compact" : ""}" aria-label="Join the night"><label for="name">Your name</label><input id="name" autocomplete="nickname" maxlength="24" value="${esc(name)}" placeholder="Name"><button class="primary" id="create" ${!connected || busy ? "disabled" : ""}>Create a night</button><div class="divider"><span>or</span></div><label for="code">Room code</label><div class="join-row"><input id="code" autocapitalize="characters" autocomplete="off" maxlength="5" value="${esc(code)}" placeholder="ABCDE"><button id="join" ${!connected || busy ? "disabled" : ""}>Join</button></div>${offers.map((o) => `<button class="recover" data-token="${esc(o.token)}">Return as ${esc(o.name)}</button>`).join("")}${seat ? '<button id="fresh" class="back">Join as another player</button>' : ""}${message}</section>${status}</main>`;
+  app
+    .querySelector<HTMLInputElement>("#name")!
+    .addEventListener("input", (e) => {
+      name = (e.target as HTMLInputElement).value;
+      localStorage.setItem("maple:name", name);
+    });
+  app
+    .querySelector<HTMLInputElement>("#code")!
+    .addEventListener("input", (e) => {
+      code = (e.target as HTMLInputElement).value
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, "");
+      (e.target as HTMLInputElement).value = code;
+    });
+  const join = async () => {
+    if (!name.trim()) {
+      notice = "Enter your name to join the night.";
+      render();
+      return;
+    }
+    const credentials = owned().filter((s) => s.room === code);
+    if (credentials.length && !offers.length) {
+      try {
+        const result = await request("recover", {
+          code,
+          tokens: credentials.map((s) => s.token),
+        });
+        offers = availableOffers(result.offers);
+        if (offers.length) {
+          render();
+          return;
+        }
+      } catch {
+        notice = "Connecting to the street. Try again in a moment.";
+        render();
+        return;
+      }
+    }
+    void action("join", { name: name.trim(), code: code.trim() });
+  };
+  app.querySelector("#create")!.addEventListener("click", () => {
+    if (!name.trim()) {
+      notice = "Enter your name to start a night.";
+      render();
+      return;
+    }
+    void action("create", { name: name.trim() });
+  });
+  app.querySelector("#join")!.addEventListener("click", join);
+  app.querySelector("#code")!.addEventListener("keydown", (e) => {
+    if ((e as KeyboardEvent).key === "Enter") join();
+  });
+  app.querySelectorAll<HTMLButtonElement>("[data-token]").forEach((b) =>
+    b.addEventListener(
+      "click",
+      () =>
+        void action("resume", {
+          code,
+          token: b.dataset.token,
+          bootId:
+            owned().find((s) => s.token === b.dataset.token)?.bootId ?? bootId,
+        }),
+    ),
+  );
+  app.querySelector("#fresh")?.addEventListener("click", () => {
+    forget();
+    notice = "";
+    render();
+  });
+}
+window.addEventListener("online", () => {
+  if (!connected) connect();
+});
+window.addEventListener("pagehide", () => socket?.close());
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) connect();
+});
+render();
+connect();
