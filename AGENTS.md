@@ -82,9 +82,11 @@ APPROVED AMENDMENTS:
 - Replacement character downloads must be listed before use. Wait for the user
   to supply them, preserve source filenames and report mismatches.
 
-CURRENT AUTHORIZATION: A focused step 2 flashlight, camera, moonlight, solid-object
-and label pass. Keep the verified street flows working. Share collision rules
-between device and server; confirm restart recovery from the street. Preserve
-controls, measure frame rate and scene budget, save a new Mood A comparison and
-update STEP2_VERIFICATION.md. No preparation, hiding, seeking, footprints, radio,
-scoring or deployment. Commit and stop before mechanics.
+CURRENT AUTHORIZATION: A focused step 2 ground-first flashlight and full-beam
+camera framing follow-up only. Full lit-area visibility takes priority over
+character size; target at least about 40 pixels at 667x375. Preserve verified
+silhouettes, labels, collisions, controls, blackout, movement and recovery.
+Document exact world-space beam dimensions in PLAN.md, save four directional
+phone screenshots, measure rendering budget/FPS, run existing tests and update
+STEP2_VERIFICATION.md. No preparation, hiding, seeking, footprints, radio,
+scoring or deployment. Commit and stop.

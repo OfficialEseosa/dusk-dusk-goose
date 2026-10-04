@@ -82,6 +82,14 @@ Target stable **30 fps on a mid-range Android phone**, 60 where available. Initi
 
 Cap pixel ratio around 1.25 and reduce render resolution if sustained frame times exceed 33 ms. Use real flashlight lights for all active seekers, but reserve dynamic shadow maps for the nearest one or two lights, with simplified static occlusion for others. Test wall leaks explicitly. No mandatory bloom, ambient-occlusion pass or depth-of-field. Limit texture sizes and preload only the selected layout. Validate frame time, heat and memory after ten minutes on a real phone; desktop emulation alone is insufficient.
 
+### Shared ground-first flashlight dimensions
+
+Every device and every player uses `FLASHLIGHT_PROFILE` in `game/shared/street-layout.ts`. A real spotlight originates 1.10 m above the player, 0.40 m ahead, and aims 2.80 m horizontally ahead of that origin at y = -0.45 m. Downward pitch is atan(1.55 / 2.80) = 0.505581 radians (28.97 degrees); outer half-angle is 0.375 radians (21.49 degrees), full cone angle 42.97 degrees. Penumbra is 0.18, colour #FFD08A, intensity 3.8, distance cutoff 14 m, distance decay 0. The distance cutoff is not its ground reach: the downward cone determines that footprint.
+
+On a flat y = 0 ground plane the soft-edged elliptical footprint starts **1.308 m** ahead of the player, ends **8.776 m** ahead, and has maximum width **2.543 m**. Existing road top y = -0.055 gives **1.354–9.195 m**, maximum width **2.670 m**. Sidewalk top y = 0.02 gives **1.292–8.624 m**, width **2.497 m**. Lower grass top y = -0.175 gives **1.453–10.108 m**, width **2.948 m**. These are outer fade boundaries; occluding objects interrupt illumination. The same physical cone intersects raised ground differently, identically on all devices. Future ground marks must use these same world-space cone and penumbra parameters, never a screen-size-dependent reveal radius.
+
+Ground materials compensate for grazing spotlight incidence inside the existing light/shadow calculation, so road, grass and paving remain clearly readable. Walls retain ordinary diffuse response. No translucent wedge or ground overlay is used. The same two character slots cast shadows on every device, with no added shadow lights. The raised camera smoothly follows the footprint centre in the player's facing direction and widens immediately during turns to preserve its full outline. At 667x375 settled characters remain about 49 pixels tall; full beam visibility takes priority.
+
 ## 7. Build order and two-phone checkpoints
 
 Each row is a separate approval-sized implementation request. The first playable slice gets the chosen final visual direction; later steps add mechanics rather than replacing the presentation.

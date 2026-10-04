@@ -57,6 +57,11 @@ export class Street {
   private direction = new THREE.Vector3();
   private projected = new THREE.Vector3();
   private cameraFocus = new THREE.Vector3();
+  private cameraHalfHeight = 5;
+  private readonly cameraOffset = new THREE.Vector3(9,22,23);
+  private readonly cameraRight = new THREE.Vector3(23,0,-9).normalize();
+  private readonly cameraUp = new THREE.Vector3().crossVectors(this.cameraOffset.clone().normalize(),this.cameraRight);
+  private readonly framingPoints = Array.from({length:66},()=>new THREE.Vector3());
   private movePath:{x:number;z:number}[]=[];
   private readonly characterInverse = new THREE.Matrix4();
   private readonly characterTransform = new THREE.Matrix4();
@@ -128,7 +133,7 @@ export class Street {
     this.serverOffset = offset;
     const local = current.players.find(player => player.id === localId);
     if (local) this.pose = this.fromPlayer(local);
-    this.cameraFocus.set(this.pose.x, 0, this.pose.z - 6);
+    this.cameraFocus.set(this.pose.x, 0, this.pose.z);
     this.lastFrame = performance.now();
     this.frame = requestAnimationFrame(this.animate);
   }
@@ -191,13 +196,34 @@ export class Street {
     const wrapper = new THREE.Group(); wrapper.add(object); wrapper.rotation.y = rotation;
     // Rotation happens around the authored placement, rather than the street origin.
     object.position.x -= x; object.position.z -= z; wrapper.position.set(x, 0, z);
-    wrapper.traverse(node => { if (node instanceof THREE.Mesh) { node.receiveShadow = true; node.castShadow = true; for(const material of Array.isArray(node.material)?node.material:[node.material]) material.userData.kit=path.split('/')[0]; } });
+    wrapper.traverse(node => { if (node instanceof THREE.Mesh) {
+      if(path.includes("driveway")) {
+        node.material=Array.isArray(node.material)?node.material.map(m=>m.clone()):node.material.clone();
+        for(const material of Array.isArray(node.material)?node.material:[node.material]) this.groundMaterial(material as THREE.MeshStandardMaterial);
+      }
+      node.receiveShadow = true; node.castShadow = true; for(const material of Array.isArray(node.material)?node.material:[node.material]) material.userData.kit=path.split('/')[0]; } });
     this.scene.add(wrapper); return wrapper;
   }
 
   private box(width: number, height: number, depth: number, color: number, x: number, y: number, z: number) {
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), new THREE.MeshStandardMaterial({ color, roughness: 1 }));
+    if (height <= 0.35 && width > 1) this.groundMaterial(mesh.material);
     mesh.position.set(x, y, z); mesh.receiveShadow = true; this.scene.add(mesh); return mesh;
+  }
+
+  /** Lift grazing spotlight response on horizontal ground, retaining the real
+   * cone, soft edge and shadow mask. Walls keep their ordinary diffuse response. */
+  private groundMaterial(material: THREE.MeshStandardMaterial) {
+    material.userData.ground = true;
+    material.customProgramCacheKey = () => "ground-spot-response-v1";
+    material.onBeforeCompile = shader => {
+      const chunk = THREE.ShaderChunk.lights_fragment_begin.replace(
+        "getSpotLightInfo( spotLight, geometryPosition, directLight );",
+        `getSpotLightInfo( spotLight, geometryPosition, directLight );
+        directLight.color *= 1.7 * clamp(1.0 / max(dot(geometryNormal, directLight.direction), 0.12), 1.0, 8.0);`
+      );
+      shader.fragmentShader = shader.fragmentShader.replace("#include <lights_fragment_begin>", chunk);
+    };
   }
 
   private buildStreet() {
@@ -252,7 +278,7 @@ export class Street {
     this.scene.traverse(node=>{
       if(!(node instanceof THREE.Mesh)||Array.isArray(node.material))return;
       const material=node.material as THREE.MeshStandardMaterial;
-      const key=JSON.stringify([material.type,material.userData.kit??'plain',material.color?.getHex(),material.roughness,material.metalness,material.map?.name??'',material.emissive?.getHex()]);
+      const key=JSON.stringify([material.type,material.userData.kit??'plain',material.userData.ground??false,material.color?.getHex(),material.roughness,material.metalness,material.map?.name??'',material.emissive?.getHex()]);
       let bucket=buckets.get(key);if(!bucket){bucket={material,geometries:[],meshes:[]};buckets.set(key,bucket);}
       const geometry=node.geometry.index?node.geometry.toNonIndexed():node.geometry.clone();
       geometry.applyMatrix4(node.matrixWorld);
@@ -394,10 +420,7 @@ export class Street {
       this.lastSend = now; this.pose.seq++; this.onPose({ ...this.pose,path:this.movePath.length?this.movePath:[{x:this.pose.x,z:this.pose.z}] });this.movePath=[];
     }
     const labelWidth = this.container.clientWidth, labelHeight = this.container.clientHeight;
-    this.cameraFocus.lerp(new THREE.Vector3(this.pose.x, 0, this.pose.z - (labelHeight<=500?3.2:4)), 1 - Math.exp(-5 * dt));
-    this.camera.position.set(this.cameraFocus.x + 9, 22, this.cameraFocus.z + 23);
-    this.camera.lookAt(this.cameraFocus);
-    this.camera.updateMatrixWorld();
+    this.frameBeam(dt, labelWidth, labelHeight);
     const observed: Record<string, Pose> = {};
     for (const [id, figure] of this.figures) {
       const local = id === this.localId;
@@ -469,10 +492,52 @@ export class Street {
     }
   }
 
+  /** Frame the real cone's ground intersection, rather than a screen-sized beam.
+   * Include the lowest grass plane as well as raised paving in the envelope. */
+  private frameBeam(dt:number,width:number,height:number) {
+    const pitch = Math.atan2(BEAM.height-BEAM.targetY,BEAM.targetDistance);
+    const forwardX=Math.sin(this.pose.facing),forwardZ=Math.cos(this.pose.facing);
+    let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+    for(let i=0;i<64;i++) {
+      const theta=i*Math.PI*2/64;
+      const side=Math.sin(BEAM.halfAngle)*Math.cos(theta);
+      const down=-Math.sin(pitch)*Math.cos(BEAM.halfAngle)+Math.cos(pitch)*Math.sin(BEAM.halfAngle)*Math.sin(theta);
+      const along=Math.cos(pitch)*Math.cos(BEAM.halfAngle)+Math.sin(pitch)*Math.sin(BEAM.halfAngle)*Math.sin(theta);
+      const ground=-0.175, distance=(BEAM.height-ground)/-down;
+      this.framingPoints[i].set(this.pose.x+forwardX*(BEAM.forwardOffset+along*distance)+forwardZ*side*distance,
+        ground,this.pose.z+forwardZ*(BEAM.forwardOffset+along*distance)-forwardX*side*distance);
+    }
+    this.framingPoints[64].set(this.pose.x,0,this.pose.z);
+    this.framingPoints[65].set(this.pose.x,1.65,this.pose.z);
+    for(const point of this.framingPoints) {
+      const x=point.dot(this.cameraRight),y=point.dot(this.cameraUp);
+      minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);
+    }
+    const cx=(minX+maxX)/2,cy=(minY+maxY)/2;
+    const determinant=this.cameraRight.x*this.cameraUp.z-this.cameraRight.z*this.cameraUp.x;
+    const targetX=(cx*this.cameraUp.z-this.cameraRight.z*cy)/determinant;
+    const targetZ=(this.cameraRight.x*cy-cx*this.cameraUp.x)/determinant;
+    this.cameraFocus.lerp(this.projected.set(targetX,0,targetZ),1-Math.exp(-6*dt));
+    // While the focus eases after a turn, widen immediately enough to keep the
+    // entire cone visible; close the view gently once its focus catches up.
+    const focusX=this.cameraFocus.dot(this.cameraRight),focusY=this.cameraFocus.dot(this.cameraUp);
+    const aspect=width/height;
+    const required=Math.max((Math.max(maxX-focusX,focusX-minX)+0.6)/aspect,
+      Math.max(maxY-focusY,focusY-minY)+0.6,height<=500?4.7:9.5);
+    this.cameraHalfHeight=required>this.cameraHalfHeight?required:THREE.MathUtils.lerp(this.cameraHalfHeight,required,1-Math.exp(-6*dt));
+    this.camera.left=-this.cameraHalfHeight*aspect;this.camera.right=this.cameraHalfHeight*aspect;
+    this.camera.top=this.cameraHalfHeight;this.camera.bottom=-this.cameraHalfHeight;
+    this.camera.updateProjectionMatrix();
+    this.camera.position.copy(this.cameraFocus).add(this.cameraOffset);this.camera.lookAt(this.cameraFocus);this.camera.updateMatrixWorld();
+    if (performance.now()-this.lastObservation>=50) this.renderer.domElement.dataset.beamBounds=JSON.stringify(this.framingPoints.slice(0,64).map(p=>{
+      const projected=p.clone().project(this.camera);return{x:(projected.x*.5+.5)*width,y:(-projected.y*.5+.5)*height};
+    }));
+  }
+
   private resizeCanvas() {
     const width = Math.max(this.container.clientWidth, 1), height = Math.max(this.container.clientHeight, 1);
     const aspect = width / height;
-    const halfHeight = height<=500?3.65:9.5;
+    const halfHeight = height<=500?4.7:9.5;
     this.camera.left = -halfHeight * aspect; this.camera.right = halfHeight * aspect;
     this.camera.top = halfHeight; this.camera.bottom = -halfHeight;
     this.camera.near = 0.1; this.camera.far = 120; this.camera.updateProjectionMatrix();

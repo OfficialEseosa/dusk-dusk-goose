@@ -39,7 +39,7 @@ test('phone camera, separated labels and warm beams beside a house',async({brows
     await a.getByRole('button',{name:'Start the night',exact:true}).click();for(const p of [a,b])await p.locator('canvas[data-ready="true"]').waitFor();
     await walkTo(a,'z',-5.5);await walkTo(b,'z',-4.8);
     await expect(a.locator('canvas')).toHaveAttribute('data-lit','false',{timeout:15000});await a.waitForTimeout(400);
-    expect(Number(await a.locator('canvas').getAttribute('data-character-height'))).toBeGreaterThanOrEqual(60);
+    expect(Number(await a.locator('canvas').getAttribute('data-character-height'))).toBeGreaterThanOrEqual(40);
     expect(await a.locator('canvas').getAttribute('data-flashlight')).toBe(await b.locator('canvas').getAttribute('data-flashlight'));
     // Put the two characters together to exercise label separation.
     await walkTo(b,'x',(await pose(a)).x);
@@ -47,7 +47,7 @@ test('phone camera, separated labels and warm beams beside a house',async({brows
     const rectangles=await a.locator('.player-label:not([hidden])').evaluateAll(labels=>labels.map(l=>{const r=l.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height};}));
     expect(rectangles.length).toBe(2);const [r,s]=rectangles;expect(r.x<s.x+s.w&&r.x+r.w>s.x&&r.y<s.y+s.h&&r.y+r.h>s.y).toBe(false);
     await walkTo(b,'x',-2.4);await b.keyboard.down('w');await b.keyboard.down('a');await b.waitForTimeout(60);await b.keyboard.up('w');await b.keyboard.up('a');await a.waitForTimeout(400);
-    await a.screenshot({path:'../design/flashlight-pass-phone.png'});await b.screenshot({path:'../design/flashlight-pass-laptop.png'});
+    await a.screenshot({path:'../design/ground-beam-phone.png'});await b.screenshot({path:'../design/ground-beam-laptop.png'});
     for(const p of [a,b])expect(await p.evaluate(()=>document.documentElement.scrollWidth===innerWidth&&document.documentElement.scrollHeight===innerHeight)).toBe(true);
   }finally{await phone.close();await laptop.close();}
 });

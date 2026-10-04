@@ -3,7 +3,7 @@ export const STREET_BOUNDS = { minX: -36, maxX: 36, minZ: -19, maxZ: 7 } as cons
 export const MOVE_SPEED = 4;
 export const BLACKOUT_DELAY_MS = 10_000;
 /** World-space beam profile, shared by every player; camera size never changes it. */
-export const FLASHLIGHT_PROFILE={color:0xff9d38,intensity:9,range:12.5,halfAngle:0.40,penumbra:0.55,height:1.1,forwardOffset:0.4,targetDistance:9,targetY:-0.45,maxShadowLights:2} as const;
+export const FLASHLIGHT_PROFILE={color:0xffd08a,intensity:3.8,range:14,halfAngle:0.375,penumbra:0.18,height:1.1,forwardOffset:0.4,targetDistance:2.8,targetY:-0.45,maxShadowLights:2} as const;
 export const PLAYER_RADIUS = 0.3;
 export const HOUSE_X = [-30, -18, -6, 6, 18, 30] as const;
 export const HOUSE_MODELS = ["b", "a", "d", "c", "f", "e"] as const;
