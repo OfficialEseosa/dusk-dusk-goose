@@ -5,16 +5,19 @@ import { extname, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { WebSocketServer, WebSocket } from "ws";
 import type {
+  RadioMessage,
   ClientRequest,
   RoomSnapshot,
   ServerMessage,
 } from "../shared/protocol.js";
 import { BLACKOUT_DELAY_MS, MOVE_SPEED, legalStreetMove } from "../shared/street-layout.js";
 import { HIDING_SPOTS, HIDING_MS, SEEKING_MS, SEARCH_MS, REVEAL_MS, COOLDOWN_MS, FLASHLIGHT_PICKUP, insidePrep, nearSpot } from '../shared/round.js';
+import { RADIO_HISTORY_LIMIT, RADIO_TEXT_LIMIT, RADIO_WINDOW_MS, RADIO_MESSAGES_PER_WINDOW, getRadioPhrases } from '../shared/radio.js';
 import { FOOTPRINT_LIFE_MS, MAX_FOOTPRINTS, FOOTPRINT_SPACING, FREEZE_MS, FREEZE_IMMUNITY_MS, CLUE_INTERVAL_MS, CLUE_CHOICE_MS, groundBeamStrength, groundHeight, streetRoute, trueCluePool, type TrueClue } from '../shared/trails.js';
 
 interface Seat {
   id: string;
+  radioSentAt?: number[];
   joinOrder: number;
   name: string;
   token: string;
@@ -51,12 +54,15 @@ interface Room {
   movementDirty?: boolean;
   round?: { number: number; phase: 'hiding' | 'seeking' | 'reveal'; hiderId: string | null; phaseEndsAt: number; capsuleSpotId?: string; foundBy?: string | null; foundByName?: string; revealReadyAt?: number };
   match?: Match;
+  radio?: RadioMessage[];
   previousHiderOrder?: number;
   nextJoinOrder: number;
   trails?: { footprints: { id: string; x: number; z: number; facing: number; fadeAt: number; expiresAt: number }[]; marks: { id: string; x: number; z: number; createdAt: number }[]; disturbed: Set<string>; decoys: number; lastStep?: { x: number; z: number }; seekingStartedAt?: number; clues: { id: string; text: string; sentAt: number }[]; clueCount: number; offer?: { id: string; options: TrueClue[]; deadlineAt: number } };
 }
 interface Session {
   revoked?: boolean;
+  radioFailureTokens?: number;
+  radioFailureAt?: number;
   seat?: Seat;
   room?: Room;
   alive: boolean;
@@ -120,6 +126,7 @@ export function createGameServer(options: ServerOptions = {}) {
     const visibleRound = round && { number: round.number, phase: round.phase, hiderId: round.hiderId, phaseEndsAt: round.phaseEndsAt,
       ...(round.phase === 'reveal' ? { capsuleSpotId: round.capsuleSpotId, foundBy: round.foundBy, foundByName: round.foundByName, revealReadyAt: round.revealReadyAt } : recipient?.role === 'hider' && round.capsuleSpotId ? { capsuleSpotId: round.capsuleSpotId } : {}) };
     return {
+      radio: room.radio,
       code: room.code,
       phase: room.phase,
       hostId: room.hostId,
@@ -229,6 +236,7 @@ export function createGameServer(options: ServerOptions = {}) {
   }
   function newMatch(room: Room, changed = false) {
     const seats = [...room.seats.values()];
+    room.radio = [];
     room.match = { id: randomUUID(), phase: 'playing', roundNumber: 0, totalRounds: seats.length === 1 ? 3 : seats.length === 2 ? 4 : seats.length, solo: seats.length === 1,
       scores: seats.map(seat => ({ playerId: seat.id, name: seat.name, score: 0, roundPoints: 0 })), rosterIds: seats.map(seat => seat.id),
       announcement: changed ? 'The group changed. A fresh match starts now.' : '', winnerIds: [] };
@@ -259,9 +267,16 @@ export function createGameServer(options: ServerOptions = {}) {
       for (const spot of shuffled([capsule, alternatives[0]])) { const route = streetRoute({x:-4,z:2},spot); room.trails.lastStep = undefined; leaveSteps(room, route, Date.now()); }
     }
   }
+  function publishRadio(room: Room, message: RadioMessage) {
+    room.radio = [...(room.radio ?? []), message].slice(-RADIO_HISTORY_LIMIT);
+    for (const seat of room.seats.values()) if (seat.socket) send(seat.socket, { type: 'radio', message });
+  }
   function sendClue(room: Room, clue: TrueClue) {
     if (!room.trails || room.round?.phase !== 'seeking') return;
-    room.trails.clues.push({ id: randomUUID(), text: clue.text, sentAt: Date.now() });
+    const id = randomUUID(), sentAt = Date.now();
+    room.trails.clues.push({ id, text: clue.text, sentAt });
+    const hiderId = room.round.hiderId, hiderName = hiderId ? room.seats.get(hiderId)?.name ?? room.match?.scores.find(entry => entry.playerId === hiderId)?.name : undefined;
+    publishRadio(room, { id, senderId: hiderId, senderName: hiderName ?? 'The street', text: clue.text, kind: 'clue', sentAt });
     room.trails.clues = room.trails.clues.slice(-3); room.trails.offer = undefined;
     room.movementDirty = true;
   }
@@ -360,6 +375,37 @@ export function createGameServer(options: ServerOptions = {}) {
   function receive(socket: WebSocket, request: ClientRequest) {
     const session = sessions.get(socket)!;
     if (session.revoked) return;
+    // Radio has a separate allowance and never invokes expensive trace/phase
+    // updates. A rejected flood gets at most ten small replies per second.
+    if (request.type === 'radio' || request.type === 'radio_quick') {
+      const { room, seat } = session, now = Date.now();
+      const rejectRadio = (error: string, message: string) => {
+        session.radioFailureTokens = Math.min(10, (session.radioFailureTokens ?? 10) + (now - (session.radioFailureAt ?? now)) * .01);
+        session.radioFailureAt = now;
+        if (session.radioFailureTokens >= 1) { session.radioFailureTokens--; fail(socket, request.id, error, message); }
+      };
+      if (!room?.match || !seat) return rejectRadio('no_radio', 'Join a night and start playing first.');
+      const recent = (seat.radioSentAt ?? []).filter(time => now - time < RADIO_WINDOW_MS);
+      seat.radioSentAt = recent;
+      if (recent.length >= RADIO_MESSAGES_PER_WINDOW) return rejectRadio('radio_rate_limited', 'Let the radio settle for a few seconds.');
+      let text: string;
+      if (request.type === 'radio_quick') {
+        // Construct only the public context needed by the shared phrase helper;
+        // do not create a full secret-filtered trace snapshot for each send.
+        const context = { round: room.round, match: room.match, players: [{ id: seat.id, role: seat.role }] } as unknown as RoomSnapshot;
+        const phrase = getRadioPhrases(context, seat.id).find(item => item.id === request.phraseId);
+        if (!phrase) return rejectRadio('invalid_phrase', 'That phrase is not available now.');
+        text = phrase.text;
+      } else {
+        if (typeof request.text !== 'string' || request.text.length > RADIO_TEXT_LIMIT * 2 || [...request.text].length > RADIO_TEXT_LIMIT || /[\u0000-\u001f\u007f]/.test(request.text) || !request.text.trim()) return rejectRadio('invalid_radio_text', 'Send a short message of 1 to 80 characters.');
+        text = request.text.trim();
+      }
+      seat.radioSentAt.push(now);
+      const message: RadioMessage = { id: randomUUID(), senderId: seat.id, senderName: seat.name, text, kind: 'message', sentAt: now };
+      publishRadio(room, message); room.touchedAt = now;
+      send(socket, { type: 'result', id: request.id, ok: true, radio: message });
+      return;
+    }
     if (session.room?.round?.phase === 'hiding' && Date.now() >= session.room.round.phaseEndsAt) beginSeeking(session.room);
     if (session.room?.round?.phase === 'seeking' && Date.now() >= session.room.round.phaseEndsAt) reveal(session.room, null);
     if (session.room) updateTrails(session.room, Date.now());

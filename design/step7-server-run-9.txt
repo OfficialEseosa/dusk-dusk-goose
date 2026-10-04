@@ -1,0 +1,219 @@
+
+> maple-street-night@1.0.0 test
+> tsx --test tests/server*.test.ts
+
+TAP version 13
+# Subtest: every rendered body blocks its occupied footprint with player clearance
+ok 1 - every rendered body blocks its occupied footprint with player clearance
+  ---
+  duration_ms: 1.5685
+  type: 'test'
+  ...
+# Subtest: swept validation rejects crossing a thin lamp with clear endpoints
+ok 2 - swept validation rejects crossing a thin lamp with clear endpoints
+  ---
+  duration_ms: 0.7142
+  type: 'test'
+  ...
+# Subtest: device sliding stops at a car and continues along its face
+ok 3 - device sliding stops at a car and continues along its face
+  ---
+  duration_ms: 3.3322
+  type: 'test'
+  ...
+# Subtest: large movement cannot tunnel through a car, house or street boundary
+ok 4 - large movement cannot tunnel through a car, house or street boundary
+  ---
+  duration_ms: 4.9951
+  type: 'test'
+  ...
+# Subtest: solo completes three server-owned rounds, restores final scoreboard and replay creates a fresh match
+ok 5 - solo completes three server-owned rounds, restores final scoreboard and replay creates a fresh match
+  ---
+  duration_ms: 2843.5305
+  type: 'test'
+  ...
+# Subtest: two players alternate four rounds, agree on scores, auto-advance and either player may replay
+ok 6 - two players alternate four rounds, agree on scores, auto-advance and either player may replay
+  ---
+  duration_ms: 1947.9557
+  type: 'test'
+  ...
+# Subtest: late joins reset the announced scoring cycle and removing the next hider does not stall
+ok 7 - late joins reset the announced scoring cycle and removing the next hider does not stall
+  ---
+  duration_ms: 2460.2508
+  type: 'test'
+  ...
+# Privacy sampling: real mark rank counts [ 17, 10, 18, 15 ] footprint lists reordered 57
+# Subtest: sixty solo rounds put the real disturbed mark in every list position without a labelled trail or mark
+ok 8 - sixty solo rounds put the real disturbed mark in every list position without a labelled trail or mark
+  ---
+  duration_ms: 27540.439
+  type: 'test'
+  ...
+# Subtest: three through six players each receive one hider turn and a disconnected seat cannot pause the match
+ok 9 - three through six players each receive one hider turn and a disconnected seat cannot pause the match
+  ---
+  duration_ms: 11100.7504
+  type: 'test'
+  ...
+# Subtest: between-round reconnect keeps scores and a device cannot inject points or force the next round
+ok 10 - between-round reconnect keeps scores and a device cannot inject points or force the next round
+  ---
+  duration_ms: 396.5534
+  type: 'test'
+  ...
+# Subtest: four public role phrases never depend on private capsule data
+ok 11 - four public role phrases never depend on private capsule data
+  ---
+  duration_ms: 3.4222
+  type: 'test'
+  ...
+# Subtest: eighty Unicode characters, literal markup, server sender and quick phrase validation
+ok 12 - eighty Unicode characters, literal markup, server sender and quick phrase validation
+  ---
+  duration_ms: 253.5448
+  type: 'test'
+  ...
+# Subtest: private credential takeover preserves the seat send allowance and history
+ok 13 - private credential takeover preserves the seat send allowance and history
+  ---
+  duration_ms: 5202.0608
+  type: 'test'
+  ...
+# Subtest: flood replies and fanout are bounded without consuming movement or control allowance
+ok 14 - flood replies and fanout are bounded without consuming movement or control allowance
+  ---
+  duration_ms: 883.0902
+  type: 'test'
+  ...
+# Subtest: twenty-four match history entries include eighteen clues, survive refresh and clear on replay
+ok 15 - twenty-four match history entries include eighteen clues, survive refresh and clear on replay
+  ---
+  duration_ms: 11745.6526
+  type: 'test'
+  ...
+# Subtest: solo clues share bounded public radio history without secret fields
+ok 16 - solo clues share bounded public radio history without secret fields
+  ---
+  duration_ms: 440.5537
+  type: 'test'
+  ...
+# Subtest: human burial, private projection, full server hold, wrong cooldown, one reveal and rotation
+ok 17 - human burial, private projection, full server hold, wrong cooldown, one reveal and rotation
+  ---
+  duration_ms: 29051.8549
+  type: 'test'
+  ...
+# Subtest: solo pickup, timeout secrecy, late join waits and enters next human round
+ok 18 - solo pickup, timeout secrecy, late join waits and enters next human round
+  ---
+  duration_ms: 2546.4775
+  type: 'test'
+  ...
+# Subtest: disconnected hider cannot stall fallback burial and seeker resumes role and place
+ok 19 - disconnected hider cannot stall fallback burial and seeker resumes role and place
+  ---
+  duration_ms: 1266.3954
+  type: 'test'
+  ...
+# Subtest: rotation advances past a removed hider rather than returning to the first joiner
+ok 20 - rotation advances past a removed hider rather than returning to the first joiner
+  ---
+  duration_ms: 834.6387
+  type: 'test'
+  ...
+# Subtest: all possible clue selections stay true and preserve at least two hiding spots
+ok 21 - all possible clue selections stay true and preserve at least two hiding spots
+  ---
+  duration_ms: 2.2896
+  type: 'test'
+  ...
+# Subtest: human clue choices are private, truthful and fall back automatically; beam freeze rejects movement
+ok 22 - human clue choices are private, truthful and fall back automatically; beam freeze rejects movement
+  ---
+  duration_ms: 2853.0023
+  type: 'test'
+  ...
+# Subtest: computer burial routes remain collision-valid and beam mask uses exact shared cone
+ok 23 - computer burial routes remain collision-valid and beam mask uses exact shared cone
+  ---
+  duration_ms: 180.823
+  type: 'test'
+  ...
+# Subtest: solo snapshots publish bounded indistinguishable trails and marks, scheduled clues, then reveal only at timeout
+ok 24 - solo snapshots publish bounded indistinguishable trails and marks, scheduled clues, then reveal only at timeout
+  ---
+  duration_ms: 7321.9953
+  type: 'test'
+  ...
+# Subtest: hiding prints follow actual accepted movement during the lit lead-in without inventing a later jump
+ok 25 - hiding prints follow actual accepted movement during the lit lead-in without inventing a later jump
+  ---
+  duration_ms: 346.8119
+  type: 'test'
+  ...
+# Subtest: solo start, shared joins, private credentials, leave and host reassignment
+ok 26 - solo start, shared joins, private credentials, leave and host reassignment
+  ---
+  duration_ms: 152.2127
+  type: 'test'
+  ...
+# Subtest: valid credentials replace live seats; offers stay disconnected-only and names do not authenticate
+ok 27 - valid credentials replace live seats; offers stay disconnected-only and names do not authenticate
+  ---
+  duration_ms: 134.8273
+  type: 'test'
+  ...
+# Subtest: six seats and room capacity are bounded; old boot token returns restart reason
+ok 28 - six seats and room capacity are bounded; old boot token returns restart reason
+  ---
+  duration_ms: 148.293
+  type: 'test'
+  ...
+# Subtest: expired disconnected seats disappear without deleting connected players
+ok 29 - expired disconnected seats disappear without deleting connected players
+  ---
+  duration_ms: 167.2655
+  type: 'test'
+  ...
+# Subtest: a real process-state restart loses the room and identifies stale credentials
+ok 30 - a real process-state restart loses the room and identifies stale credentials
+  ---
+  duration_ms: 48.4727
+  type: 'test'
+  ...
+# Subtest: production serves built static files and rejects development routes and foreign origins
+ok 31 - production serves built static files and rejects development routes and foreign origins
+  ---
+  duration_ms: 36.7157
+  type: 'test'
+  ...
+# Subtest: street state has stable blackout timing and character poses through late joins and takeover
+ok 32 - street state has stable blackout timing and character poses through late joins and takeover
+  ---
+  duration_ms: 332.4147
+  type: 'test'
+  ...
+# Subtest: 20 Hz movement has its own budget and invalid speed, boundaries and replay are rejected
+ok 33 - 20 Hz movement has its own budget and invalid speed, boundaries and replay are rejected
+  ---
+  duration_ms: 3927.5293
+  type: 'test'
+  ...
+# Subtest: server rejects lamp penetration while accepting bounded legal corner traces
+ok 34 - server rejects lamp penetration while accepting bounded legal corner traces
+  ---
+  duration_ms: 4719.4299
+  type: 'test'
+  ...
+1..34
+# tests 34
+# suites 0
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 46831.1659

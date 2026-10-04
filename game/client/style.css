@@ -500,3 +500,38 @@ h1 {
 @media(max-height:400px){#match-panel {padding:10px 16px;gap:6px;}#match-title {font-size:22px;}#match-scores {gap:3px 12px;}#match-scores li {padding:2px 0;min-height:28px;}}
 
 #match-banner {position:absolute;top:99px;left:50%;transform:translateX(-50%);max-width:calc(100% - 32px);margin:0;padding:8px 12px;border-radius:8px;background:#10232ded;color:#ffdfaa;text-align:center;font-size:16px;pointer-events:none;}#match-banner[hidden]{display:none;}
+
+#radio-toggle {position:absolute;right:max(28px,env(safe-area-inset-right));bottom:max(130px,calc(env(safe-area-inset-bottom) + 106px));min-height:44px;width:118px;padding:8px;background:#182f3ce8;color:#ffdfaa;border:1px solid #b4a276;border-radius:14px;font-size:16px;z-index:4;}
+#radio-toggle small {font-size:16px;margin-left:8px;opacity:.8;}
+#radio-panel {position:absolute;top:96px;left:50%;transform:translateX(-50%);width:360px;max-width:calc(100% - 300px);padding:8px;background:#10232df5;border:1px solid #b4a276;border-radius:12px;color:#ffdfaa;font-size:16px;z-index:3;touch-action:pan-y;}
+#radio-panel[hidden],#radio-panel [hidden] {display:none;}
+#radio-panel header {display:flex;align-items:center;justify-content:space-between;min-height:44px;}
+#radio-panel button {min-height:44px;padding:5px 8px;font-size:16px;line-height:1.15;border-radius:8px;background:#213745;color:#ffdfaa;}
+#radio-form {display:flex;gap:6px;margin:4px 0;}
+#radio-input {flex:1;min-width:0;width:0;height:44px;min-height:44px;margin:0;padding:6px 8px;font-size:16px;touch-action:manipulation;}
+.radio-body {display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+#radio-phrases {display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+#radio-history {height:100px;overflow:auto;overscroll-behavior:contain;margin:0;padding:0 4px;list-style:none;touch-action:pan-y;}
+#radio-history li {padding-bottom:6px;line-height:1.2;overflow-wrap:anywhere;}
+#radio-history strong,#radio-history span {display:block;font-size:16px;}
+#radio-history strong {color:#e8eee5;}#radio-history li[data-kind="clue"] strong {color:#ffd08a;}
+#radio-note {margin:4px 0 0;font-size:16px;line-height:1.2;min-height:20px;color:#e8eee5;}
+.radio-open #clue-choices {left:12px;top:90px;bottom:auto;transform:none;width:130px;flex-direction:column;z-index:4;}
+.radio-open #clue-choices button {min-height:44px;}
+.radio-open #match-banner {visibility:hidden;}
+.showing-scores #radio-panel {z-index:5;}.showing-scores #radio-toggle {z-index:6;}
+.radio-keyboard #radio-panel {top:50px;max-width:calc(100% - 300px);}
+.radio-keyboard #radio-panel header,.radio-keyboard .radio-body {display:none;}
+.radio-keyboard #radio-toggle {top:8px;bottom:auto;}
+.radio-keyboard #mute {visibility:hidden;}
+.radio-keyboard #move-stick {width:80px;height:80px;bottom:8px;}
+.radio-keyboard #round-action {height:64px;bottom:8px;}
+.radio-keyboard .round-hud {top:8px;}
+@media(pointer:coarse){#radio-toggle small{display:none;}}
+@media(max-height:300px){#radio-panel {top:50px;}#radio-toggle {top:8px;bottom:auto;} .radio-keyboard #round-instruction{visibility:hidden;}}
+
+.radio-keyboard #street-code {visibility:hidden;}
+.showing-scores:not(.radio-keyboard) #radio-toggle {top:8px;bottom:auto;right:150px;}
+
+#clue-transmission {width:calc(100% - 300px);}
+.showing-scores #clue-transmission {position:static;transform:none;width:100%;max-width:none;padding:4px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}

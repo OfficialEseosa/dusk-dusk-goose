@@ -46,7 +46,7 @@ export class RoundControls {
   this.matchPanel.querySelector('.match-actions')!.prepend(this.next);container.append(this.matchPanel);
   this.announcement=document.createElement('p');this.announcement.id='match-banner';this.announcement.hidden=true;this.announcement.setAttribute('role','status');container.append(this.announcement);
   this.button.addEventListener('pointerdown',this.down);this.button.addEventListener('pointerup',this.up);this.button.addEventListener('pointercancel',this.up);this.button.addEventListener('lostpointercapture',this.up);
-  window.addEventListener('keydown',this.keyDown);window.addEventListener('keyup',this.keyUp);window.addEventListener('blur',this.up);document.addEventListener('visibilitychange',this.visibility);
+  document.addEventListener('focusin',this.focusInput);window.addEventListener('keydown',this.keyDown);window.addEventListener('keyup',this.keyUp);window.addEventListener('blur',this.up);document.addEventListener('visibilitychange',this.visibility);
   this.timer=setInterval(()=>this.tick(),50);
  }
  update(room:RoomSnapshot){const changed=this.room?.round?.number!==room.round?.number||this.room?.round?.phase!==room.round?.phase;this.room=room;this.offset=room.serverTime-Date.now();if(changed)this.release();this.tick();}
@@ -87,8 +87,7 @@ export class RoundControls {
   this.choices.hidden=!offer||showScores;
   Array.from(this.choices.children).forEach((child,i)=>{const option=offer?.options[i];child.textContent=option?.text??'';(child as HTMLButtonElement).disabled=!option;});
   this.choices.setAttribute('aria-label',`Send a true clue${offer?`: ${Math.max(0,Math.ceil((offer.deadlineAt-now)/1000))} seconds`:''}`);
-  const clue=round.clues?.at(-1);this.radio.hidden=showScores||!clue||now-clue.sentAt>15000;
-  this.radio.textContent=clue?`Radio: ${clue.text}`:'';
+
   if((player.frozenUntil??0)>now)this.instruction.textContent='Caught in the light. Frozen for two seconds.';
   else if(player.role==='hider'&&round.phase==='seeking')this.instruction.textContent=`Lay a trail. ${round.decoysRemaining??0} decoy marks left.`;
   const pose=this.street.localPose;
@@ -120,8 +119,9 @@ export class RoundControls {
  private down=(event:PointerEvent)=>{event.preventDefault();this.button.setPointerCapture(event.pointerId);void this.begin();};
  private up=()=>this.release();
  private release(){if(!this.held)return;this.held=false;this.generation++;this.progress.style.transform='scaleX(0)';void this.send('search_cancel',{roundNumber:this.heldRoundNumber});}
- private keyDown=(event:KeyboardEvent)=>{if(event.key.toLowerCase()==='e'&&!event.repeat&&!(event.target instanceof HTMLInputElement)){event.preventDefault();void this.begin();}};
+ private focusInput=()=>{if(document.activeElement instanceof HTMLElement&&document.activeElement.closest('input,textarea,[contenteditable="true"]'))this.release();};
+ private keyDown=(event:KeyboardEvent)=>{if(event.key.toLowerCase()==='e'&&!event.repeat&&!(event.target instanceof HTMLElement&&event.target.closest('input,textarea,[contenteditable="true"]'))){event.preventDefault();void this.begin();}};
  private keyUp=(event:KeyboardEvent)=>{if(event.key.toLowerCase()==='e')this.release();};
  private visibility=()=>{if(document.hidden)this.release();};
- dispose(){clearInterval(this.timer);this.release();window.removeEventListener('keydown',this.keyDown);window.removeEventListener('keyup',this.keyUp);window.removeEventListener('blur',this.up);document.removeEventListener('visibilitychange',this.visibility);}
+ dispose(){document.removeEventListener('focusin',this.focusInput);clearInterval(this.timer);this.release();window.removeEventListener('keydown',this.keyDown);window.removeEventListener('keyup',this.keyUp);window.removeEventListener('blur',this.up);document.removeEventListener('visibilitychange',this.visibility);}
 }

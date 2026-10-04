@@ -37,13 +37,14 @@ try{
   await a.locator('canvas[data-round-phase="seeking"]').waitFor({timeout:45000});
   await b.keyboard.down('d');await b.waitForTimeout(50);await b.keyboard.up('d');
   clients.forEach((s,i)=>s.send(JSON.stringify({id:'face',type:'move',x:s.pose.x,z:s.pose.z,facing:i===0?Math.PI/2:i*Math.PI/2,seq:s.pose.seq+1})));
+  if(process.argv[2]==='step7')for(const p of [a,b])await p.locator('#radio-toggle').click();
   const samples=[];
   for(let index=0;index<15;index++){
     await new Promise(resolve=>setTimeout(resolve,2000));
     samples.push(await Promise.all([a,b].map(p=>p.locator('canvas').evaluate(c=>({fps:Number(c.dataset.fps),p95:Number(c.dataset.frameP95),triangles:Number(c.dataset.triangles),drawCalls:Number(c.dataset.drawCalls),shadowLights:Number(c.dataset.shadowLights),characterHeight:Number(c.dataset.characterHeight),footprints:Number(c.dataset.footprintsReceived),marks:Number(c.dataset.marksReceived),players:Object.keys(JSON.parse(c.dataset.playerposes)).length})))));
   }
   const hardware={cpu:os.cpus()[0]?.model,platform:os.platform(),browser:browser.version(),gpu:await a.locator('canvas').evaluate(c=>{const gl=c.getContext('webgl2');const ext=gl.getExtension('WEBGL_debug_renderer_info');return ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):'unavailable';})};
-  const result={stress:"real six-player room; client-only injected 256 public footprints and four marks",hardware,prepMetrics,playerCount:6,durationMs:30000,devices:samples[0].map((_,i)=>({viewport:i===0?'667x375':'1366x768',medianFps:samples.map(s=>s[i].fps).sort((a,b)=>a-b)[7],maxTriangles:Math.max(...samples.map(s=>s[i].triangles)),maxDrawCalls:Math.max(...samples.map(s=>s[i].drawCalls)),shadowLights:samples[0][i].shadowLights,characterHeight:samples[0][i].characterHeight,frameP95Ms:samples.at(-1)[i].p95})),samples};
-  await writeFile(`../design/${process.argv[2]==='step6'?'step6':'step5'}-six-player-metrics.json`,JSON.stringify(result,null,2));console.log(JSON.stringify(result.devices));
+  const result={stress:`real six-player room; client-only injected 256 public footprints and four marks${process.argv[2]==='step7'?'; radio panels open on both renders':''}`,hardware,prepMetrics,playerCount:6,durationMs:30000,devices:samples[0].map((_,i)=>({viewport:i===0?'667x375':'1366x768',medianFps:samples.map(s=>s[i].fps).sort((a,b)=>a-b)[7],maxTriangles:Math.max(...samples.map(s=>s[i].triangles)),maxDrawCalls:Math.max(...samples.map(s=>s[i].drawCalls)),shadowLights:samples[0][i].shadowLights,characterHeight:samples[0][i].characterHeight,frameP95Ms:samples.at(-1)[i].p95})),samples};
+  await writeFile(`../design/${['step6','step7'].includes(process.argv[2])?process.argv[2]:'step5'}-six-player-metrics.json`,JSON.stringify(result,null,2));console.log(JSON.stringify(result.devices));
   for(const device of result.devices){assert(device.maxTriangles<100000);assert(device.maxDrawCalls<100);assert(device.shadowLights<=2);assert(device.medianFps>=30);}
 }finally{for(const client of clients)client.close();await browser.close();}

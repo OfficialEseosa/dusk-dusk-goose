@@ -62,7 +62,12 @@ test('six-player scorecards fit phone and laptop with long names and persistent 
   for(let n=1;n<=6;n++){
    await round(a,ac,n);expect(ac().match!.totalRounds).toBe(6);await Promise.all([reveal(a),reveal(b)]);await expect(a.locator('#match-scores li:not([hidden])')).toHaveCount(6);await screen(a);await screen(b);await expect.poll(()=>bc().match!.scores).toEqual(ac().match!.scores);
    for(const p of[a,b])expect(await p.evaluate(()=>['#move-stick','#round-action','#match-panel'].every((selector,i)=>document.querySelector(selector)===(window as any).stableMatchNodes[i]))).toBe(true);
-   if(n===1){await a.screenshot({path:'../design/step6-six-player-between-phone.png'});await b.screenshot({path:'../design/step6-six-player-between-laptop.png'});}
+   if(n===1){
+    await b.locator('#radio-toggle').click();const text='All six of us are still here. Meet by the windows for the next round.';await b.locator('#radio-input').fill(text);await b.locator('#radio-send').click();await b.locator('#radio-toggle').click();
+    for(const p of[a,b]){await expect(p.locator('#radio-panel')).toBeHidden();await expect(p.locator('#clue-transmission')).toBeVisible();await expect(p.locator('#clue-transmission')).toContainText(text);expect(await p.evaluate(()=>{const caption=document.querySelector('#clue-transmission')!.getBoundingClientRect(),panel=document.querySelector('#match-panel')!.getBoundingClientRect();return caption.x>=panel.x&&caption.right<=panel.right&&caption.y>=panel.y&&caption.bottom<=panel.bottom;})).toBe(true);await screen(p);}
+    await a.screenshot({path:'../design/step7-six-player-score-radio-phone.png'});await b.screenshot({path:'../design/step7-six-player-score-radio-laptop.png'});
+    await a.screenshot({path:'../design/step6-six-player-between-phone.png'});await b.screenshot({path:'../design/step6-six-player-between-laptop.png'});
+   }
    if(n<6)await faster(a);
   }
   expect(ac().match!.phase).toBe('finished');expect(ac().match!.winnerIds).toHaveLength(6);await expect(a.locator('#match-scores .score-earned')).toHaveText(['Winner','Winner','Winner','Winner','Winner','Winner']);await a.screenshot({path:'../design/step6-six-player-final-phone.png'});await b.screenshot({path:'../design/step6-six-player-final-laptop.png'});

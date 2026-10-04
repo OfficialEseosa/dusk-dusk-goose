@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ok 1 tests\match.spec.ts:54:1 › six-player scorecards fit phone and laptop with long names and persistent controls (51.6s)
+
+  1 passed (55.0s)

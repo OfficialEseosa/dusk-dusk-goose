@@ -82,12 +82,11 @@ APPROVED AMENDMENTS:
 - Replacement character downloads must be listed before use. Wait for the user
   to supply them, preserve source filenames and report mismatches.
 
-CURRENT AUTHORIZATION: Step 5 is independently verified. Fix disturbed-mark
-ordering and check solo footprint ordering for capsule information. Build step 6
-only: server-owned scoring, fixed matches (solo 3 rounds, two players 4 rounds,
-three to six one hider turn each), automatic next rounds, running/final scores,
-replay, roster-change scoring cycles and device-local solo best. Preserve all
-prior behavior and persistent controls. Verify secret filtering and recovery,
-run server tests ten consecutive times and all browser tests, record checks and
-limitations in STEP6_VERIFICATION.md, save phone score screenshots, commit and
-stop. No typed chat, quick phrases, extra layouts, new art or deployment.
+CURRENT AUTHORIZATION: Step 6 is independently verified. Build step 7 only:
+persistent contextual quick phrases and up-to-80-character plain-text radio,
+server rate limits and bounded match history including scheduled clues,
+input isolation and phone keyboard resilience, and finishing sound respecting
+mute/visibility/gesture recovery. Preserve all earlier flow, privacy, movement,
+scores and persistent controls. Run server tests ten consecutive times and all
+browser tests, write STEP7_VERIFICATION.md, save phone radio evidence, commit and
+stop. No deployment, voice chat, layouts, new art, scoring changes or step 8.

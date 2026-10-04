@@ -4,8 +4,9 @@ import "@fontsource/dm-sans/latin-600.css";
 import "./style.css";
 import {Street} from './street';
 import {RoundControls} from './round-controls';
+import {RadioControls} from './radio-controls';
 import {NightSound} from './audio';
-import type {RoomSnapshot} from '../shared/protocol';
+import type {RoomSnapshot,RadioMessage} from '../shared/protocol';
 
 type Seat = { room: string; playerId: string; token: string; bootId: string };
 type Room = RoomSnapshot;
@@ -15,12 +16,14 @@ type Result = {
   seat?: Seat;
   room?: Room;
   offers?: Offer[];
+  radio?: RadioMessage;
   error?: { code: string; message: string };
 };
 const app = document.querySelector<HTMLDivElement>("#app")!;
 const sound=new NightSound();
 let street:Street|null=null;
 let roundControls:RoundControls|null=null;
+let radioControls:RadioControls|null=null;
 let sceneSeat='',rosterSignature='';
 const key = "maple:seat:v1",
   ownedKey = "maple:owned:v1";
@@ -164,6 +167,9 @@ async function restore() {
     render();
   }
 }
+function receiveRadio(message:RadioMessage){
+  if(!room)return;room.radio=[...(room.radio??[]).filter(entry=>entry.id!==message.id),message].slice(-24);render();
+}
 function connect() {
   if (
     socket &&
@@ -194,6 +200,8 @@ function connect() {
         pending.delete(message.id);
         p.resolve(message);
       }
+    } else if (message.type === "radio") {
+      receiveRadio(message.message);
     } else if (message.type === "search_noise") {
       sound.searchNoise();
     } else if (message.type === "seat_replaced") {
@@ -295,7 +303,7 @@ const mark =
   '<svg class="street-mark" viewBox="0 0 120 80" aria-hidden="true"><path d="M20 65V33L48 12l28 21v32M76 65V42l17-13 17 13v23M35 65V44h23v21"/><path class="window" d="M42 28h12v10H42z"/></svg>';
 function render() {
   if(room?.phase==='started'&&seat){renderStreet();return;}
-  if(street){roundControls?.dispose();roundControls=null;street.dispose();street=null;sceneSeat='';}
+  if(street){radioControls?.dispose();radioControls=null;roundControls?.dispose();roundControls=null;street.dispose();street=null;sceneSeat='';}
   sound.setRoom();
   const status = connected
     ? ""
@@ -386,22 +394,25 @@ function render() {
 function renderStreet(){
   if(!room||!seat)return;
   if(!street||sceneSeat!==seat.playerId){
-    roundControls?.dispose();street?.dispose();sceneSeat=seat.playerId;rosterSignature='';
-    app.innerHTML=`<main class="game-screen"><div id="street-view"></div><header class="game-hud"><button id="leave" class="back">← Back to title</button><span id="street-code">${room.code}</span><button id="mute">Sound on</button></header><ul id="street-players" class="sr-only" aria-label="Players"></ul><p id="street-status" role="status"></p><div id="street-loading">Opening Maple Street...</div></main>`;
+    radioControls?.dispose();roundControls?.dispose();street?.dispose();sceneSeat=seat.playerId;rosterSignature='';
+    app.innerHTML=`<main class="game-screen"><div id="street-view"></div><header class="game-hud"><button id="leave" class="back">← Back to title</button><span id="street-code">${room.code}</span><button id="mute">${sound.muted?'Sound off':'Sound on'}</button></header><ul id="street-players" class="sr-only" aria-label="Players"></ul><p id="street-status" role="status"></p><div id="street-loading">Opening Maple Street...</div></main>`;
     app.querySelector('#leave')!.addEventListener('click',()=>void leave());
     app.querySelector('#mute')!.addEventListener('click',()=>{sound.toggle();app.querySelector('#mute')!.textContent=sound.muted?'Sound off':'Sound on';});
     street=new Street(app.querySelector<HTMLElement>('#street-view')!,pose=>{
       if(connected&&socket.readyState===WebSocket.OPEN)socket.send(JSON.stringify({id:`move-${pose.seq}`,type:'move',...pose}));
-    });
+    },(moving,place)=>sound.setMovement(moving,place));
     const controlsPlayerId=seat.playerId,controlsRoomCode=room.code;
     roundControls=new RoundControls(app.querySelector<HTMLElement>('.game-screen')!,street,seat.playerId,async(type,fields={})=>{
       try {const r=await request(type,{roundNumber:room?.round?.number,...fields});if(seat?.playerId!==controlsPlayerId||room?.code!==controlsRoomCode)return r;if(r.ok&&r.room){notice="";room=r.room;render();}else if(!r.ok&&r.error?.code!=="stale_round"){notice=r.error?.message??"Try again.";render();}return r;}
       catch {return {ok:false};}
     },()=>void leave());
+    radioControls=new RadioControls(app.querySelector<HTMLElement>('.game-screen')!,seat.playerId,async(type,fields)=>{
+      try{const result=await request(type,fields);if(seat?.playerId===controlsPlayerId&&room?.code===controlsRoomCode&&result.ok&&result.radio)receiveRadio(result.radio);return result;}catch{return {ok:false,error:{message:'Radio is reconnecting. Try again shortly.'}};}
+    });
     const current=street;
     void current.initialize(seat.playerId,room).then(()=>{if(street===current)app.querySelector('#street-loading')?.remove();}).catch(()=>{if(street===current){const loading=app.querySelector('#street-loading')!;loading.innerHTML='<p>The street could not load.</p><button id="retry-scene">Try again</button>';loading.querySelector('#retry-scene')?.addEventListener('click',()=>location.reload());}});
   }
-  street.update(room);roundControls?.update(room);street.setConnection(connected&&!recovering);sound.setRoom(room);
+  street.update(room);roundControls?.update(room);street.setConnection(connected&&!recovering);radioControls?.update(room);sound.setRoom(room,seat.playerId);
   const status=app.querySelector('#street-status')!;
   const next=connected?notice:'Reconnecting to the street...';if(status.textContent!==next)status.textContent=next;
   const roster=room.roster??room.players;

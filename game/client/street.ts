@@ -27,7 +27,7 @@ type Figure = {
 export class Street {
   private readonly scene = new THREE.Scene();
   private readonly prep = new THREE.Scene();
-  private place = "street";
+  private place: "street" | "prep" = "street";
   private roundNumber = 0;
   private capsule?: THREE.Mesh;
   private trailView?: TrailView;
@@ -79,7 +79,7 @@ export class Street {
   private readonly characterNormal = new THREE.Matrix3();
   private readonly characterVertex = new THREE.Vector3();
 
-  constructor(private readonly container: HTMLElement, private readonly onPose: (pose: Pose & {path?:{x:number;z:number}[]}) => void) {
+  constructor(private readonly container: HTMLElement, private readonly onPose: (pose: Pose & {path?:{x:number;z:number}[]}) => void, private readonly onMovement:(moving:boolean,place:'street'|'prep')=>void=()=>{}) {
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -109,6 +109,7 @@ export class Street {
     this.stick.addEventListener("pointerup", this.pointerEnd);
     this.stick.addEventListener("pointercancel", this.pointerEnd);
     this.stick.addEventListener("lostpointercapture", this.pointerEnd);
+    document.addEventListener("focusin",this.focusInput);
     window.addEventListener("keydown", this.keyDown);
     window.addEventListener("keyup", this.keyUp);
     window.addEventListener("blur", this.clearInput);
@@ -479,7 +480,9 @@ export class Street {
     const serverNow=Date.now()+this.serverOffset;
     const frozen=(this.snapshot?.players.find(p=>p.id===this.localId)?.frozenUntil??0)>serverNow;
     const scoreViewing=this.snapshot?.round?.phase==="reveal"&&Boolean(this.snapshot?.match);
-    const turning = length > 0.08 && this.connected && !document.hidden&&!revealViewing&&!scoreViewing;
+    const typing=document.activeElement instanceof HTMLElement&&Boolean(document.activeElement.closest('input,textarea,[contenteditable="true"]'));
+    const beforeX=this.pose.x,beforeZ=this.pose.z;
+    const turning = !typing&&length > 0.08 && this.connected && !document.hidden&&!revealViewing&&!scoreViewing;
     const moving = turning&&!frozen;
     if (turning) {
       dx /= Math.max(length, 1); dz /= Math.max(length, 1);
@@ -489,6 +492,7 @@ export class Street {
       this.pose.x=next.x;this.pose.z=next.z;
       this.pose.facing = Math.atan2(dx, dz);
     }
+    this.onMovement(Math.hypot(this.pose.x-beforeX,this.pose.z-beforeZ)>.00001,this.place);
     if (this.connected && !document.hidden && now - this.lastSend >= 50) {
       this.lastSend = now; this.pose.seq++; this.onPose({ ...this.pose,path:this.movePath.length?this.movePath:[{x:this.pose.x,z:this.pose.z}] });this.movePath=[];
     }
@@ -551,6 +555,13 @@ export class Street {
       if(local){
         const feet=figure.group.position.clone().project(this.camera),head=figure.group.position.clone().add(new THREE.Vector3(0,1.65,0)).project(this.camera);
         this.renderer.domElement.dataset.characterHeight=String(Math.abs(head.y-feet.y)*labelHeight/2);
+        const body={x:(Math.min(head.x,feet.x)*.5+.5)*labelWidth-20,y:(-Math.max(head.y,feet.y)*.5+.5)*labelHeight,width:40,height:Math.abs(head.y-feet.y)*labelHeight/2};
+        this.renderer.domElement.dataset.characterBounds=JSON.stringify(body);
+        const button=this.container.parentElement?.querySelector<HTMLElement>('#radio-toggle');
+        if(button){const keyboard=this.container.parentElement!.classList.contains('radio-keyboard'),scores=this.container.parentElement!.classList.contains('showing-scores'),rect=button.getBoundingClientRect(),baseY=labelHeight-130-rect.height;
+          const overlap=body.x<rect.right&&body.x+body.width>rect.x&&body.y<baseY+rect.height&&body.y+body.height>baseY;
+          button.style.top=!keyboard&&!scores&&overlap?'96px':'';button.style.bottom=!keyboard&&!scores&&overlap?'auto':'';
+        }
       }
     }
     const trailCounts=this.trailView?.frame(serverNow);
@@ -585,7 +596,7 @@ export class Street {
     const hud=this.container.parentElement?.querySelector(".round-hud")?.getBoundingClientRect();
     if(hud)occupied.push({x:hud.x,y:hud.y,w:hud.width,h:hud.height});
     if(this.capsuleLabel&&!this.capsuleLabel.hidden){const capsule=this.capsuleLabel.getBoundingClientRect();occupied.push({x:capsule.x,y:capsule.y,w:capsule.width,h:capsule.height});}
-    for(const control of Array.from(this.container.parentElement?.querySelectorAll("#round-instruction,#clue-transmission,#clue-choices")??[])){
+    for(const control of Array.from(this.container.parentElement?.querySelectorAll("#round-instruction,#clue-transmission,#clue-choices,#radio-panel,#radio-toggle")??[])){
       const rect=control.getBoundingClientRect();if(rect.width&&rect.height)occupied.push({x:rect.x,y:rect.y,w:rect.width,h:rect.height});
     }
     for(const figure of [...this.figures.values()].sort((a,b)=>Number(b.label.textContent==='You')-Number(a.label.textContent==='You'))){
@@ -655,15 +666,17 @@ export class Street {
     this.renderer.setSize(width, height, false);
   }
 
+  private focusInput=()=>{if(document.activeElement instanceof HTMLElement&&document.activeElement.closest('input,textarea,[contenteditable="true"]'))this.clearInput();};
   private keyDown = (event: KeyboardEvent) => {
     const key = event.key.toLowerCase();
     if (!["w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(key)) return;
-    if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
+    if (event.target instanceof HTMLElement && event.target.closest('input,textarea,[contenteditable="true"]')) return;
     event.preventDefault(); this.keys.add(key);
   };
   private keyUp = (event: KeyboardEvent) => { this.keys.delete(event.key.toLowerCase()); };
   private pointerDown = (event: PointerEvent) => {
     if (this.pointer !== null) return;
+    if(document.activeElement instanceof HTMLInputElement)document.activeElement.blur();
     event.preventDefault(); this.pointer = event.pointerId;
     const bounds = this.stick.getBoundingClientRect(); this.origin.set(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
     this.stick.setPointerCapture(event.pointerId); this.pointerMove(event);
@@ -691,6 +704,7 @@ export class Street {
   }
 
   dispose() {
+    document.removeEventListener('focusin',this.focusInput);this.onMovement(false,this.place);
     this.disposed = true; cancelAnimationFrame(this.frame); this.resize.disconnect();
     window.removeEventListener("keydown", this.keyDown); window.removeEventListener("keyup", this.keyUp);
     window.removeEventListener("blur", this.clearInput); document.removeEventListener("visibilitychange", this.visibility);

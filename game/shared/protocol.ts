@@ -5,7 +5,9 @@ export interface PlayerPose {
   facing: number;
   seq: number;
 }
+export interface RadioMessage { id: string; senderId: string | null; senderName: string; text: string; kind: 'message' | 'clue'; sentAt: number }
 export interface RoomSnapshot {
+  radio?: RadioMessage[];
   code: string;
   phase: RoomPhase;
   hostId: string;
@@ -25,7 +27,9 @@ export interface SeatCredential {
 }
 export interface ClientRequest {
   id: string;
-  type: "create" | "join" | "resume" | "recover" | "leave" | "start" | "play_again" | "move" | "pickup" | "bury" | "disturb" | "choose_clue" | "search_begin" | "search_cancel" | "search_complete";
+  type: "create" | "join" | "resume" | "recover" | "leave" | "start" | "play_again" | "radio" | "radio_quick" | "move" | "pickup" | "bury" | "disturb" | "choose_clue" | "search_begin" | "search_cancel" | "search_complete";
+  text?: string;
+  phraseId?: string;
   clueId?: string;
   spotId?: string;
   roundNumber?: number;
@@ -41,6 +45,7 @@ export interface ClientRequest {
   tokens?: string[];
 }
 export type ServerMessage =
+  | { type: 'radio'; message: RadioMessage }
   | { type: 'search_noise'; eventId: string; playerId: string }
   | ({ type: "pose_rejected"; playerId: string } & PlayerPose)
   | { type: "seat_replaced"; message: string }
@@ -50,6 +55,7 @@ export type ServerMessage =
       type: "result";
       id: string;
       ok: true;
+      radio?: RadioMessage;
       seat?: SeatCredential;
       room?: RoomSnapshot;
       offers?: { playerId: string; name: string; token: string }[];

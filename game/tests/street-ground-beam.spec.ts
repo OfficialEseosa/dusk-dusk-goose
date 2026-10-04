@@ -14,7 +14,7 @@ test('full ground beam fits four phone directions',async({browser})=>{
  for(const [direction,key] of [['north','w'],['east','d'],['south','s'],['west','a']]){
  await a.keyboard.down(key);await a.waitForTimeout(60);await a.keyboard.up(key);
  for(let i=0;i<4;i++){const points=JSON.parse(await a.locator('canvas').getAttribute('data-beam-bounds')??'[]');expect(points.length).toBe(64);for(const p of points){expect(p.x).toBeGreaterThanOrEqual(0);expect(p.x).toBeLessThanOrEqual(667);expect(p.y).toBeGreaterThanOrEqual(0);expect(p.y).toBeLessThanOrEqual(375);}await a.waitForTimeout(150);}
- await a.waitForTimeout(1000);const height=Number(await a.locator('canvas').getAttribute('data-character-height'));console.log(direction,height);expect(height).toBeGreaterThanOrEqual(40);await a.screenshot({path:`../design/step4-ground-beam-${direction}-667x375.png`});
+ await a.waitForTimeout(1000);expect(await a.evaluate(()=>{const body=JSON.parse(document.querySelector<HTMLCanvasElement>('canvas')!.dataset.characterBounds??'null'),button=document.querySelector('#radio-toggle')?.getBoundingClientRect();return Boolean(body&&button&&!(body.x<button.right&&body.x+body.width>button.x&&body.y<button.bottom&&body.y+body.height>button.y));})).toBe(true);const height=Number(await a.locator('canvas').getAttribute('data-character-height'));console.log(direction,height);expect(height).toBeGreaterThanOrEqual(40);await a.screenshot({path:`../design/step4-ground-beam-${direction}-667x375.png`});
  }
  await b.screenshot({path:'../design/step4-ground-beam-laptop-1366x768.png'});
  expect(await a.locator('canvas').getAttribute('data-flashlight')).toBe(await b.locator('canvas').getAttribute('data-flashlight'));
