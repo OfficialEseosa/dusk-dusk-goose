@@ -1,5 +1,10 @@
 import { test, expect, type Page } from "@playwright/test";
 import { spawn, type ChildProcess } from "node:child_process";
+import {
+  createServer as createTcpServer,
+  connect as connectTcp,
+  type Socket,
+} from "node:net";
 async function create(page: Page, name = "Alex") {
   await page.goto("/");
   await page.getByLabel("Your name").fill(name);
@@ -284,7 +289,7 @@ test("real production restart returns two sessions to title and both can create 
     await stop();
   }
 });
-test("copied tab credentials cannot take over a connected seat", async ({
+test("duplicated tab takes over once and displaced tab stops reclaiming its seat", async ({
   browser,
 }) => {
   const context = await browser.newContext({
@@ -301,17 +306,31 @@ test("copied tab credentials cannot take over a connected seat", async ({
     credential,
   );
   await b.goto(`/?room=${code}`);
-  await expect(
-    b.getByRole("button", { name: "Join as another player" }),
-  ).toBeVisible();
-  await bounds(b);
-  await b.getByRole("button", { name: "Join as another player" }).click();
-  await b.getByLabel("Your name").fill("Sam");
-  await b.getByRole("button", { name: "Join", exact: true }).click();
   await expect(b.getByRole("list", { name: "Players" })).toContainText(
-    "Sam (you)",
+    "Alex (you)",
   );
-  await expect(a.getByRole("list", { name: "Players" })).toContainText(
+  await expect(
+    a.getByText("Your seat continued in another tab.", { exact: true }),
+  ).toBeVisible();
+  expect(
+    await a.evaluate(() => sessionStorage.getItem("maple:seat:v1")),
+  ).toBeNull();
+  await bounds(b);
+  await bounds(a);
+  // Leave enough time for an erroneous automatic reconnect/resume to fight back.
+  await a.waitForTimeout(2500);
+  await expect(
+    a.getByText("Your seat continued in another tab.", { exact: true }),
+  ).toBeVisible();
+  await expect(b.getByRole("list", { name: "Players" })).toContainText(
+    "Alex (you)",
+  );
+  await a.reload();
+  await expect(
+    a.getByRole("button", { name: "Create a night", exact: true }),
+  ).toBeVisible();
+  await b.reload();
+  await expect(b.getByRole("list", { name: "Players" })).toContainText(
     "Alex (you)",
   );
   await context.close();
@@ -359,4 +378,123 @@ test("returning from page cache keeps exactly one connection and the same seat",
     ),
   ).toBe(2);
   await context.close();
+});
+test("silent browser-side drop resumes before the stale server socket expires", async ({
+  browser,
+}) => {
+  const sockets = new Set<Socket>();
+  const tunnels: { client: Socket; upstream: Socket; blackhole: boolean }[] =
+    [];
+  let staleOpenAtReconnect = false;
+  const relay = createTcpServer((client) => {
+    const upstream = connectTcp(5175, "127.0.0.1");
+    const tunnel = { client, upstream, blackhole: false };
+    sockets.add(client);
+    sockets.add(upstream);
+    client.once("data", (data) => {
+      if (data.toString().startsWith("GET /live ")) {
+        if (tunnels.length)
+          staleOpenAtReconnect = !tunnels[0].upstream.destroyed;
+        tunnels.push(tunnel);
+      }
+    });
+    client.pipe(upstream);
+    upstream.pipe(client);
+    client.on("close", () => {
+      sockets.delete(client);
+      if (!tunnel.blackhole) upstream.destroy();
+    });
+    client.on("error", () => {
+      if (!tunnel.blackhole) upstream.destroy();
+    });
+    upstream.on("close", () => {
+      sockets.delete(upstream);
+      client.destroy();
+    });
+    upstream.on("error", () => client.destroy());
+  });
+  await new Promise<void>((resolve) => relay.listen(0, "127.0.0.1", resolve));
+  const port = (relay.address() as { port: number }).port;
+  const phone = await browser.newContext({
+    viewport: { width: 667, height: 375 },
+    hasTouch: true,
+  });
+  const laptop = await browser.newContext({
+    viewport: { width: 1366, height: 768 },
+  });
+  try {
+    const a = await phone.newPage(),
+      b = await laptop.newPage();
+    let resumed = false;
+    a.on("websocket", (ws) =>
+      ws.on("framereceived", (frame) => {
+        const data = JSON.parse(frame.payload.toString());
+        if (
+          tunnels.length > 1 &&
+          data.type === "result" &&
+          data.ok &&
+          data.seat
+        )
+          resumed = true;
+      }),
+    );
+    await a.goto(`http://127.0.0.1:${port}/`);
+    await a.getByLabel("Your name").fill("Alex");
+    await a
+      .getByRole("button", { name: "Create a night", exact: true })
+      .click();
+    await expect(a.getByTestId("room-code")).toBeVisible();
+    const code = await a.getByTestId("room-code").innerText();
+    const seat = await a.evaluate(() =>
+      sessionStorage.getItem("maple:seat:v1"),
+    );
+    await b.goto(`/?room=${code}`);
+    await b.getByLabel("Your name").fill("Sam");
+    await b.getByRole("button", { name: "Join", exact: true }).click();
+    await expect(b.getByRole("list", { name: "Players" })).toContainText(
+      "Sam (you)",
+    );
+    expect(tunnels).toHaveLength(1);
+    const old = tunnels[0];
+    old.blackhole = true;
+    old.client.unpipe(old.upstream);
+    old.upstream.unpipe(old.client);
+    // Destroy only the browser leg. No WebSocket close, TCP FIN or RST reaches the server leg.
+    const began = Date.now();
+    old.client.destroy();
+    expect(old.upstream.destroyed).toBe(false);
+    await expect.poll(() => resumed, { timeout: 3000 }).toBe(true);
+    const elapsed = Date.now() - began;
+    expect(elapsed).toBeLessThan(3000);
+    expect(staleOpenAtReconnect).toBe(true);
+    expect(
+      await a.evaluate(() => sessionStorage.getItem("maple:seat:v1")),
+    ).toBe(seat);
+    await expect(
+      a.getByRole("button", { name: "Start the night", exact: true }),
+    ).toBeEnabled();
+    await expect(
+      a.getByText(
+        "Your seat is still reconnecting. You can also join as another player.",
+      ),
+    ).toHaveCount(0);
+    await expect(
+      b
+        .getByRole("listitem")
+        .filter({ hasText: "Alex" })
+        .getByText("Here", { exact: true }),
+    ).toBeVisible();
+    await bounds(a);
+    await bounds(b);
+    await a.screenshot({ path: "test-results/silent-drop-phone.png" });
+    await b.screenshot({ path: "test-results/silent-drop-laptop.png" });
+    console.log(
+      `Silent drop recovered in ${elapsed} ms with stale upstream still open at reconnect.`,
+    );
+  } finally {
+    await phone.close();
+    await laptop.close();
+    for (const socket of sockets) socket.destroy();
+    await new Promise<void>((resolve) => relay.close(() => resolve()));
+  }
 });

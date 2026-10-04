@@ -137,12 +137,6 @@ async function restore() {
         code = room.code;
         address(code);
         notice = "";
-      } else if (result.error?.code === "seat_connected") {
-        notice =
-          "Your seat is still reconnecting. You can also join as another player.";
-        setTimeout(() => {
-          if (!room) void restore();
-        }, 2000);
       } else {
         notice = result.error?.message ?? "That night has ended.";
         forget(true);
@@ -194,6 +188,8 @@ function connect() {
         pending.delete(message.id);
         p.resolve(message);
       }
+    } else if (message.type === "seat_replaced") {
+      continuedElsewhere();
     } else if (message.type === "room") {
       room = message.room;
       render();
@@ -202,12 +198,19 @@ function connect() {
       render();
     }
   };
-  current.onclose = () => {
+  current.onclose = (event) => {
     if (socket !== current) return;
+    if (event.code === 4001) continuedElsewhere();
     connected = false;
     for (const p of pending.values()) {
       clearTimeout(p.timer);
-      p.reject(new Error("Connection lost. Reconnecting."));
+      p.reject(
+        new Error(
+          event.code === 4001
+            ? "Your seat continued in another tab."
+            : "Connection lost. Reconnecting.",
+        ),
+      );
     }
     pending.clear();
     render();
@@ -217,6 +220,14 @@ function connect() {
     );
   };
   current.onerror = () => current.close();
+}
+function continuedElsewhere() {
+  // Keep browser ownership for the new tab; clear only this tab's auto-resume.
+  forget();
+  code = "";
+  address("");
+  notice = "Your seat continued in another tab.";
+  render();
 }
 async function action(type: string, fields: Record<string, unknown> = {}) {
   if (busy) return;

@@ -70,7 +70,7 @@ test("solo start, shared joins, private credentials, leave and host reassignment
     await game.close();
   }
 });
-test("only disconnected credential holders can recover a seat, names do not authenticate", async () => {
+test("valid credentials replace live seats; offers stay disconnected-only and names do not authenticate", async () => {
   const { game, url } = await setup();
   try {
     const a = await connect(url);
@@ -84,32 +84,39 @@ test("only disconnected credential holders can recover a seat, names do not auth
       tokens: [seat.token],
     });
     assert.ok(live.ok && live.offers?.length === 0);
-    const steal = await b.request({
+    const previousClosed = new Promise<number>((resolve) =>
+      a.socket.once("close", resolve),
+    );
+    const takeover = await b.request({
       type: "resume",
       code: seat.room,
       token: seat.token,
       bootId: seat.bootId,
     });
-    assert.ok(!steal.ok && steal.error.code === "seat_connected");
+    assert.ok(takeover.ok && takeover.seat?.playerId === seat.playerId);
+    assert.equal(await previousClosed, 4001);
+    assert.ok(a.messages.some((message) => message.type === "seat_replaced"));
+    assert.ok(takeover.room?.players[0].connected);
+    const c = await connect(url);
     await new Promise<void>((resolve) => {
-      a.socket.once("close", resolve);
-      a.socket.close();
+      b.socket.once("close", resolve);
+      b.socket.close();
     });
     await new Promise((resolve) => setTimeout(resolve, 10));
-    const wrong = await b.request({
+    const wrong = await c.request({
       type: "resume",
       code: seat.room,
       token: "not-the-token",
       name: "Alex",
     });
     assert.ok(!wrong.ok && wrong.error.code === "invalid_token");
-    const offers = await b.request({
+    const offers = await c.request({
       type: "recover",
       code: seat.room,
       tokens: [seat.token],
     });
     assert.ok(offers.ok && offers.offers?.[0]?.playerId === seat.playerId);
-    const resumed = await b.request({
+    const resumed = await c.request({
       type: "resume",
       code: seat.room,
       token: seat.token,

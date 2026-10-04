@@ -25,6 +25,7 @@ interface Room {
   touchedAt: number;
 }
 interface Session {
+  revoked?: boolean;
   seat?: Seat;
   room?: Room;
   alive: boolean;
@@ -172,6 +173,7 @@ export function createGameServer(options: ServerOptions = {}) {
   }
   function receive(socket: WebSocket, request: ClientRequest) {
     const session = sessions.get(socket)!;
+    if (session.revoked) return;
     const id = request.id;
     if (Date.now() - session.windowAt > 10_000) {
       session.windowAt = Date.now();
@@ -291,13 +293,24 @@ export function createGameServer(options: ServerOptions = {}) {
           "invalid_token",
           "Your place in that night has expired. Join again with the room code.",
         );
-      if (seat.socket)
-        return fail(
-          socket,
-          id,
-          "seat_connected",
-          "That player is already connected in another tab.",
-        );
+      if (seat.socket) {
+        const previous = seat.socket;
+        const previousSession = sessions.get(previous);
+        // Detach first so late messages/close events cannot mutate the new seat.
+        if (previousSession) {
+          previousSession.revoked = true;
+          previousSession.seat = undefined;
+          previousSession.room = undefined;
+        }
+        send(previous, {
+          type: "seat_replaced",
+          message: "Your seat continued in another tab.",
+        });
+        previous.close(4001, "Your seat continued in another tab.");
+        const timeout = setTimeout(() => previous.terminate(), 1000);
+        timeout.unref();
+        previous.once("close", () => clearTimeout(timeout));
+      }
       attach(socket, session, room, seat, id);
       return;
     }

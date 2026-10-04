@@ -21,6 +21,7 @@ export interface ClientRequest {
   tokens?: string[];
 }
 export type ServerMessage =
+  | { type: "seat_replaced"; message: string }
   | { type: "hello"; bootId: string }
   | { type: "room"; room: RoomSnapshot }
   | {
