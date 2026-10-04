@@ -1,0 +1,51 @@
+
+Running 3 tests using 1 worker
+
+  ok 1 tests\finishing.spec.ts:17:1 › title describes the game; portrait hint belongs to play; real Chromium fullscreen enters and exits (2.2s)
+Radio UI arrival: 65 ms
+  ok 2 tests\radio.spec.ts:23:1 › two independent sessions exchange contextual radio; draft, focus, movement and phone keyboard layout stay intact (10.2s)
+Other player moves during radio flood: accepted after 375 ms; 60.5 FPS
+  x  3 tests\radio.spec.ts:43:1 › radio flood is friendly and cannot stop movement; bounded history restores and phrases work through reveal and final (19.2s)
+
+
+  1) tests\radio.spec.ts:43:1 › radio flood is friendly and cannot stop movement; bounded history restores and phrases work through reveal and final 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 15
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "rect": Object {
+    +       "bottom": 99,
+    +       "height": 44,
+    +       "left": -393,
+    +       "right": 530.75,
+    +       "top": 55,
+    +       "width": 923.75,
+    +       "x": -393,
+    +       "y": 55,
+    +     },
+    +     "text": "",
+    +   },
+    + ]
+
+      18 | async function typed(p:Page,text:string){await radio(p);await p.locator('#radio-input').fill(text);await p.locator('#radio-send').click();}
+      19 | async function quick(p:Page){await radio(p);const first=p.locator('#radio-phrases button').first(),text=(await first.innerText()).trim();await first.click();return text;}
+    > 20 | async function screen(p:Page){expect(await p.evaluate(()=>document.documentElement.scrollWidth===innerWidth&&document.documentElement.scrollHeight===innerHeight)).toBe(true);const bad=await p.locator('#radio-panel').evaluate(panel=>[...panel.querySelectorAll('input,button')].filter(e=>e.getClientRects().length).filter(e=>{const r=e.getBoundingClientRect();const phrase=Boolean(e.closest('#radio-phrases'));return (!phrase&&(r.x<0||r.right>innerWidth+.5))||r.y<0||r.bottom>innerHeight+.5||r.height<44||parseFloat(getComputedStyle(e).fontSize)<16;}).map(e=>({text:e.textContent,rect:e.getBoundingClientRect().toJSON()})));expect(bad).toEqual([]);for(const button of await p.locator('#radio-phrases button:not([hidden])').all()){await button.scrollIntoViewIfNeeded();const box=await button.boundingBox();expect(box!.x).toBeGreaterThanOrEqual(0);expect(box!.x+box!.width).toBeLessThanOrEqual((await p.viewportSize())!.width+.5);}const overlaps=await p.evaluate(()=>{const visible=(selector:string)=>{const e=document.querySelector<HTMLElement>(selector);return e&&e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden'?e.getBoundingClientRect():null;};const panel=visible('#radio-panel'),toggle=visible('#radio-toggle');const results:string[]=[];for(const selector of ['#move-stick','#round-action','.round-hud','#fullscreen','#mute','#leave']){const box=visible(selector);if(!box)continue;for(const [name,r] of [['panel',panel],['toggle',toggle]] as const)if(r&&box.x<r.right&&box.right>r.x&&box.y<r.bottom&&box.bottom>r.y)results.push(`${name}/${selector}`);}const code=visible('#street-code'),hud=visible('.round-hud');if(code&&hud&&code.x<hud.right&&code.right>hud.x&&code.y<hud.bottom&&code.bottom>hud.y)results.push('room code/countdown');return results;});expect(overlaps).toEqual([]);}
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^
+      21 | async function phraseIDs(p:Page){return p.locator('#radio-phrases button').evaluateAll(buttons=>buttons.map(b=>(b as HTMLElement).dataset.phraseId));}
+      22 |
+      23 | test('two independent sessions exchange contextual radio; draft, focus, movement and phone keyboard layout stay intact',async({browser})=>{
+        at screen (C:\Users\rapha\Last Night on Maple Street\game\tests\radio.spec.ts:20:635)
+        at C:\Users\rapha\Last Night on Maple Street\game\tests\radio.spec.ts:57:162
+
+    Error Context: test-results\radio-radio-flood-is-frien-3d5ea-rk-through-reveal-and-final\error-context.md
+
+    Error Context: test-results\radio-radio-flood-is-frien-3d5ea-rk-through-reveal-and-final\error-context.md
+
+  1 failed
+    tests\radio.spec.ts:43:1 › radio flood is friendly and cannot stop movement; bounded history restores and phrases work through reveal and final 
+  2 passed (35.7s)

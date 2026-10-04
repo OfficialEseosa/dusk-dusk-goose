@@ -1,0 +1,17 @@
+Clean production verification, October 4, 2026
+
+Source-only git archive HEAD game plus current tracked/nonignored game file overlay. Original copy had neither node_modules nor dist. SHA256 inventory: finishing-clean-source.json. Copy moved to Windows Temp before Playwright cleared test-results; all current production files and source hashes match. Final title wording and final scoreboard/radio CSS are included.
+
+Exact commands, NODE_ENV=production, NPM_CONFIG_PRODUCTION=true, PORT=5183:
+npm ci --include=dev
+npm run build
+npm prune --omit=dev
+npm start
+
+Install: 33 packages added, 34 audited, zero reported vulnerabilities. Compile succeeded. Prune: 31 packages removed, 3 audited, zero reported vulnerabilities. Runtime Node v22.18.0. Command line is node dist/server/server/index.js. Vite, tsx, TypeScript, Playwright and font packages absent after prune; three and ws present. Build warning: 738.60kB JS bundle exceeds500kB advisory (gzip193.40kB); no build failure. NPM_CONFIG_PRODUCTION option emitted normal deprecation advice to use omit, but final prune was effective.
+
+HTTP and WebSocket probes passed against the same5183 listener: page/JS/CSS/woff2/GLB/asset manifest/license/HEAD200, POST405, dev/debug/source/test/config paths404; two real seats joined and started, host privatecredential took over samehiderseat, radio delivered, foreignOriginupgrade403. Results in finishing-clean-copy.json; runtime process in finishing-clean-runtime.txt. Copied production process stopped after probes. No deployment made.
+
+This verifies Windows production startup/build/dependencies and protocol only. Railway Linux image, actual Railpack build/container, HTTPS/WSS proxy, account settings/billing and physical cellular phones remain untested. game/DEPLOY.md documents owner setup and strict stop-first singleton updates; setting overlap0 alone is not a strict stop-first guarantee.
+Final rebuild includes the hider mid-round refresh teaching correction in round-controls.ts; final HTTP JS is index-LUNTRpa4.js. Exact ci/build/prune/start and all probes repeated successfully after that last source change.
+Final scene iteration includes street.ts score exclusion, viewport guard and radio width clamp. Exact ci/build/prune/start and all probes repeated successfully after this source change. Final HTTP JS: index-Ddpm0_iU.js; CSS: index-Dc61-OwF.css.

@@ -1,0 +1,47 @@
+
+Running 30 tests using 1 worker
+
+  ok  1 tests\audio.spec.ts:34:1 › real Web Audio delivers footsteps, rummage, radio, freezing and discovery; mute and hidden silence the destination (34.7s)
+  ok  2 tests\audio.spec.ts:50:1 › timeout and final motif play once; refresh waits for a tap and never replays historical round sounds (24.2s)
+  ok  3 tests\audio.spec.ts:60:1 › a replay before the first tap discards the old final motif without suppressing the next match ending (57.9s)
+  ok  4 tests\finishing.spec.ts:17:1 › title describes the game; portrait hint belongs to play; real Chromium fullscreen enters and exits (1.2s)
+  ok  5 tests\finishing.spec.ts:25:1 › unsupported fullscreen gives a dismissible install tip remembered on this device (886ms)
+  ok  6 tests\finishing.spec.ts:31:1 › hider and seeker role cards fade without replaying on snapshots; first contextual action draws attention (16.1s)
+Radio dock north: {"body":{"x":229.82055941519235,"y":260.7405550861414,"width":40,"height":49.14635642879572},"panel":{"x":8,"y":52,"width":651,"height":132},"overlap":false}
+Radio dock east: {"body":{"x":125.77788938871214,"y":104.9347353150393,"width":40,"height":49.1188428844852},"panel":{"x":178,"y":52,"width":481,"height":132},"overlap":false}
+Radio dock south: {"body":{"x":396.6537191987698,"y":35.552017320732396,"width":40,"height":49.09684040523728},"panel":{"x":8,"y":52,"width":376,"height":132},"overlap":false}
+Radio dock west: {"body":{"x":501.2979587753357,"y":188.787401362006,"width":40,"height":49.13744086954362},"panel":{"x":8,"y":52,"width":481,"height":132},"overlap":false}
+  ok  7 tests\finishing.spec.ts:39:1 › solo card explains seeking and the phone radio is a persistent top dock leaving controls reachable (7.8s)
+  ok  8 tests\match.spec.ts:24:1 › solo completes three rounds, refreshes both score screens, remembers best and replays (35.8s)
+  ok  9 tests\match.spec.ts:38:1 › two separate phone and laptop sessions finish four alternating rounds with shared scores and replay (34.7s)
+  ok 10 tests\match.spec.ts:47:1 › friend joins solo between rounds, gets a fresh human cycle, and departure does not stall it (23.6s)
+  ok 11 tests\match.spec.ts:54:1 › six-player scorecards fit phone and laptop with long names and persistent controls (50.8s)
+Radio UI arrival: 58 ms
+  ok 12 tests\radio.spec.ts:23:1 › two independent sessions exchange contextual radio; draft, focus, movement and phone keyboard layout stay intact (10.3s)
+Other player moves during radio flood: accepted after 379 ms; 47.8 FPS
+  ok 13 tests\radio.spec.ts:43:1 › radio flood is friendly and cannot stop movement; bounded history restores and phrases work through reveal and final (1.3m)
+  ok 14 tests\rooms.spec.ts:37:1 › two independent phone/laptop sessions: join, clipboard, start, refresh, leave (1.9s)
+  ok 15 tests\rooms.spec.ts:95:1 › same browser tabs remain separate; disconnected credential offers seat; clipboard denial fallback (862ms)
+  ok 16 tests\rooms.spec.ts:149:1 › solo starts; invalid rooms and names stay actionable; small viewport fits (765ms)
+  ok 17 tests\rooms.spec.ts:185:1 › six-player phone lobby fits; another device cannot recover by name (2.1s)
+  ok 18 tests\rooms.spec.ts:226:1 › real production restart returns two sessions to title and both can create again (2.7s)
+  ok 19 tests\rooms.spec.ts:302:1 › duplicated tab takes over once and displaced tab stops reclaiming its seat (3.1s)
+  ok 20 tests\rooms.spec.ts:348:1 › returning from page cache keeps exactly one connection and the same seat (291ms)
+Silent drop recovered in 873 ms with stale upstream still open at reconnect.
+  ok 21 tests\rooms.spec.ts:392:1 › silent browser-side drop resumes before the stale server socket expires (2.8s)
+  ok 22 tests\round.spec.ts:6:1 › two independent sessions complete a human round, secret search, cooldown, refresh and rotation (56.7s)
+  ok 23 tests\round.spec.ts:38:1 › solo pickup, full timed search phase, timeout reveal and next round on phone (2.1m)
+north 49.15227362957205
+east 49.15220530176307
+south 49.15214688819701
+west 49.152253353231394
+  ok 24 tests\street-ground-beam.spec.ts:3:1 › full ground beam fits four phone directions (46.3s)
+  ok 25 tests\street-polish.spec.ts:15:1 › keyboard walking stops at every solid class and can move away (42.3s)
+  ok 26 tests\street-polish.spec.ts:36:1 › phone camera, separated labels and warm beams beside a house (42.5s)
+Remote movement 153 ms; blackout skew 2 ms.
+  ok 27 tests\street.spec.ts:6:1 › street: shared blackout, smooth poses, stable controls, refresh and late join (38.8s)
+  ok 28 tests\street.spec.ts:61:1 › a frozen device does not pause the other player or blackout (37.0s)
+  ok 29 tests\street.spec.ts:82:1 › first tap unlocks sound, blackout stops hum and plays flashlight click (10.7s)
+  ok 30 tests\trails.spec.ts:17:1 › human and solo trails, three decoys, beam visibility, freeze and all three true scheduled clues (2.8m)
+
+  30 passed (16.1m)

@@ -1,0 +1,5 @@
+Finishing server repeat verification, October 4, 2026
+
+Initial unchanged-suite attempt passed runs 1-4 (34/34 each) and failed run 5 (33/34). The failure was the removed-hider rotation test in game/tests/server-round.test.ts at its second-round host Start assertion. That test assumed a fixed 350ms delay covered 100ms hiding, 100ms seeking, tick/broadcast delivery and reveal readiness. Under simultaneous browser/test load the server had not yet delivered a reveal-ready state when Start arrived. No production code failed or was changed.
+
+The test now waits for the actual server-observed reveal phase and the published revealReadyAt deadline in both rounds before issuing Start. The expected second/third hider identities and host Start success assertions are unchanged. Full-suite repeats were restarted from run 1 after this test-only correction. finishing-server-runs.json and finishing-server-run-N.txt describe that final attempt.

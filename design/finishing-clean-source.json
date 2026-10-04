@@ -1,0 +1,461 @@
+{
+  "gitHead": "5e4d7228e1104bf7f9a912ce2706c3f80b15b534",
+  "sourceRoot": "C:\\Users\\rapha\\Last Night on Maple Street",
+  "copyRoot": "C:/Users/rapha/AppData/Local/Temp/maple-finishing-production-20261004/game",
+  "files": [
+    {
+      "path": "game/ASSET_INTAKE.md",
+      "sha256": "BA0AF1DED556797DBEF04A8664B49FD7BEFD2F8D6DEB17231D5FD3C1AB853CBC"
+    },
+    {
+      "path": "game/client/audio.ts",
+      "sha256": "32951A50B00C7CA1240E67B7BA4F3DA04EC35466D798E4666624A30F8F112B93"
+    },
+    {
+      "path": "game/client/main.ts",
+      "sha256": "3E1789EBB7FB16A39AC6847CEFAECEABB4E7B9E6BA851A897F65A602B59D38B7"
+    },
+    {
+      "path": "game/client/play-comfort.ts",
+      "sha256": "6D1559A93464B202F204AA8FD9415DAAE81EBBF85AB40BA5666E14D049ADCDD3"
+    },
+    {
+      "path": "game/client/radio-controls.ts",
+      "sha256": "83869859C9D9BF1E6C1E0465AD68A8D561CF6980DC7C5D7ED8B64EF9C99811AD"
+    },
+    {
+      "path": "game/client/round-controls.ts",
+      "sha256": "F32F96AB6C9A25D594903E8E1429D33A19AE160242FB349ACA25F3A26F9881B1"
+    },
+    {
+      "path": "game/client/street.ts",
+      "sha256": "2FB90B1EF74B57680B42663D9A22C7223ED7D035D6F4509A49DCC596B65437B2"
+    },
+    {
+      "path": "game/client/style.css",
+      "sha256": "0F93AD305A62BB23AEBDE8D69E69484EFD8EACDABFE18569C83172E7183DFDD4"
+    },
+    {
+      "path": "game/client/trail-view.ts",
+      "sha256": "A16F259B5575BA29E1FCCE4BD03E64EE9F6182EAE46852A42B8E4FB1343E91BE"
+    },
+    {
+      "path": "game/DEPLOY.md",
+      "sha256": "C1B1E7E40686C86E1BC15F5FB47E01417F60E4746F66C9F4DA9F5C73475CC918"
+    },
+    {
+      "path": "game/index.html",
+      "sha256": "DE4FD9A0E5FA21A96DEC9025B1732BAE260543E5C511ECCFFDE3CEEAA77996EC"
+    },
+    {
+      "path": "game/package-lock.json",
+      "sha256": "877CA8082DAD265666F5E88BE22E4FBA21822E51C443B03DFF41BE33EBC347BA"
+    },
+    {
+      "path": "game/package.json",
+      "sha256": "7A8B261E29D3A78DEC1C9DE7EBFE5E30CAC31154AF2373427910BE8AF7166C5A"
+    },
+    {
+      "path": "game/playwright.config.ts",
+      "sha256": "A4674EEEC5AE2C5443923E40C45D20754B0F18B38FFF7C894FDB269B5FA1FE49"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/character-a.glb",
+      "sha256": "8EE5DAE167EC589863F6BBA222467EB90ACE8BE357A4C5ABFCAB289290181616"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/character-b.glb",
+      "sha256": "30ED390A741A1B285F587544819AA8A02C8F7F270E552ED742EB84785034F62A"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/character-c.glb",
+      "sha256": "AD2425BA0DA5D9ADFF791B949BD62389DDCB09963FF89265930EAB0D6484398C"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/character-d.glb",
+      "sha256": "BD7CBF0D45E58F6809E3249A84502CE629AC53BFA13BC39FB0A83D171FAF84BF"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/character-e.glb",
+      "sha256": "9A12684981BC7763AEBECEAFFED82ABFCC458D27B1ED3E169B92BEBCC4870675"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/character-f.glb",
+      "sha256": "04223C1C6CDCE5DA6FE9C9729A24E1AA9C765DEC93AF952379112F7DA24A828A"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/License.txt",
+      "sha256": "610FEC89C16826112E9D6B80497B726C43FEA0E42C9CD9D7CB081F8AD550C0EC"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/Textures/texture-a.png",
+      "sha256": "257E944C582CE7CDA206FBD8CEB717BE648F9721756BAF377A36478C11C0059A"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/Textures/texture-b.png",
+      "sha256": "C614148428FBF63AB701AB95E2EBE0B6103EA0E2E6212C986D8931899BAD7692"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/Textures/texture-c.png",
+      "sha256": "582A62EAE6CA086F65E6BFDDE16D0D1D15A95FDAF484C0DEF4769D5A47BA1C8E"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/Textures/texture-d.png",
+      "sha256": "C61BC29EC4D96229B979FC9196500AFAC13C2B448BBAB1085832354FB4EF849A"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/Textures/texture-e.png",
+      "sha256": "6BBDB4F76B8D2BA7FEB1AD8E4A341CA87AFD655A4F061C77A86C400AD3125049"
+    },
+    {
+      "path": "game/public/assets/kenney/blocky-characters/Textures/texture-f.png",
+      "sha256": "54404F22588BAC5A7F8DF09C2AAC0520E101A6F32944CE4070F550D7AD80C6F7"
+    },
+    {
+      "path": "game/public/assets/kenney/car-kit/box.glb",
+      "sha256": "B773815C791D2708A2A70F1A9BB6D197D7211269AD96E273F9E364EA536C1B18"
+    },
+    {
+      "path": "game/public/assets/kenney/car-kit/License.txt",
+      "sha256": "C33B7F6453D134DEAE7B1B8493717D9CCFA754C25AB97F6DE89B88F8FDA19B00"
+    },
+    {
+      "path": "game/public/assets/kenney/car-kit/sedan.glb",
+      "sha256": "B532EA7D2C59F7F6B22B138CF1955218A2C1898F1CEA932AF4D3FD563C3959B7"
+    },
+    {
+      "path": "game/public/assets/kenney/car-kit/Textures/colormap.png",
+      "sha256": "F3622A03A20C6696065CAE9CBE391351BE873508AF190C2EBD1D420C055787A5"
+    },
+    {
+      "path": "game/public/assets/kenney/car-kit/van.glb",
+      "sha256": "ED4ED56E8E5ED98DB050AF09ED2062B3B6BB7B93EAB1E563CB6774B387B233A1"
+    },
+    {
+      "path": "game/public/assets/kenney/car-kit/wheel-default.glb",
+      "sha256": "7D61941BC27BCC3B235E2E26C598CBCB4166BD66EB8F9920E26842A11015C62B"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-roads/dumpster.glb",
+      "sha256": "C60EBECC23487C38B5E0750856A3B50744D2EA12B3C83AD03D537E5A4670777A"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-roads/electricity-pole.glb",
+      "sha256": "08C9B924E297EAA46BBD79AC09795C045848A4E38A72B2CE4F973517F840C2D3"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-roads/License.txt",
+      "sha256": "87B9404AEF5DFF6162AE1E53A27BC6427FE1CDD2E2DD5EC05FDD25F17DA10498"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-roads/light-curved.glb",
+      "sha256": "154DCCE9D58EC2CD165E26C91A89C97BDD2838CF06D255099B3570DF84F82EC6"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-roads/road-bend.glb",
+      "sha256": "9752F63448C8E7A3D30CA2E0E1BB6784C5ADB72B56A2B05667BE8D546C1674BC"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-roads/road-driveway-single.glb",
+      "sha256": "59F22734D5C22B55AE007914939227E7742FDDDF4C371ACE106E8161BDFB5AD2"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-roads/road-end.glb",
+      "sha256": "BDF62518CFCC2C1A1425A4C8BC845E8E344F9C8B34DFB364B6B7D442E6171F11"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-roads/road-straight.glb",
+      "sha256": "F8F744FB6FC96DEDD5AD1F763B550166F2624A3757BF36B4B39969D2E7CACAC5"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-roads/Textures/colormap.png",
+      "sha256": "A48E2962661AE44368FFDDF3054F80ED8491D082B757DCC3011184CD9A98B185"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/building-type-a.glb",
+      "sha256": "49F32E20B9DCD24B1C8F6D6488807B8C8CB684CBB595BFB0BB36AD903E470FAA"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/building-type-b.glb",
+      "sha256": "A964A10C51BB334BE677657FD8FA483531974DD15B4243575990192818E2300E"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/building-type-c.glb",
+      "sha256": "86A69F30F1A09461283E158514945AE5CC9D56357B0DDC83A9A3F0EECD113591"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/building-type-d.glb",
+      "sha256": "A41CD28265B2B224E700373C3A8356562619699998B7FA4D70ED41DE629A6731"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/building-type-e.glb",
+      "sha256": "9EC43994C8C332B1AE5B058D8B9646255831FD91047C1A35B1FC1ECAE4C082FC"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/building-type-f.glb",
+      "sha256": "6F778F50D7F03C86F9A018E428CF8FFDD9E918DF09954C0651D1C9559584A22B"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/driveway-short.glb",
+      "sha256": "7C7E81602CD6B1024FC98F3F32803DB2E21222A3E30CFC838FB7F2282F593823"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/fence-low.glb",
+      "sha256": "FE0272D73820BB4C8DB3BED408A28CBD5C042DA1373142BD13122A1AC9D1A168"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/fence.glb",
+      "sha256": "073BD2000AC51879516D49F835D5156DAC4D5038085380B1232858FC3F562D02"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/License.txt",
+      "sha256": "D778FA769A89A7D9F167BC337FDF8FC2144E47D9ABB0C35EB6AD897C0EE24D0A"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/path-short.glb",
+      "sha256": "0F657EBADF8C56ADCD54335B8DA2E54120F539918EA50509812731790EF99C2B"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/path-stones-short.glb",
+      "sha256": "63148E02C35D4AD249EE1DCBB0C5EE921CD719F501B25EB8B66BC0E1B20CE28C"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/planter.glb",
+      "sha256": "A876E87D908F0397DCAF94B7705835447825C4C5B39195319535415386542C17"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/Textures/colormap.png",
+      "sha256": "9B5DE86078C25EF02351A80D35FF3C978693A1044565B73EEDD9AE9B5B80665D"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/tree-large.glb",
+      "sha256": "16D1F95C149BC727A953A473CF20BF21DE9BF1A88747C4F9D2EEB4AC7D43E291"
+    },
+    {
+      "path": "game/public/assets/kenney/city-kit-suburban/tree-small.glb",
+      "sha256": "5F63359E5F392609D7617CC98070855CA1FFD4F4B4BC3978A5FF56ECE88A58D6"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/bedSingle.glb",
+      "sha256": "CA00C63F9A12DA3138D902B2F5F18E0360FB6E8A5AC42CCB4BC3F185724B65D1"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/books.glb",
+      "sha256": "B8DC56E5D29F6FC1F4727FCCB1B9642627FEE9942C48060A00034E98DF02701C"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/cabinetBedDrawerTable.glb",
+      "sha256": "FEC6271639DF5AFF9F8AC75D6679385EAB2ABB7C8D2F51ABEBA3ED689DDB6F0D"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/cardboardBoxClosed.glb",
+      "sha256": "4AF079DCA52960912764574950F0549FF2AE1224B3DB1528718629473A2D5D81"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/floorFull.glb",
+      "sha256": "99FC5DF646D8DC605D6FE35001FE5B15BB7B269CC5C65F4F7793FBC76FF3D822"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/License.txt",
+      "sha256": "BC0DE1A0742CB490F9ED4BAE0BD284286EBB27E23149B9917C7D8C0D590B8B29"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/radio.glb",
+      "sha256": "1BA93D6BA6F049750853B4652B92F286F2898E527695A0705B75CC7615897FED"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/rugRectangle.glb",
+      "sha256": "A989D2D59C04E3071E0C90388B113A9A8F339CE1814EF984C51CB6DCD7C8E0EB"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/trashcan.glb",
+      "sha256": "E0CCC1FE50CBD05386477FDFF527171D1CF7C0DE2BA7FF3233F8D9561FEB2561"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/wall.glb",
+      "sha256": "69273D5D623BDDFCE41D12D4E5EEB5621EA04F1EDCBD8F35C00A60C2FD3258B7"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/wallCorner.glb",
+      "sha256": "0E6521CAEE1F9282784C52E0F651084E49F575B091AD97BF25540B8049757AEF"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/wallDoorway.glb",
+      "sha256": "A55BE1DA05AA80C74749D0C38BD093FA5E2B1EAF21CBC9A7C3A0E6FBCFBE38E2"
+    },
+    {
+      "path": "game/public/assets/kenney/furniture-kit/wallWindow.glb",
+      "sha256": "166A10FDDB8A78D942BC2791186913F7015DFEE8501D20EFD7A7B8F196FC5C3E"
+    },
+    {
+      "path": "game/public/assets/manifest.json",
+      "sha256": "008F0322F915A7DC45A060BBAAB32D0D7BC82F44A455B5ED4A46BFD822482426"
+    },
+    {
+      "path": "game/public/licenses/DM-Sans-OFL.txt",
+      "sha256": "6FBD040A29C2037A765DFB9F2561E9965B5C95C6DCB5DCE516089D63D5F17AF7"
+    },
+    {
+      "path": "game/public/licenses/Fraunces-OFL.txt",
+      "sha256": "CD3384CAFAC6F2BDDC3955273958A2E029F97027C8037AC539EF5744A77B579E"
+    },
+    {
+      "path": "game/README.md",
+      "sha256": "B02C2C414DBEABDD3F8B554988AEB04B6AF34C17FE4E25CD9027A6D996AE56F2"
+    },
+    {
+      "path": "game/scripts/assets.mjs",
+      "sha256": "450FA0D8DCC04C6F0A75DE8D3B83A6596807308918B2372059562BC426C2364E"
+    },
+    {
+      "path": "game/server/index.ts",
+      "sha256": "8F9F83CA5CEA3CB2479CB1783D53286D95CA9410C6CED5143ACA603ED4B018D1"
+    },
+    {
+      "path": "game/shared/protocol.ts",
+      "sha256": "31691810CDAFAA30E11249166BBC129FBE108C8CD07D2F0F0A31627A37BF0458"
+    },
+    {
+      "path": "game/shared/radio.ts",
+      "sha256": "8D503C2A284209B86091AEDC22C7CA4F66558F7F1A10256AFD0ED9DCEC01CD42"
+    },
+    {
+      "path": "game/shared/round.ts",
+      "sha256": "E0C44128CAD5C54EE4A105FE544A6727CCB98E2FA4A895D1559418A62B1EF0DA"
+    },
+    {
+      "path": "game/shared/street-layout.ts",
+      "sha256": "412D87E52D6CD6C5C189953DB8F62DEB4112B95EF33E0B2B4EB6D8EA2CDEAE83"
+    },
+    {
+      "path": "game/shared/trails.ts",
+      "sha256": "915CF280DEC96AA988B0868A8E5EA213E49B8742DF698CBE1298914456036627"
+    },
+    {
+      "path": "game/STEP1_VERIFICATION.md",
+      "sha256": "61C230307EA919D0893E64C1E7140C962C356CECAA00D135D6D215F6C0422A86"
+    },
+    {
+      "path": "game/STEP2_VERIFICATION.md",
+      "sha256": "D39CABF84068874FDD92C71049954D1FD4F924C70528C7DB541D17AEE3AB5F8C"
+    },
+    {
+      "path": "game/STEP4_VERIFICATION.md",
+      "sha256": "DAA86ED35B40C8AD4CFBD1E0C69F302DA80673995ADBAC930CD01A7959989130"
+    },
+    {
+      "path": "game/STEP5_VERIFICATION.md",
+      "sha256": "CD06EA568D4352594A8BBDE5D3ADB92D22DA7D9BB9EDB34BB76757241E23F193"
+    },
+    {
+      "path": "game/STEP6_VERIFICATION.md",
+      "sha256": "666CCFE070B4368E4A4D6DF7BE59B31615DCD836649EE34EA53424D23B2F4C52"
+    },
+    {
+      "path": "game/STEP7_VERIFICATION.md",
+      "sha256": "9B77EEE90AED60192247D8EC4F1E61EFCF77D22005CEAE44108AB8D1F917F9E1"
+    },
+    {
+      "path": "game/tests/audio.spec.ts",
+      "sha256": "AB7FA4235FFF1703B532CB7E5678CE677EB8C6A1C5649E70DDE8A889B96271DE"
+    },
+    {
+      "path": "game/tests/finishing.spec.ts",
+      "sha256": "6088C64B3EE9C16316B5F3CBD11803A9F7F63981C4D7CDCE1FBAB81816ABEDA3"
+    },
+    {
+      "path": "game/tests/match.spec.ts",
+      "sha256": "EDD4448A6E0512B3183F9E5A48995C1A57C48DA0879A6252C875AACFC42F31DC"
+    },
+    {
+      "path": "game/tests/radio.spec.ts",
+      "sha256": "6147AAD866F7AFBAA20C8FAA41BA7F90AFD885A460DCDD04E8CC73040D801029"
+    },
+    {
+      "path": "game/tests/rooms.spec.ts",
+      "sha256": "D7A697B4B841FE4F04B3F0DADD44B651A8EE408880513622B9673637E2A12BCD"
+    },
+    {
+      "path": "game/tests/round-regression-helpers.ts",
+      "sha256": "E1F9CFCBEC532BE0597A3A65C2CB63A65DED07C1C59C7EBA2DEB6A940C525633"
+    },
+    {
+      "path": "game/tests/round.spec.ts",
+      "sha256": "6A22A20B68847AE16FD17296AA8DCA113D7B8A25372971BEBB52A09B6996B7B4"
+    },
+    {
+      "path": "game/tests/server-collision.test.ts",
+      "sha256": "E0DBF144B6312025C4594CBDE354642522CFEB0F0C4AF8CB580B0632CC5DB1CE"
+    },
+    {
+      "path": "game/tests/server-match.test.ts",
+      "sha256": "24AC1E4DFE77DD842430548B5AB978672A54244BF78866E6494F1CDEBEDC294E"
+    },
+    {
+      "path": "game/tests/server-radio.test.ts",
+      "sha256": "571AEFFB3B268D673540EFB31517C80A3839B011D67F8B10D65C58BDA7CC0C58"
+    },
+    {
+      "path": "game/tests/server-round.test.ts",
+      "sha256": "9792AA36793CF156C636E170739B5538A93448977F33CF68E68F3A8F9ED65B58"
+    },
+    {
+      "path": "game/tests/server-trails.test.ts",
+      "sha256": "AFAAFEEFAAEE4B9222565D34D51190C99A303EA2878A62FF82AB072C3332D0B2"
+    },
+    {
+      "path": "game/tests/server.test.ts",
+      "sha256": "3720311993953F0A74366DF0708B0282D1D49D4510826183C678F0D636586256"
+    },
+    {
+      "path": "game/tests/step2-soak.mjs",
+      "sha256": "D4E07EE861E16ADE9044FB17084D6C4A29ADCABE7AFA6E81247CBAE14CA5AB68"
+    },
+    {
+      "path": "game/tests/step5-render-budget.mjs",
+      "sha256": "F4BE2348E7B9386DF7ABC553DFA7C6B252A964C3FA4897013F6E27D95EAFA674"
+    },
+    {
+      "path": "game/tests/step5-shadow-check.mjs",
+      "sha256": "13DEC7A4DF8D94761B267F6193D4B204267D0F974D28E377E8CF254102EA985B"
+    },
+    {
+      "path": "game/tests/step5-soak.mjs",
+      "sha256": "D324CD3014AC700A38465E8212F3FB3365B9097B617B58CD3ABD862D5C9220A6"
+    },
+    {
+      "path": "game/tests/street-ground-beam.spec.ts",
+      "sha256": "E1E97A01E05BFFD9960AB2B4DE1327A64B468076D65BAA4BCF06F5EF4A902C04"
+    },
+    {
+      "path": "game/tests/street-polish.spec.ts",
+      "sha256": "C3D96438941172D8257D6E2D95F3E46EF2D5C4778430B742FC711D7F8A3B7309"
+    },
+    {
+      "path": "game/tests/street-render-budget.mjs",
+      "sha256": "4B8C381F1EDAD82E97D2812CC67D061D937A14F28663E639A5DB1F8B30AC5850"
+    },
+    {
+      "path": "game/tests/street.spec.ts",
+      "sha256": "D68027FBF74506129BDC89959647F2D6BB087CACEA34EE16F86A7764330A8AE5"
+    },
+    {
+      "path": "game/tests/trails.spec.ts",
+      "sha256": "4C19E242F58109F85491AD9620F63AF8A3C58DCBFDD47CCADD3316842084D571"
+    },
+    {
+      "path": "game/tsconfig.client.json",
+      "sha256": "5C7B5E8F6878BB8972002E668CE542E28901761E4E4BDAB52E455DCEFA234788"
+    },
+    {
+      "path": "game/tsconfig.server.json",
+      "sha256": "EAFFBFF39B06A220BCF1E1BAE74942B91A3A87AB82C8F809FB216C77D9E714DC"
+    },
+    {
+      "path": "game/vite.config.ts",
+      "sha256": "EEECEEE78754B44490916A2ED5F18B4FEF28B4A82A0C59C0144EECFEC7BF73AD"
+    }
+  ],
+  "developmentInstallAbsent": true,
+  "buildAbsent": true
+}

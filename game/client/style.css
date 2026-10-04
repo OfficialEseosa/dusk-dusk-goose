@@ -535,3 +535,57 @@ h1 {
 
 #clue-transmission {width:calc(100% - 300px);}
 .showing-scores #clue-transmission {position:static;transform:none;width:100%;max-width:none;padding:4px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
+
+/* Display hints and teaching leave input and movement available. */
+.display-controls {display:flex;gap:8px;pointer-events:auto;}
+#title-description {font-size:16px;line-height:1.3;max-width:380px;margin:12px 0 0;}
+#role-card {position:absolute;top:96px;left:50%;transform:translateX(-50%);width:min(440px,calc(100% - 36px));margin:0;padding:10px 12px;border:1px solid #b4a276;border-radius:10px;background:#10232dec;color:#ffdfaa;font-size:16px;line-height:1.3;text-align:center;pointer-events:none;animation:role-fade 5s both;z-index:2;}
+#role-card[hidden] {display:none;}
+@keyframes role-fade {0%,78%{opacity:1}100%{opacity:0}}
+.action-attention {animation:action-attention .65s ease-in-out 4;}
+@keyframes action-attention {50%{border-color:#ffdf94;box-shadow:0 0 0 5px #ffd78055}}
+#orientation-hint {display:none;position:absolute;top:100px;left:16px;right:16px;margin:0;padding:8px;background:#10232ddd;border-radius:8px;font-size:16px;text-align:center;pointer-events:none;z-index:7;}
+#install-tip {position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:min(330px,calc(100% - 320px));display:flex;align-items:center;gap:8px;padding:8px;background:#10232ded;border:1px solid #b4a276;border-radius:8px;font-size:16px;line-height:1.2;z-index:4;}
+#install-tip button {min-height:44px;font-size:16px;padding:8px;}
+.radio-open #role-card,.radio-open #install-tip {visibility:hidden;}
+@media(orientation:portrait){#orientation-hint{display:block;}#install-tip{width:calc(100% - 32px);bottom:156px;}}
+@media(prefers-reduced-motion:reduce){#role-card{animation:none;}.action-attention{animation:none;border-color:#ffdf94;box-shadow:0 0 0 4px #ffd78055;}}
+/* Short phone dock: composing and closing share a row; phrases pan sideways. */
+@media(max-width:900px){
+ #radio-panel {top:52px;left:max(8px,env(safe-area-inset-left));right:max(8px,env(safe-area-inset-right));transform:none;width:auto;max-width:none;padding:2px 4px;border-radius:8px;}
+ #radio-panel header {display:none;}
+ #radio-form {margin:0;gap:4px;}
+ #radio-panel #radio-close {flex-shrink:0;}
+ .radio-body {display:block;}
+ #radio-phrases {display:flex;overflow-x:auto;overflow-y:hidden;gap:4px;margin-top:1px;touch-action:pan-x;overscroll-behavior:contain;scrollbar-width:none;}
+ #radio-phrases::-webkit-scrollbar {display:none;}
+ #radio-phrases button {flex:0 0 auto;white-space:nowrap;min-height:44px;}
+ #radio-history {height:36px;padding:0;margin-top:1px;overflow-y:auto;}
+ #radio-history li {height:18px;padding:0;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+ #radio-history strong,#radio-history span {display:inline;font-size:16px;}
+ #radio-history strong::after {content:': ';}
+ #radio-note {position:absolute;top:auto;bottom:2px;right:4px;margin:0;padding:0 4px;line-height:18px;min-height:0;background:#10232ded;border-radius:4px;max-width:100%;}
+ #radio-note:empty {display:none;}
+ #radio-note:not(:empty) {white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+ .radio-open .round-hud {top:8px;}
+ .radio-open #street-code {visibility:hidden;}
+ .radio-open #clue-choices {top:auto;bottom:56px;left:50%;transform:translateX(-50%);width:calc(100% - 330px);flex-direction:row;}
+ .radio-keyboard #radio-panel {top:26px;max-width:none;}
+ .radio-keyboard .radio-body {display:block;}
+ .radio-keyboard .game-hud {visibility:hidden;}
+ .radio-keyboard #radio-toggle {visibility:hidden;}
+ .radio-keyboard .round-hud {top:0;line-height:22px;}
+ .radio-keyboard #round-clock {font-size:18px;}
+ .radio-keyboard #round-instruction {visibility:hidden;}
+ .radio-keyboard #move-stick {width:68px;height:68px;}
+ .radio-keyboard #move-stick .knob {left:12px;top:12px;}
+ .radio-keyboard #round-action {height:64px;}
+}
+
+#street-status:not(:empty) {bottom:42px;background:#10232ded;padding:4px 8px;border-radius:6px;}
+
+@media(orientation:portrait){#orientation-hint{top:auto;bottom:152px;}}
+
+.showing-scores:not(.radio-keyboard) #radio-toggle {right:max(260px,env(safe-area-inset-right));}
+.showing-scores #street-code {visibility:hidden;}
+.showing-scores #install-tip {display:none;}

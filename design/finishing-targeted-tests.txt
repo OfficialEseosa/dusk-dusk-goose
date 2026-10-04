@@ -1,0 +1,17 @@
+
+Running 6 tests using 1 worker
+
+  ok 1 tests\finishing.spec.ts:17:1 › title describes the game; portrait hint belongs to play; real Chromium fullscreen enters and exits (2.0s)
+  ok 2 tests\finishing.spec.ts:25:1 › unsupported fullscreen gives a dismissible install tip remembered on this device (1.1s)
+  ok 3 tests\finishing.spec.ts:31:1 › hider and seeker role cards fade without replaying on snapshots; first contextual action draws attention (9.1s)
+Radio dock north: {"body":{"x":229.814845466486,"y":260.75383707061275,"width":40,"height":49.14746727870637},"panel":{"x":8,"y":52,"width":651,"height":132},"overlap":false}
+Radio dock east: {"body":{"x":125.75144001383381,"y":104.9092798855722,"width":40,"height":49.121837445844314},"panel":{"x":178,"y":52,"width":481,"height":132},"overlap":false}
+Radio dock south: {"body":{"x":396.7548592397388,"y":35.497415998167874,"width":40,"height":49.10691671959845},"panel":{"x":8,"y":52,"width":376,"height":132},"overlap":false}
+Radio dock west: {"body":{"x":501.2952157087519,"y":188.78526117565528,"width":40,"height":49.137245488229475},"panel":{"x":8,"y":52,"width":481,"height":132},"overlap":false}
+  ok 4 tests\finishing.spec.ts:39:1 › solo card explains seeking and the phone radio is a persistent top dock leaving controls reachable (8.3s)
+Radio UI arrival: 57 ms
+  ok 5 tests\radio.spec.ts:23:1 › two independent sessions exchange contextual radio; draft, focus, movement and phone keyboard layout stay intact (10.4s)
+Other player moves during radio flood: accepted after 383 ms; 61.2 FPS
+  ok 6 tests\radio.spec.ts:43:1 › radio flood is friendly and cannot stop movement; bounded history restores and phrases work through reveal and final (1.3m)
+
+  6 passed (1.9m)

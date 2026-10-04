@@ -154,9 +154,13 @@ test('rotation advances past a removed hider rather than returning to the first 
     const a = await connect(), b = await connect(), c = await connect(), created = await create(a, 'Alex');
     const joinedB = await b.request({ type: 'join', name: 'Sam', code: created.room.code }); assert.ok(joinedB.ok && joinedB.seat);
     const joinedC = await c.request({ type: 'join', name: 'Lee', code: created.room.code }); assert.ok(joinedC.ok && joinedC.seat);
-    await a.request({ type: 'start' }); await wait(350);
+    await a.request({ type: 'start' });
+    await until(() => a.room().round?.phase === 'reveal', 'first round reveal');
+    await afterServerDeadline(a.room().round!.revealReadyAt!);
     const second = await a.request({ type: 'start' }); assert.ok(second.ok && second.room?.round?.hiderId === joinedB.seat.playerId);
-    await b.request({ type: 'leave' }); await wait(350);
+    await b.request({ type: 'leave' });
+    await until(() => a.room().round?.phase === 'reveal', 'second round reveal after hider leaves');
+    await afterServerDeadline(a.room().round!.revealReadyAt!);
     const third = await a.request({ type: 'start' }); assert.ok(third.ok && third.room?.round?.hiderId === joinedC.seat.playerId);
   } finally { await game.close(); }
 });

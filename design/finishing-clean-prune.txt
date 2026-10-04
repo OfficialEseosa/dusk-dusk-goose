@@ -1,0 +1,5 @@
+npm warn config production Use `--omit=dev` instead.
+
+removed 31 packages, and audited 3 packages in 2s
+
+found 0 vulnerabilities

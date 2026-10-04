@@ -557,6 +557,18 @@ export class Street {
         this.renderer.domElement.dataset.characterHeight=String(Math.abs(head.y-feet.y)*labelHeight/2);
         const body={x:(Math.min(head.x,feet.x)*.5+.5)*labelWidth-20,y:(-Math.max(head.y,feet.y)*.5+.5)*labelHeight,width:40,height:Math.abs(head.y-feet.y)*labelHeight/2};
         this.renderer.domElement.dataset.characterBounds=JSON.stringify(body);
+        // Keep the top radio dock off the projected character without changing
+        // the camera or clipping the shared flashlight envelope.
+        const dock=this.container.parentElement?.querySelector<HTMLElement>('#radio-panel');
+        if(dock){
+          const rect=dock.getBoundingClientRect();
+          const blocked=labelWidth<=900&&!dock.hidden&&!this.container.parentElement!.classList.contains('showing-scores')&&body.x<labelWidth&&body.x+body.width>0&&body.y<rect.bottom+8&&body.y+body.height>rect.top-8;
+          if(blocked){
+            const left=Math.max(0,body.x-20),right=Math.max(0,labelWidth-body.x-body.width-20);
+            dock.style.width=`${Math.floor(Math.min(labelWidth-16,Math.max(left,right)))}px`;
+            dock.style.left=left>=right?'8px':'auto';dock.style.right=left>=right?'auto':'8px';
+          }else{dock.style.width='';dock.style.left='';dock.style.right='';}
+        }
         const button=this.container.parentElement?.querySelector<HTMLElement>('#radio-toggle');
         if(button){const keyboard=this.container.parentElement!.classList.contains('radio-keyboard'),scores=this.container.parentElement!.classList.contains('showing-scores'),rect=button.getBoundingClientRect(),baseY=labelHeight-130-rect.height;
           const overlap=body.x<rect.right&&body.x+body.width>rect.x&&body.y<baseY+rect.height&&body.y+body.height>baseY;
@@ -596,8 +608,8 @@ export class Street {
     const hud=this.container.parentElement?.querySelector(".round-hud")?.getBoundingClientRect();
     if(hud)occupied.push({x:hud.x,y:hud.y,w:hud.width,h:hud.height});
     if(this.capsuleLabel&&!this.capsuleLabel.hidden){const capsule=this.capsuleLabel.getBoundingClientRect();occupied.push({x:capsule.x,y:capsule.y,w:capsule.width,h:capsule.height});}
-    for(const control of Array.from(this.container.parentElement?.querySelectorAll("#round-instruction,#clue-transmission,#clue-choices,#radio-panel,#radio-toggle")??[])){
-      const rect=control.getBoundingClientRect();if(rect.width&&rect.height)occupied.push({x:rect.x,y:rect.y,w:rect.width,h:rect.height});
+    for(const control of Array.from(this.container.parentElement?.querySelectorAll("#round-instruction,#clue-transmission,#clue-choices,#radio-panel,#radio-toggle,#role-card,#orientation-hint,#install-tip,#street-status,.game-hud")??[])){
+      const rect=control.getBoundingClientRect();if(rect.width&&rect.height&&getComputedStyle(control).visibility!=="hidden")occupied.push({x:rect.x,y:rect.y,w:rect.width,h:rect.height});
     }
     for(const figure of [...this.figures.values()].sort((a,b)=>Number(b.label.textContent==='You')-Number(a.label.textContent==='You'))){
       if(figure.label.hidden)continue;

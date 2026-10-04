@@ -1,6 +1,6 @@
 # Last Night on Maple Street: build plan
 
-October 3, 2026. Approved with the user's amendments. Step 7 is authorized; steps 1 through 6 are independently verified.
+October 3, 2026. Approved with the user's amendments. Steps 1 through 7 are independently verified. The requested finishing pass is authorized.
 
 The new brief replaces GAME_SPEC.md. The retired game is preserved in commit `c3da94123cc2f3113f85d8e2cf94ca7f3afaa501`. AGENTS.md records the standing rules and the approved amendments below. The fresh game lives in `game/`.
 
@@ -136,7 +136,7 @@ These settings must be ready for your first Railway deployment **at the end of s
 
 ## Current scope
 
-Steps 1 through 6 are independently verified. Step 7 adds contextual quick phrases, short plain-text radio and finishing sounds. No deployment, voice chat, new art, scoring changes or additional layouts.
+Steps 1 through 7 are independently verified. The finishing pass docks the phone radio, adds optional fullscreen and home-screen/orientation hints, brief role teaching and first-action attention, and verifies Railway production commands. No deployment, voice chat, new art, scoring changes or additional layouts.
 
 Footprints are placed approximately every 0.45 metres and fade linearly over **60 seconds**. The hiding trail starts its fade clock when seeking begins; prints made while seeking start immediately. Store at most **256 footprints**, **four disturbed marks**, three sent clues and one three-option clue offer per room; expired footprints are removed. The cap retains roughly 115 metres of recent walking and may remove the oldest prints before their full lifetime during sustained movement. Disturbed marks remain until reveal. All marks have random public identifiers and a common timestamp. Every public projection uses a fresh cryptographic Fisher-Yates shuffle of marks and footprints, including after a decoy is added during seeking. Stable identifiers preserve rendering identity; list indices carry no creation order or burial-versus-decoy information. Solo route generation also randomizes which trail is built first; all its footprints share the seeking-start fade clock. Seekers receive no capsule spot, true/false trail flag, mark spot identifier or clue candidate list before reveal.
 
@@ -152,4 +152,4 @@ The radio is available throughout play, including preparation, reveal and final 
 
 Procedural finishing sound adds soft local footsteps, search rummaging, discovery, freeze, round start/end and a final motif. All pass through the same mute/visibility gain; crickets continue throughout play. A first gesture unlocks audio after refresh; a previously unlocked context resumes after a hidden page returns. Gameplay information remains visible without sound.
 
-Record tests and limitations in game/STEP7_VERIFICATION.md, save phone radio evidence in design, commit and stop before step 8.
+Step 7 results are recorded in game/STEP7_VERIFICATION.md. Record this finishing pass in game/FINISHING_VERIFICATION.md, save phone dock/role evidence in design, write game/DEPLOY.md, commit and stop. No additional gameplay features.

@@ -1,0 +1,9 @@
+
+Running 2 tests using 1 worker
+
+Radio UI arrival: 50 ms
+  ok 1 tests\radio.spec.ts:23:1 › two independent sessions exchange contextual radio; draft, focus, movement and phone keyboard layout stay intact (10.7s)
+Other player moves during radio flood: accepted after 387 ms; 60.3 FPS
+  ok 2 tests\radio.spec.ts:43:1 › radio flood is friendly and cannot stop movement; bounded history restores and phrases work through reveal and final (1.3m)
+
+  2 passed (1.6m)

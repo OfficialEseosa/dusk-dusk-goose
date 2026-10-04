@@ -82,11 +82,10 @@ APPROVED AMENDMENTS:
 - Replacement character downloads must be listed before use. Wait for the user
   to supply them, preserve source filenames and report mismatches.
 
-CURRENT AUTHORIZATION: Step 6 is independently verified. Build step 7 only:
-persistent contextual quick phrases and up-to-80-character plain-text radio,
-server rate limits and bounded match history including scheduled clues,
-input isolation and phone keyboard resilience, and finishing sound respecting
-mute/visibility/gesture recovery. Preserve all earlier flow, privacy, movement,
-scores and persistent controls. Run server tests ten consecutive times and all
-browser tests, write STEP7_VERIFICATION.md, save phone radio evidence, commit and
-stop. No deployment, voice chat, layouts, new art, scoring changes or step 8.
+CURRENT AUTHORIZATION: Step 7 is independently verified. Build only the finishing
+pass: a compact phone radio dock, optional fullscreen with a dismissible home
+screen tip where unsupported, a portrait play hint, a title description, brief
+round role cards and first-action attention. Preserve gameplay and persistent
+controls. Verify clean Railway install/build/start, write DEPLOY.md and
+FINISHING_VERIFICATION.md, save phone evidence, run server tests ten times and all
+browser tests, commit and stop. No deployment, new art, layouts or scoring changes.

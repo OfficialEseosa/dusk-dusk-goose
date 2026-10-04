@@ -6,6 +6,11 @@ type Reply={ok:boolean;error?:{message:string}};
 /** Persistent controls: snapshots change state and text, never the input elements. */
 export class RoundControls {
  private room?:RoomSnapshot;
+ private readonly roleCard:HTMLElement;
+ private roleKey="";
+ private roleUntil=0;
+ private actionTaught=false;
+ private attentionUntil=0;
  private offset=0;
  private held=false;
  private generation=0;
@@ -29,6 +34,8 @@ export class RoundControls {
  private announcedMatch="";
  private announcementUntil=0;
  constructor(private container:HTMLElement,private street:Street,private playerId:string,private send:(type:string,fields?:Record<string,unknown>)=>Promise<Reply>,private leave:()=>void){
+  this.roleCard=document.createElement('p');this.roleCard.id='role-card';this.roleCard.hidden=true;this.roleCard.setAttribute('role','status');container.append(this.roleCard);
+  try{this.actionTaught=localStorage.getItem('maple:action-taught:v1')==='yes';}catch{}
   const panel=document.createElement('div');panel.className='round-hud';panel.innerHTML='<span id="round-phase"></span><strong id="round-clock" aria-label="Time remaining"></strong>';
   this.hud=panel;container.append(panel);this.phase=panel.querySelector('#round-phase')!;this.clock=panel.querySelector('#round-clock')!;this.instruction=document.createElement('p');this.instruction.id='round-instruction';container.append(this.instruction);
   this.radio=document.createElement('div');this.radio.id='clue-transmission';this.radio.setAttribute('role','status');this.radio.hidden=true;container.append(this.radio);
@@ -74,6 +81,9 @@ export class RoundControls {
    text('#solo-best',best);text('#match-countdown',finished?'':`Next round in ${Math.max(0,Math.ceil(((match.nextRoundAt??round.phaseEndsAt)-now)/1000))}s`);
    this.replay.hidden=!finished;
   }
+  const roleKey=`${match?.id}:${round.number}`;
+  if(roleKey!==this.roleKey&&this.street.loaded){this.roleKey=roleKey;this.roleUntil=now+5000;this.roleCard.textContent=player.role==='waiting'?'Next round is yours. Pick up a flashlight while you wait.':player.role==='hider'?(round.phase==='seeking'||round.capsuleSpotId?'You are hiding. Leave misleading trails and stay out of the light.':'You are hiding. Bury the capsule before the timer ends.'):'Find the capsule. Footprints and disturbed ground only show in your light.';this.roleCard.style.animation='none';void this.roleCard.offsetWidth;this.roleCard.style.animation='';}
+  this.roleCard.hidden=showScores||!this.street.loaded||now>=this.roleUntil;
   this.next.hidden=!showScores||finished||room.hostId!==this.playerId;
   this.next.disabled=now<(round.revealReadyAt??round.phaseEndsAt);
   const found=roster.find(p=>p.id===round.foundBy)?.name??round.foundByName;
@@ -102,6 +112,8 @@ export class RoundControls {
    }
   }
   this.button.hidden=showScores||!this.target||!this.street.loaded||(player.frozenUntil??0)>now;
+  if(!this.button.hidden&&!this.actionTaught){this.actionTaught=true;this.attentionUntil=now+2600;try{localStorage.setItem('maple:action-taught:v1','yes');}catch{}}
+  this.button.classList.toggle('action-attention',!this.button.hidden&&now<this.attentionUntil);
   this.button.querySelector('.action-name')!.textContent=this.target?.name??'';
   this.button.querySelector('.action-spot')!.textContent=this.target?.spotName??'';
   const search=player.search,progress=search&&this.held?Math.min(1,Math.max(0,(now-search.startedAt)/SEARCH_MS)):0;

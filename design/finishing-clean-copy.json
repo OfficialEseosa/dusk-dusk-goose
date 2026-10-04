@@ -1,0 +1,134 @@
+{
+  "node": "v22.18.0",
+  "port": 5183,
+  "http": [
+    {
+      "route": "/",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "route": "/assets/index-Ddpm0_iU.js",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "route": "/assets/index-Dc61-OwF.css",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "route": "/assets/fraunces-latin-600-normal-BFCDtZfi.woff2",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "route": "/assets/manifest.json",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "route": "/assets/kenney/city-kit-suburban/building-type-a.glb",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "route": "/licenses/Fraunces-OFL.txt",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "route": "/",
+      "method": "HEAD",
+      "status": 200
+    },
+    {
+      "route": "/",
+      "method": "POST",
+      "status": 405
+    },
+    {
+      "route": "/live",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "route": "/api/debug",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "route": "/debug/rooms",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "route": "/__vite_ping",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "route": "/.env",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "route": "/server/index.ts",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "route": "/node_modules/vite/package.json",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "route": "/node_modules/tsx/dist/cli.mjs",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "route": "/tests/server.test.ts",
+      "method": "GET",
+      "status": 404
+    }
+  ],
+  "webSocket": {
+    "sameAddress": true,
+    "twoSeats": true,
+    "start": true,
+    "credentialTakeover": true,
+    "sameRole": true,
+    "radio": true,
+    "foreignOriginStatus": 403
+  },
+  "runtimeDependencies": [
+    {
+      "name": "vite",
+      "absent": true
+    },
+    {
+      "name": "tsx",
+      "absent": true
+    },
+    {
+      "name": "typescript",
+      "absent": true
+    },
+    {
+      "name": "@playwright/test",
+      "absent": true
+    },
+    {
+      "name": "@fontsource/dm-sans",
+      "absent": true
+    },
+    {
+      "name": "@fontsource/fraunces",
+      "absent": true
+    }
+  ],
+  "limitations": [
+    "Local Windows copy only; Railway Linux container/TLS/proxy/account/cellular not tested."
+  ]
+}

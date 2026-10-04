@@ -36,4 +36,8 @@ npm test
 npm run test:e2e
 ```
 
-The asset command reads the five supplied packs outside `game/`; the build needs only selected exports committed under `public/assets`. Production starts compiled JavaScript, with no development tools or debug endpoints. The selected CC0 assets and self-hosted fonts include their licences. Railway settings are in the root PLAN.md.
+The asset command reads the five supplied packs outside `game/`; the build needs only selected exports committed under `public/assets`. Production starts compiled JavaScript, with no development tools or debug endpoints. The selected CC0 assets and self-hosted fonts include their licences.
+
+Deployment settings and safe stop-first updates are in [DEPLOY.md](DEPLOY.md). During play, supported browsers offer Fullscreen; other browsers show a dismissible Add to Home Screen tip. Round role cards fade automatically. The phone radio is docked above the world, with sideways-scrolling phrases and recent messages.
+
+The finishing checks and real-device limitations are recorded in [FINISHING_VERIFICATION.md](FINISHING_VERIFICATION.md).
