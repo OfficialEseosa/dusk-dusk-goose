@@ -3,7 +3,7 @@
 ## Progress
 
 - [x] Phase 0 Prepare: read owner request and research 00–04, 06; view five reference images; replace AGENTS.md; tag old HEAD; choose reusable systems.
-- [ ] Phase 1 The chase: shared Park collision/tuning; server bots, auto-aim light, freeze, committed lunge, catches, battery/pickups; playable plain-shapes 3D client; 500-round-per-count balance report; rules tests and browser smoke.
+- [x] Phase 1 The chase: shared Park collision/tuning; server bots, auto-aim light, freeze, committed lunge, catches, battery/pickups; playable plain-shapes 3D client; 500-round-per-count balance report; rules tests and browser smoke. Balance misses and attempts recorded below; not a balance pass.
 - [ ] Phase 2 Solo: instant Play, first-ten-second approach, escalation/director, milestones, local best/run storage, retry under2.5s; timed browser evidence.
 - [ ] Phase 3 Multiplayer: mid-solo joining, rotation, filler kids, infection,75s/finale, scoring/results/rematch; stale/hidden cover, fair catches; two contexts.
 - [ ] Phase 4 Look: kit kids/props, code goose, Park dressing, bright blue October night/warm beams,56px characters, living title/HUD. Scored visual comparison and three weakest fixes, up to three rounds.
@@ -38,7 +38,19 @@
 - Phase0 git status clean; HEAD f802515; origin OfficialEseosa/dusk-dusk-goose,main.
 - Copy-Item research/NEW-AGENTS.md AGENTS.md succeeded; git tag old-game-end-f802515 succeeded.
 - Required research read and five reference images inspected; no research edits/downloads.
-- Phase0 commit/push pending.
+- Phase0 commit e3fcd39 and tag old-game-end-f802515 both pushed successfully to origin.
+- Phase1 (in progress): added shared collision/tuning, deterministic server simulation, separate one-port chase server, persistent phone/keyboard controls and plain Three.js client; production entry now chase-server.js/chase-main.ts. Legacy implementation and tests remain intact and inactive in production.
+- `npm run build` passed twice (TypeScript client/server and Vite). Vite warns main JS is ~534KB uncompressed/~136KB gzip; defer code splitting to hardening if measurements justify it.
+- `npm run test:chase`: 10/10 passed (collision sweep, beam auto-aim, wall occlusion, freeze cost/immunity, passive catch grace, freeze priority, lunge timing/cooldown, battery economy, deterministic bounded events, real WebSocket rooms/teleport rejection/credential takeover/origin and room cap).
+- `npm test -- --test-reporter=dot`: retained server suite34/34 passed in48.8s; argument placement still emitted TAP. No old tests deleted or weakened.
+- `npx playwright test tests/chase.spec.ts`:1/1 passed in12.8s. Test creates independent contexts at667x375 and1366x768, starts solo, moves/holds light, joins same code as goose, checks role buttons/no overflow/action bounds/no browser errors.
+- Saved and inspected game/evidence/phase1/title-{667,1366}.png and chase-{667,1366}.png. Phone screenshot shows freeze event, readable HUD and reachable116px stick/100px action. Neither screenshot is near the final visual bar: empty flat surfaces, basic characters, no October dressing, weak beam shape. Phase4 must address these; current evidence establishes plain chase only, not commercial quality or physical thumb comfort.
+- First30-run balance sample exposed invalid default spawns inside hedge: kid wins90% at2–5 and0% at6, first catch6.4–7.15s, solo15.05s. Fixed spawn validation and BFS goal rounding/navigation; second30-run sample: kid wins3.33% at2–4/6.67% at5/0% at6, first22.95/22.7/17.6s, solo22.8s. Targets still missed. Full500 runs per count and one-parameter bot-speed5.1 experiment pending; no claimed balance pass.
+- Found refresh sequence reset would make resumed inputs replay-rejected; seat reply now carries nextSeq. Recheck pending.
+- After sequence fix, `npm run build`, `npm run test:chase` (10/10), and `npx playwright test tests/chase.spec.ts` (1/1,9.7s) all passed again. Default npm test now includes chase tests alongside every retained server test.
+- One-number experiment `npx tsx scripts/balance.ts 30 --goose-speed=5.1` saved to game/evidence-balance-speed51.json: kids win30% at2–4,16.67% at5,0% at6; median first catch26.7/23.9/23s, solo22.8s. Lower speed improves survival but worsens first catch and does not fix six-player snowball. Keep original5.25 until director/last-kid mechanisms and second arena exist; do not tune to a bot-only metric by giving bots false outcomes. Those missing later-phase mechanisms materially affect final balance. Final pass must rerun the same report and explain any remaining misses.
+- Full `npx tsx scripts/balance.ts 500 > evidence-balance-phase1.json` completed successfully (2500 multiplayer rounds +500 solo runs). At2/3/4 humans: kids win2%,first catch22.9s,median round35.55s,zero catches.2%. At5:3%,22.7s,40.9s,.2%. At6:0%,17.25s,22.35s,0%. Solo median22.75s. Only zero-catch target passes; kid35–45%,first10–15s,solo35–50s all miss. Two-player round>40s target also misses. This is a recorded baseline, not finished balance. Spawn/navigation repairs and slower-goose experiment are the attempts so far; director, last-kid relief, lamps and second arena remain to be integrated before final tuning.
+- Phase1 checks complete under owner's explicit allowance to record missed balance targets and attempts. Phase1 commit/push pending; next action is Phase2 solo escalation/director, best/retry and first10s measurements. Game currently has no production art/audio, full multiplayer round rotation, lag rewind or final hardening; do not claim overall completion.
 
 ### Final acceptance ledger (research00 section7)
 

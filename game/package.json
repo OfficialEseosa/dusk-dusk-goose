@@ -1,5 +1,5 @@
 {
-  "name": "maple-street-night",
+  "name": "dusk-dusk-goose",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -9,10 +9,12 @@
   "scripts": {
     "assets": "node scripts/assets.mjs",
     "build": "tsc --noEmit -p tsconfig.client.json && tsc -p tsconfig.server.json && vite build",
-    "start": "node dist/server/server/index.js",
+    "start": "node dist/server/server/chase-server.js",
     "dev": "npm run build && npm start",
-    "test": "tsx --test tests/server*.test.ts",
-    "test:e2e": "npm run build && playwright test"
+    "test": "tsx --test tests/server*.test.ts tests/chase*.test.ts",
+    "test:e2e": "npm run build && playwright test",
+    "test:chase": "tsx --test tests/chase*.test.ts",
+    "balance": "tsx scripts/balance.ts"
   },
   "dependencies": {
     "three": "^0.186.1",
