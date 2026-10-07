@@ -1,0 +1,22 @@
+[
+  {
+    "file": "chase-1366.png",
+    "nearBlackPercent": 0.004,
+    "medianLuma": 65.55
+  },
+  {
+    "file": "chase-667.png",
+    "nearBlackPercent": 0.0,
+    "medianLuma": 66.69
+  },
+  {
+    "file": "freeze-1366.png",
+    "nearBlackPercent": 0.004,
+    "medianLuma": 66.33
+  },
+  {
+    "file": "freeze-667.png",
+    "nearBlackPercent": 0.008,
+    "medianLuma": 68.19
+  }
+]

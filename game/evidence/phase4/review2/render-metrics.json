@@ -1,0 +1,28 @@
+[
+  {
+    "viewport": {
+      "width": 667,
+      "height": 375
+    },
+    "minKidPixels": 110.91896211407933,
+    "maxCalls": 42,
+    "maxTriangles": 46367,
+    "maxPrograms": 10,
+    "kidAnimationSeconds": 0.9333000000000001,
+    "gooseNeckRange": 0.13998045481880617,
+    "errors": []
+  },
+  {
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "minKidPixels": 194.8832051666344,
+    "maxCalls": 42,
+    "maxTriangles": 46367,
+    "maxPrograms": 10,
+    "kidAnimationSeconds": 1.0000999999999995,
+    "gooseNeckRange": 0.139311776435884,
+    "errors": []
+  }
+]

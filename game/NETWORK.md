@@ -46,4 +46,3 @@ Nothing replays old input after resume. Per-socket encoders reset on reconnect;
 run changes reset event ids and remote interpolation. There are no production
 latency controls or debugging endpoints. Test TCP relays add real 100/200 ms delays
 in each direction, including native WebSocket heartbeat packets.
-
