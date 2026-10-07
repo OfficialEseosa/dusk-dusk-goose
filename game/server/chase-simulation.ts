@@ -1,4 +1,5 @@
-import { PARK,TUNE,angle,angleDelta,clearPath,distance,slide,walkable,type Entity,type Point,type ChaseEvent,type ChaseSnapshot,type Arena } from '../shared/chase.js';
+import { PARK,TUNE,angle,angleDelta,clearPath,distance,slide,walkable,type Entity,type Point,type ChaseEvent,type ChaseSnapshot,type Arena,type LampState } from '../shared/chase.js';
+import {PositionHistory,segmentDistance} from './chase-history.js';
 
 /** Deterministic generator: identical simulation inputs yield identical reports. */
 export function randomSeed(seed:number){return ()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t^=t+Math.imul(t^t>>>7,61|t);return ((t^t>>>14)>>>0)/4294967296;};}
@@ -6,6 +7,9 @@ export class ChaseSimulation {
   entities:Entity[]=[]; events:ChaseEvent[]=[]; pickups:{x:number;z:number;readyAt:number}[]=[];
   now=0; elapsed=0; phase:'playing'|'results'='playing'; firstCatch:number|null=null;
   survivalMultiplier=1; autoLightUntil=0; firstSoloGooseId?:string; beginner=false; assistedFreezeUsed=false; soloIntensity=0;
+  startingGeese=new Set<string>();lastKid?:string;private startingBonus=new Set<string>();
+  history=new PositionHistory();viewDelay=new Map<string,number>();
+  lamps:LampState[]=[{x:-3.8,z:0,remaining:5,readyAt:0,active:false}];beginnerKids=new Set<string>();private lastCatchAt=0;
   private minds=new Map<string,{lastSeen?:Point; seenAt:number; litAt:number; cornerUntil:number}>();
   private eventId=0; private rng:()=>number; private navCache=new Map<string,{at:number;field:Map<string,number>}>();
   constructor(public mode:'solo'|'multi'='solo',seed=1,public arena:Arena=PARK){
@@ -18,14 +22,26 @@ export class ChaseSimulation {
     this.entities.push(e);return e;
   }
   event(type:ChaseEvent['type'],actor:Entity,target?:Entity){this.events.push({id:++this.eventId,at:this.now,type,actor:actor.id,target:target?.id,x:target?.x??actor.x,z:target?.z??actor.z});if(this.events.length>48)this.events.shift();}
+  gooseBoost(){return this.mode==='multi'?(this.elapsed>=60?1.08:1)*(1+.04*Math.max(0,Math.min(4,Math.floor((this.elapsed-this.lastCatchAt-15)/5)))):1;}
   speed(e:Entity){if(e.frozenUntil>this.now||e.safeUntil>this.now&&e.role==='goose')return 0;
     const t=this.now-e.lungeAt;if(e.role==='goose'&&t<TUNE.windup+TUNE.dashTime+TUNE.recovery)return t<TUNE.windup?0:t<TUNE.windup+TUNE.dashTime?TUNE.dashDistance/TUNE.dashTime:TUNE.gooseSpeed*.3;
-    if(e.role==='kid')return e.light?TUNE.litSpeed:TUNE.kidSpeed;
-    return (this.mode==='solo'?TUNE.kidSpeed*Math.min(1.12,.92+.02*Math.floor(this.elapsed/15)):e.bot?TUNE.botSpeed:TUNE.gooseSpeed)*(this.mode==='multi'&&this.elapsed>=60?1.08:1);
+    if(e.role==='kid')return (e.light?TUNE.litSpeed:TUNE.kidSpeed)*(e.id===this.lastKid?1.08:1);
+    return (this.mode==='solo'?TUNE.kidSpeed*Math.min(1.12,.92+.02*Math.floor(this.elapsed/15)):e.bot?TUNE.botSpeed:TUNE.gooseSpeed)*this.gooseBoost();
   }
   lunge(e:Entity){if(e.role!=='goose'||e.frozenUntil>this.now||e.safeUntil>this.now||this.now-e.lungeAt<TUNE.cooldown)return false;
     e.lungeAt=this.now;e.lungeAngle=e.facing;e.lungeHit=false;this.event('windup',e);return true;}
-  dwellNeeded(goose:Entity){return this.mode==='solo'&&this.beginner&&!this.assistedFreezeUsed&&goose.id===this.firstSoloGooseId? .1:TUNE.dwell;}
+  dwellNeeded(goose:Entity,kid?:Entity){return this.mode==='solo'&&this.beginner&&!this.assistedFreezeUsed&&goose.id===this.firstSoloGooseId||this.mode==='multi'&&this.elapsed<=3&&!!kid&&this.beginnerKids.has(kid.id)? .1:TUNE.dwell;}
+  practice(dt:number){
+    this.now+=dt;
+    for(const k of this.entities){if(k.role!=='kid')continue;k.battery=100;k.light=k.held;
+      const target=this.entities.filter(g=>g.role==='goose'&&distance(k,g)<=TUNE.range&&clearPath(k,g,this.arena,0,true)).sort((a,b)=>distance(k,a)-distance(k,b))[0];
+      const desired=target?angle(k,target):k.facing,delta=angleDelta(k.aim,desired);k.aim+=Math.max(-TUNE.aimSpeed*dt,Math.min(TUNE.aimSpeed*dt,delta));
+      for(const g of this.entities){if(g.role!=='goose')continue;const hit=k.light&&distance(k,g)<=TUNE.range&&Math.abs(angleDelta(k.aim,angle(k,g)))<=TUNE.halfCone&&clearPath(k,g,this.arena,0,true);
+        k.dwell[g.id]=hit?(k.dwell[g.id]??0)+dt:0;
+        if(k.dwell[g.id]>=TUNE.dwell&&g.immuneUntil<=this.now&&g.frozenUntil<=this.now){g.frozenUntil=this.now+TUNE.freeze;g.immuneUntil=g.frozenUntil+TUNE.immunity;k.dwell[g.id]=0;this.event('freeze',k,g);}
+      }
+    }
+  }
   private field(goal:Point){
     let gx=Math.round(goal.x),gz=Math.round(goal.z);
     if(!walkable({x:gx,z:gz},this.arena,.5)){
@@ -86,38 +102,58 @@ export class ChaseSimulation {
     e.vx=(q.x-e.x)/dt;e.vz=(q.z-e.z)/dt;e.x=q.x;e.z=q.z;
   }
   step(dt=.05){
-    if(this.phase==='results')return;this.now+=dt;this.elapsed+=dt;
+    if(this.phase==='results')return;const before=new Map(this.entities.map(e=>[e.id,{x:e.x,z:e.z}]));
+    for(const e of this.entities)this.history.record(e.id,this.now,e);
+    this.now+=dt;this.elapsed+=dt;
     for(const e of this.entities){if(e.bot)this.bot(e,dt);
       else if(e.role==='goose'&&this.now-e.lungeAt>=TUNE.windup&&this.now-e.lungeAt<TUNE.windup+TUNE.dashTime&&e.frozenUntil<=this.now){const q=slide(e,Math.sin(e.lungeAngle)*this.speed(e)*dt,Math.cos(e.lungeAngle)*this.speed(e)*dt,this.arena);e.x=q.x;e.z=q.z;}
-      if(e.role!=='kid')continue;
+    }
+    // Capture all movement before resolving any player's defence or attack.
+    for(const e of this.entities)this.history.record(e.id,this.now,e);
+    for(const e of this.entities){if(e.role!=='kid')continue;
       e.light=(e.held||this.now<this.autoLightUntil)&&(e.light?e.battery>0:e.battery>=TUNE.minimumBattery);
       if(e.light){e.lastLight=this.now;e.battery=Math.max(0,e.battery-TUNE.drain*dt);}else if(this.now-e.lastLight>=TUNE.rechargeDelay&&!(this.mode==='multi'&&this.elapsed>=60))e.battery=Math.min(100,e.battery+TUNE.recharge*dt);
-      e.score+=10*dt*this.survivalMultiplier;
+      e.score+=10*dt*this.survivalMultiplier*(e.id===this.lastKid?2:1);
       let target:Entity|undefined;
-      if(e.light)for(const g of this.entities)if(g.role==='goose'&&distance(e,g)<=TUNE.range&&clearPath(e,g,this.arena,0,true)&&(!target||distance(e,g)<distance(e,target)))target=g;
-      const desired=target?angle(e,target):e.facing,delta=angleDelta(e.aim,desired);e.aim+=Math.max(-TUNE.aimSpeed*dt,Math.min(TUNE.aimSpeed*dt,delta));
+      const beamPoint=(g:Entity)=>this.history.at(g.id,this.now-Math.min(.2,Math.max(0,this.viewDelay.get(e.id)??0)),g);
+      if(e.light)for(const g of this.entities)if(g.role==='goose'&&distance(e,beamPoint(g))<=TUNE.range&&clearPath(e,beamPoint(g),this.arena,0,true)&&(!target||distance(e,beamPoint(g))<distance(e,beamPoint(target))))target=g;
+      const desired=target?angle(e,beamPoint(target)):e.facing,delta=angleDelta(e.aim,desired);e.aim+=Math.max(-TUNE.aimSpeed*dt,Math.min(TUNE.aimSpeed*dt,delta));
       // Resolve defence before any catches: completed freeze always wins a simultaneous touch.
       for(const g of this.entities){if(g.role!=='goose')continue;
-        const hit=e.light&&distance(e,g)<=TUNE.range&&Math.abs(angleDelta(e.aim,angle(e,g)))<=TUNE.halfCone&&clearPath(e,g,this.arena,0,true);
+        const point=beamPoint(g),hit=e.light&&distance(e,point)<=TUNE.range&&Math.abs(angleDelta(e.aim,angle(e,point)))<=TUNE.halfCone&&clearPath(e,point,this.arena,0,true);
         e.dwell[g.id]=hit?(e.dwell[g.id]??0)+dt:0;
-        if(e.dwell[g.id]>=this.dwellNeeded(g)&&g.immuneUntil<=this.now&&g.frozenUntil<=this.now&&e.battery>=TUNE.freezeCost){g.frozenUntil=this.now+TUNE.freeze;g.immuneUntil=g.frozenUntil+TUNE.immunity+Math.max(0,Math.floor(this.elapsed/30)-4)*.5;e.battery-=TUNE.freezeCost;e.score+=25;e.dwell[g.id]=0;this.assistedFreezeUsed=true;this.event('freeze',e,g);}
+        if(e.dwell[g.id]>=this.dwellNeeded(g,e)&&g.immuneUntil<=this.now&&g.frozenUntil<=this.now&&e.battery>=TUNE.freezeCost){g.frozenUntil=this.now+TUNE.freeze;g.immuneUntil=g.frozenUntil+TUNE.immunity+(this.mode==='solo'?Math.max(0,Math.floor(this.elapsed/30)-4)*.5:0);e.battery-=TUNE.freezeCost;e.score+=25;e.dwell[g.id]=0;this.assistedFreezeUsed=true;this.event('freeze',e,g);}
       }
       for(const p of this.pickups)if(p.readyAt<=this.now&&distance(e,p)<.9){e.battery=Math.min(100,e.battery+50);e.score+=10;p.readyAt=this.now+8;this.event('pickup',e);const pads=[...this.arena.pads].sort((a,b)=>distance(b,e)-distance(a,e));p.x=pads[0].x;p.z=pads[0].z;}
     }
+    for(const lamp of this.lamps){
+      if(lamp.readyAt>0&&lamp.readyAt<=this.now){lamp.readyAt=0;lamp.remaining=5;}
+      const occupant=this.entities.find(k=>k.role==='kid'&&distance(k,lamp)<3&&clearPath(k,lamp,this.arena,0,true));
+      lamp.active=!!occupant&&lamp.readyAt<=this.now&&lamp.remaining>0;
+      if(lamp.active){lamp.remaining=Math.max(0,lamp.remaining-dt);
+        for(const g of this.entities)if(g.role==='goose'&&distance(g,lamp)<3&&clearPath(lamp,g,this.arena,0,true)&&g.immuneUntil<=this.now&&g.frozenUntil<=this.now){g.frozenUntil=this.now+TUNE.freeze;g.immuneUntil=g.frozenUntil+TUNE.immunity;occupant!.score+=25;this.event('freeze',occupant!,g);}
+        if(lamp.remaining<=0){lamp.readyAt=this.now+20;lamp.active=false;}
+      }
+    }
     for(const g of this.entities){if(g.role!=='goose'||g.frozenUntil>this.now||g.safeUntil>this.now)continue;
       const t=this.now-g.lungeAt,lunging=t>=TUNE.windup&&t<TUNE.windup+TUNE.dashTime;
-      for(const k of this.entities){if(k.role!=='kid')continue;const d=distance(g,k);
-        g.touch[k.id]=d<TUNE.catchRadius?(g.touch[k.id]??0)+dt:0;
-        if(g.touch[k.id]>=.1||lunging&&d<TUNE.lungeRadius){
+      for(const k of this.entities){if(k.role!=='kid'||k.safeUntil>this.now)continue;const d=distance(g,k);
+        g.touch[k.id]=d<TUNE.catchRadius?(g.touch[k.id]??0)+1:0;
+        const rewound=this.history.at(k.id,this.now-Math.min(.15,Math.max(0,this.viewDelay.get(g.id)??0)),k);
+        const lungeHit=lunging&&segmentDistance(rewound,before.get(g.id)??g,g)<TUNE.lungeRadius&&clearPath(g,rewound,this.arena,0,true);
+        if(g.touch[k.id]>=2||lungeHit){
           // A beam about to complete in the runner grace window also protects the kid.
-          if(k.light&&k.battery>=TUNE.freezeCost&&(k.dwell[g.id]??0)>=this.dwellNeeded(g)-.05&&g.immuneUntil<=this.now)continue;
-          k.role='goose';k.light=false;k.held=false;k.safeUntil=this.now+1.5;k.frozenUntil=this.now+.6;k.touch={};g.score+=300;g.lungeHit=true;this.firstCatch??=this.elapsed;this.event('catch',g,k);
+          if(k.light&&k.battery>=TUNE.freezeCost&&(k.dwell[g.id]??0)>=this.dwellNeeded(g,k)-.05&&g.immuneUntil<=this.now)continue;
+          k.role='goose';k.light=false;k.held=false;k.safeUntil=this.now+1.5;k.frozenUntil=this.now+.6;k.touch={};g.score+=300;
+          if(this.startingGeese.has(g.id)&&!this.startingBonus.has(g.id)){g.score+=100;this.startingBonus.add(g.id);}
+          g.lungeHit=true;this.lastCatchAt=this.elapsed;this.firstCatch??=this.elapsed;this.event('catch',g,k);
         }
       }
       if(t>=TUNE.windup+TUNE.dashTime&&t<TUNE.windup+TUNE.dashTime+dt&&!g.lungeHit){this.event('miss',g);for(const k of this.entities)if(k.role==='kid'&&distance(g,k)<1.6){k.score+=50;k.battery=Math.min(100,k.battery+10);this.event('near',g,k);}}
     }
     const kids=this.entities.filter(e=>e.role==='kid');
+    if(this.mode==='multi'&&kids.length===1&&!this.lastKid){this.lastKid=kids[0].id;kids[0].battery=100;}
     if(!kids.length||this.mode==='multi'&&this.elapsed>=TUNE.roundSeconds){this.phase='results';for(const e of this.entities)e.score+=kids.length?e.role==='kid'?500:0:e.role==='goose'?250:0;this.event(kids.length?'dawn':'flock',this.entities[0]);}
   }
-  snapshot(code=''):ChaseSnapshot{return {code,now:this.now,elapsed:this.elapsed,mode:this.mode,phase:this.phase,entities:this.entities,pickups:this.pickups,events:this.events,firstCatch:this.firstCatch};}
+  snapshot(code=''):ChaseSnapshot{return {code,now:this.now,elapsed:this.elapsed,mode:this.mode,phase:this.phase,entities:this.entities,pickups:this.pickups,events:this.events,firstCatch:this.firstCatch,lamps:this.lamps,gooseBoost:this.gooseBoost()};}
 }

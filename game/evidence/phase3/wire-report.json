@@ -1,0 +1,44 @@
+[
+  {
+    "humans": 2,
+    "seconds": 75,
+    "frames": 1500,
+    "jsonBytes": 4168695,
+    "wireBytes": 257987,
+    "reduction": 16.16,
+    "wireBytesPerSecond": 3440,
+    "metadataMessages": 1,
+    "eventMessages": 5,
+    "inputBytes": 16,
+    "entityCoreBytes": 8,
+    "entityTimingAndMotionBytes": 19
+  },
+  {
+    "humans": 4,
+    "seconds": 75,
+    "frames": 1500,
+    "jsonBytes": 4377633,
+    "wireBytes": 258122,
+    "reduction": 16.96,
+    "wireBytesPerSecond": 3442,
+    "metadataMessages": 1,
+    "eventMessages": 5,
+    "inputBytes": 16,
+    "entityCoreBytes": 8,
+    "entityTimingAndMotionBytes": 19
+  },
+  {
+    "humans": 6,
+    "seconds": 75,
+    "frames": 1500,
+    "jsonBytes": 5829129,
+    "wireBytes": 359149,
+    "reduction": 16.23,
+    "wireBytesPerSecond": 4789,
+    "metadataMessages": 15,
+    "eventMessages": 17,
+    "inputBytes": 16,
+    "entityCoreBytes": 8,
+    "entityTimingAndMotionBytes": 19
+  }
+]

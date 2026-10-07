@@ -1,0 +1,30 @@
+[
+  {
+    "viewport": {
+      "width": 667,
+      "height": 375
+    },
+    "chasedMs": 3391,
+    "freezeMs": 5118,
+    "retryMs": [
+      1845,
+      1875
+    ],
+    "best": 7.229000091552734,
+    "corrections": 1
+  },
+  {
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "chasedMs": 3294,
+    "freezeMs": 5046,
+    "retryMs": [
+      1816,
+      1815
+    ],
+    "best": 7.2179999351501465,
+    "corrections": 0
+  }
+]

@@ -66,4 +66,14 @@ export interface ChaseSnapshot {
   code:string; now:number; elapsed:number; mode:'solo'|'multi'; phase:'playing'|'results';
   entities:Entity[]; pickups:{x:number;z:number;readyAt:number}[]; events:ChaseEvent[]; firstCatch:number|null;
   solo?:SoloState;
+  multi?:MultiplayerState;
+  lamps?:LampState[];
+  gooseBoost?:number;
+}
+export interface LampState extends Point {remaining:number;readyAt:number;active:boolean}
+export interface MultiplayerState {
+  runId:string; round:number; stage:'joining'|'countdown'|'playing'|'results';
+  deadline:number; serverTime:number; startingGeese:string[]; lastKid:string|null;
+  scores:{id:string;name:string;total:number;round:number;starts:number}[];
+  winner:string|null;nextGeese:string[];
 }

@@ -21,7 +21,7 @@ test('passive catch requires consecutive overlap and conversion has grace',()=>{
   s.step();assert.equal(k.role,'kid');s.step();assert.equal(k.role,'goose');assert.ok(k.safeUntil>s.now);assert.equal(k.light,false);
 });
 test('completed freeze beats catch on same tick',()=>{
-  const s=new ChaseSimulation('multi');const k=s.add('k','Kid',false,'kid',{x:-4,z:6});const g=s.add('g','Goose',false,'goose',{x:-3.2,z:6});s.add('o','Other');g.safeUntil=0;k.held=true;k.aim=Math.PI/2;k.dwell.g=.2;g.touch.k=.05;
+  const s=new ChaseSimulation('multi');const k=s.add('k','Kid',false,'kid',{x:-4,z:6});const g=s.add('g','Goose',false,'goose',{x:-3.2,z:6});s.add('o','Other');g.safeUntil=0;k.held=true;k.aim=Math.PI/2;k.dwell.g=.2;g.touch.k=1; // One prior overlapping tick: this tick would catch without defence.
   s.step();assert.equal(k.role,'kid');assert.ok(g.frozenUntil>s.now);
 });
 test('lunge has windup, direction lock and cooldown',()=>{
