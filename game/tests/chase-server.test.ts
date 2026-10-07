@@ -18,3 +18,19 @@ test('room cap and origin enforcement apply to production socket',async()=>{
     const rejected=new WebSocket(url,{origin:'https://other.example'});await new Promise<void>((r,j)=>{rejected.on('error',()=>r());rejected.on('open',()=>j(new Error('Cross-origin accepted')));});
   }finally{await g.close();}
 });
+test('automatic retry cannot crash a room whose final seat has expired',async()=>{
+  const g=await fixture();try{
+    const a=await client(g.url);a.send({type:'create'});const seat=await a.wait('seat'),room=g.rooms.get(seat.code)!;
+    room.seats.clear();room.sim.phase='results';room.resultWall=Date.now()-4100;
+    await new Promise(r=>setTimeout(r,150));
+    const b=await client(g.url);b.send({type:'create'});await b.wait('seat');assert.equal(g.rooms.size,2);assert.equal(room.sim.entities.length,1);
+  }finally{await g.close();}
+});
+test('an action arriving before the catch is drawn queues retry and restarts in under2.5 seconds',async()=>{
+  const g=await fixture();try{
+    const a=await client(g.url);a.send({type:'create'});const seat=await a.wait('seat'),room=g.rooms.get(seat.code)!,oldRun=room.solo!.runId;
+    room.sim.phase='results';const started=Date.now(),e=room.sim.entities[0];a.send({type:'input',seq:1,x:e.x,z:e.z,facing:0,held:true,lunge:true});await a.wait('retryQueued');
+    while((await a.wait('snapshot')).snapshot.solo.runId===oldRun){}
+    assert.ok(Date.now()-started<2500);assert.equal(room.sim.phase,'playing');assert.equal(room.sim.entities[0].role,'kid');
+  }finally{await g.close();}
+});

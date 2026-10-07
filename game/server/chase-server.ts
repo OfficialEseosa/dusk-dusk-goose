@@ -5,9 +5,10 @@ import {resolve,sep,extname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {WebSocket,WebSocketServer} from 'ws';
 import {ChaseSimulation} from './chase-simulation.js';
-import {clearPath,distance,type Entity} from '../shared/chase.js';
-interface Seat {id:string;name:string;token:string;socket?:WebSocket;lastInput:number;disconnected?:number;credit:number;moveAt:number;seq:number}
-interface Room {code:string;sim:ChaseSimulation;seats:Map<string,Seat>;emptyAt?:number;resultsAt?:number}
+import {SoloDirector} from './chase-solo.js';
+import {TUNE,clearPath,distance,tonightSeed} from '../shared/chase.js';
+interface Seat {id:string;name:string;token:string;socket?:WebSocket;lastInput:number;disconnected?:number;credit:number;moveAt:number;seq:number;beginner:boolean}
+interface Room {code:string;sim:ChaseSimulation;seats:Map<string,Seat>;emptyAt?:number;resultsAt?:number;solo?:SoloDirector;retryRequested?:boolean;resultWall?:number}
 export function createChaseServer(options:{clientDir?:string;maxRooms?:number}={}){
   const bootId=randomUUID(),rooms=new Map<string,Room>(),sessions=new Map<WebSocket,{room?:Room;seat?:Seat;window:number;count:number;alive:boolean}>();
   const root=resolve(options.clientDir??fileURLToPath(new URL('../../client',import.meta.url)));
@@ -24,7 +25,14 @@ export function createChaseServer(options:{clientDir?:string;maxRooms?:number}={
   server.on('upgrade',(req,socket,head)=>{let valid=false;try{valid=!req.headers.origin||new URL(req.headers.origin).host===req.headers.host;}catch{}
     if(!valid||req.url!=='/ws'){socket.destroy();return;}wss.handleUpgrade(req,socket,head,ws=>wss.emit('connection',ws));});
   function send(ws:WebSocket,msg:unknown){if(ws.readyState===WebSocket.OPEN&&ws.bufferedAmount<64000)ws.send(JSON.stringify(msg));}
-  function start(room:Room){room.sim=new ChaseSimulation('solo',randomBytes(4).readUInt32LE());for(const seat of room.seats.values())room.sim.add(seat.id,seat.name);room.sim.add('g0','Chaser',true,'goose',{x:7,z:6});room.resultsAt=undefined;}
+  function start(room:Room){
+    if(!room.seats.size)return;
+    const day=tonightSeed();room.sim=new ChaseSimulation('solo',day);
+    for(const seat of room.seats.values()){room.sim.add(seat.id,seat.name);seat.credit=.3;seat.moveAt=Date.now();}
+    const first=room.seats.values().next().value as Seat;room.solo=new SoloDirector(day,first.id,first.beginner);room.solo.prepare(room.sim);first.beginner=false;
+    room.resultsAt=undefined;room.resultWall=undefined;room.retryRequested=false;
+  }
+  function snapshot(room:Room){return {...room.sim.snapshot(room.code),solo:room.solo?.snapshot()};}
   wss.on('connection',ws=>{
     const session={window:Date.now(),count:0,alive:true} as {room?:Room;seat?:Seat;window:number;count:number;alive:boolean};sessions.set(ws,session);
     send(ws,{type:'hello',bootId});ws.on('pong',()=>session.alive=true);
@@ -48,16 +56,18 @@ export function createChaseServer(options:{clientDir?:string;maxRooms?:number}={
           }else room=typeof m.code==='string'?rooms.get(m.code.toUpperCase()):undefined;
           if(!room){send(ws,{type:'error',message:'That room is gone. Check the code or start a new night.'});return;}
           if(room.seats.size>=6){send(ws,{type:'error',message:'Six friends already fill this park.'});return;}
-          seat={id:randomUUID(),name:typeof m.name==='string'?m.name.trim().slice(0,16)||'Kid':'Kid',token:randomBytes(24).toString('hex'),lastInput:now,credit:.3,moveAt:now,seq:-1};room.seats.set(seat.id,seat);
+          seat={id:randomUUID(),name:typeof m.name==='string'?m.name.trim().slice(0,16)||'Kid':'Kid',token:randomBytes(24).toString('hex'),lastInput:now,credit:.3,moveAt:now,seq:-1,beginner:m.beginner!==false};room.seats.set(seat.id,seat);
           if(room.seats.size===1)start(room);else room.sim.add(seat.id,seat.name,false,'goose',{x:10,z:6});
         }
         seat.socket=ws;seat.disconnected=undefined;seat.lastInput=now;room.emptyAt=undefined;session.room=room;session.seat=seat;
-        send(ws,{type:'seat',id:seat.id,token:seat.token,code:room.code,bootId,nextSeq:seat.seq+1,snapshot:room.sim.snapshot(room.code)});return;
+        send(ws,{type:'seat',id:seat.id,token:seat.token,code:room.code,bootId,nextSeq:seat.seq+1,snapshot:snapshot(room)});return;
       }
       const room=session.room,seat=session.seat;if(!room||!seat||seat.socket!==ws)return;const e=room.sim.entities.find(p=>p.id===seat.id)!;
-      if(m.type==='retry'&&room.sim.phase==='results'&&room.sim.now-(room.resultsAt??room.sim.now)>=1.8){start(room);return;}
+      if(m.type==='retry'&&room.sim.phase==='results'){room.retryRequested=true;send(ws,{type:'retryQueued'});return;}
       if(m.type==='input'){
         if(!Number.isSafeInteger(m.seq)||m.seq<=seat.seq||!Number.isFinite(m.x)||!Number.isFinite(m.z)||!Number.isFinite(m.facing)||typeof m.held!=='boolean')return;
+        // The action may arrive before the client has drawn its catch. Preserve that tap as retry.
+        if(room.sim.phase==='results'&&m.lunge===true){room.retryRequested=true;send(ws,{type:'retryQueued'});}
         seat.seq=m.seq;seat.lastInput=now;e.bot=false;seat.credit=Math.min(.6,seat.credit+room.sim.speed(e)*Math.min(1,(now-seat.moveAt)/1000));seat.moveAt=now;
         const d=distance(e,m),t=room.sim.now-e.lungeAt,committed=e.role==='goose'&&t<.84;
         if(e.frozenUntil<=room.sim.now&&!committed&&d<=seat.credit+.001&&clearPath(e,m,room.sim.arena)){e.vx=(m.x-e.x)*20;e.vz=(m.z-e.z)*20;e.x=m.x;e.z=m.z;e.facing=m.facing;seat.credit=Math.max(0,seat.credit-d);}
@@ -73,12 +83,12 @@ export function createChaseServer(options:{clientDir?:string;maxRooms?:number}={
         if(seat.disconnected&&now-seat.disconnected>20000)room.seats.delete(id);}
       if(![...room.seats.values()].some(s=>s.socket)){room.emptyAt??=now;if(now-room.emptyAt>60000){rooms.delete(code);continue;}}
       room.sim.step(dt);
+      room.solo?.update(room.sim,dt);
       if(room.sim.phase==='results'){room.resultsAt??=room.sim.now;/* wall clock keeps retry independent of paused simulation */
-        if(!('resultWall' in room))(room as Room&{resultWall:number}).resultWall=now;
-        const end=(room as Room&{resultWall:number}).resultWall;
-        if(now-end>4000){delete (room as Room&{resultWall?:number}).resultWall;start(room);}else room.sim.now+=dt;
+        room.resultWall??=now;
+        if(room.seats.size&&(now-room.resultWall>TUNE.soloAutoRetry*1000||room.retryRequested&&now-room.resultWall>=TUNE.soloRetryReady*1000))start(room);else room.sim.now+=dt;
       }
-      for(const seat of room.seats.values())if(seat.socket)send(seat.socket,{type:'snapshot',snapshot:room.sim.snapshot(code)});
+      for(const seat of room.seats.values())if(seat.socket)send(seat.socket,{type:'snapshot',snapshot:snapshot(room)});
     }
   },50);timer.unref();
   const heartbeat=setInterval(()=>{for(const [ws,s] of sessions){if(!s.alive){ws.terminate();continue;}s.alive=false;ws.ping();}},5000);heartbeat.unref();

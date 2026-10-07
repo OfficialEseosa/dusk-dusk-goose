@@ -5,7 +5,10 @@ export const TUNE = {
   recharge: 4, rechargeDelay: 2, minimumBattery: 10,
   windup: .12, dashTime: .22, dashDistance: 3.2, recovery: .5, cooldown: 2.5,
   catchRadius: .85, lungeRadius: 1, roundSeconds: 75,
+  soloFirstSpawn: 1.5, soloHour: 30, soloRetryReady: 1.8, soloAutoRetry: 4,
 } as const;
+export const SOLO_SPAWNS = [1.5,10,20,32,45,60,75,90,105,120] as const;
+export function tonightSeed(time=Date.now()){return Number(new Date(time).toISOString().slice(0,10).replaceAll('-',''));}
 export type Point = { x: number; z: number };
 export type Solid = { x: number; z: number; w: number; d: number; blocksLight: boolean };
 export const PARK = {
@@ -54,8 +57,13 @@ export interface Entity extends Point {
   safeUntil:number; score:number; vx:number; vz:number; lungeAt:number; lungeAngle:number;
   lungeHit:boolean; dwell:Record<string,number>; touch:Record<string,number>;
 }
-export type ChaseEvent = {id:number; at:number; type:'freeze'|'thaw'|'windup'|'miss'|'near'|'catch'|'pickup'|'dawn'|'flock'|'spawn'; actor:string; target?:string; x:number; z:number};
+export type ChaseEvent = {id:number; at:number; type:'freeze'|'thaw'|'windup'|'miss'|'near'|'catch'|'pickup'|'dawn'|'flock'|'spawn'|'hour'; actor:string; target?:string; x:number; z:number};
+export interface SoloState {
+  runId:string; day:number; hour:number; flock:number; nextSpawnAt:number|null; intensity:number;
+  resultAt:number|null; retryReadyAt:number|null; autoRetryAt:number|null;
+}
 export interface ChaseSnapshot {
   code:string; now:number; elapsed:number; mode:'solo'|'multi'; phase:'playing'|'results';
   entities:Entity[]; pickups:{x:number;z:number;readyAt:number}[]; events:ChaseEvent[]; firstCatch:number|null;
+  solo?:SoloState;
 }

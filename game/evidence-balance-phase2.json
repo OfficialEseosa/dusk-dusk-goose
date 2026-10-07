@@ -1,0 +1,56 @@
+{
+  "seedRange": [
+    1,
+    100
+  ],
+  "botSpeed": 5.25,
+  "targets": {
+    "kidWinPercent": "35–45",
+    "medianFirstCatch": "10–15s",
+    "medianSolo": "35–50s",
+    "zeroCatchPercent": "<5"
+  },
+  "results": [
+    {
+      "humans": 2,
+      "rounds": 100,
+      "kidWinPercent": 0,
+      "medianFirstCatch": 7.549999999999981,
+      "medianRound": 18.800000000000132,
+      "zeroCatchPercent": 0
+    },
+    {
+      "humans": 3,
+      "rounds": 100,
+      "kidWinPercent": 0,
+      "medianFirstCatch": 7.549999999999981,
+      "medianRound": 18.800000000000132,
+      "zeroCatchPercent": 0
+    },
+    {
+      "humans": 4,
+      "rounds": 100,
+      "kidWinPercent": 0,
+      "medianFirstCatch": 7.549999999999981,
+      "medianRound": 18.800000000000132,
+      "zeroCatchPercent": 0
+    },
+    {
+      "humans": 5,
+      "rounds": 100,
+      "kidWinPercent": 0,
+      "medianFirstCatch": 7.599999999999981,
+      "medianRound": 11.150000000000023,
+      "zeroCatchPercent": 0
+    },
+    {
+      "humans": 6,
+      "rounds": 100,
+      "kidWinPercent": 0,
+      "medianFirstCatch": 7.549999999999981,
+      "medianRound": 7.649999999999981,
+      "zeroCatchPercent": 0
+    }
+  ],
+  "medianSolo": 14.500000000000071
+}
