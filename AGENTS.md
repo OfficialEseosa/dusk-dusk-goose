@@ -1,91 +1,68 @@
 # Project instructions
 
-Source: section 6 of audits/GAME-BRIEF-OPTION2-2026-10-03.md, amended by the user's October 3 Railway hosting instruction. The direction change supersedes GAME_SPEC.md, which is retired. The old story game and its server are preserved in Git, not the base for the replacement.
+PROJECT: Dusk Dusk Goose. A fast infection-tag party game in the dark for 1 to 6
+players on their own phones or laptops, for the Handshake x OpenAI "Create a
+Multiplayer Game" challenge (entries close October 30, 2026). Hosted on Railway.
 
-The introductory player count is normalized to 1 to 6. Capsule secrecy applies to seekers; a human hider necessarily knows the spot they selected. Hosting rules incorporate the user's Railway override. Other gameplay and quality rules are retained.
+WHAT IT IS: Everyone starts as a kid with a flashlight. A goose hunts in the dark.
+A kid who is touched becomes a goose and keeps playing. A flashlight beam freezes
+a goose briefly; batteries are small. Kids still standing at dawn win. Alone, the
+player survives as long as they can against a growing flock of computer geese.
 
-PROJECT: Last Night on Maple Street. A replayable hide-and-seek party game in the
-dark for 1 to 6 players on their own phones or laptops, for the Handshake x OpenAI
-"Create a Multiplayer Game" challenge. Hosted on Railway.
-
-WHAT IT IS: The last night of summer, 2002. The power is out on Maple Street. Each
-round, one player secretly buries a time capsule somewhere on the dark street. The
-others have about two minutes to find it using flashlights and walkie-talkies.
-Footprints and disturbed hiding spots can only be seen inside a flashlight beam.
-The hider stays in play as a shadowy figure laying false trails and must radio one
-true clue every 30 seconds. Roles rotate. Highest score wins.
+The full design is in research/00-START-HERE.md. That file wins over the other
+research files. The research folder is deliberately not in git: read it, never
+add it to git, never edit it.
 
 QUALITY BAR: A finished, shipped game that looks and feels like a small commercial
-mobile game. Not a prototype.
+mobile game. Fun and looks are requirements. A feature that works but feels flat
+is not done.
 
 ALWAYS TRUE:
-- Players join with a room code. No login, no install. 1 to 6 players.
-- There is no separate single-player mode. The same room and the same flow work
-  with one person: they can start a night alone, and the game itself plays the
-  hider every round (buries the capsule, lays the trails, radios true clues). A
-  lone player always seeks. If a friend joins between rounds, the next round has
-  a human hider.
-- Devices move their own characters and report positions/facing. The server
-  validates speed and boundaries, without server movement simulation, prediction
-  or correction. It decides searches, burial, ranges, timers, clues and scores.
-  A seeker's device never learns where the capsule is
-  until it is found or the round ends.
-- One always-on Node server, exactly one instance, owns every room in memory.
-  No external store or database. The same server serves the game page and the
-  live WebSocket connection from one public address.
-- Each device keeps one live WebSocket and reconnects automatically after a
-  connection loss, keeping its seat while that room still exists.
-- A server restart or redeploy loses all rooms. Return affected players to the
-  title with a clear, friendly message; never leave them on a dead screen.
-- Production starts compiled JavaScript without development-only tools, reads
-  its port from the host, and exposes no development or debugging endpoints.
-- Clean up abandoned rooms and expired seats; cap room count and seats per room,
-  and bound stored histories so memory cannot grow indefinitely.
-- Never enable extra replicas, cluster workers, sleeping, or overlapping active
-  game servers. Use stop-first deployment when necessary to preserve one instance.
-- Do not deploy while matches are in progress. Freeze deployments during judging.
-- Real 3D, low-poly, built from the asset kits I supply. Properly dark after the
-  power cut. Flashlights are real lights.
-- Landscape. The game fills the screen. The page never scrolls or zooms.
-- Phone: move stick on the left; on the right an action button that appears only
-  near something usable, and a radio button that is always available.
-- Laptop: keyboard to move, one key to act, one for the radio.
-- Text at least 16 pixels on a small phone. Touch targets at least 44 pixels.
-- One player's hidden tab, locked phone, or slow connection never freezes anyone
-  else. If someone leaves, the game carries on without them.
-- Nobody ever looks at a waiting screen with nothing to do.
-- Sound starts on the first tap. Nothing essential depends on sound, colour alone,
+- Tapping Play puts the player in the action within seconds. Nobody ever waits on
+  a screen with nothing to do.
+- Players join with a room code. No login, no install. 1 to 6 players. The same
+  room and flow work with one person; computer players fill empty seats.
+- Two controls: a move stick on the left and one action button on the right.
+  Laptop: keyboard to move and one key for the action.
+- Devices move their own characters and report positions. The server validates
+  movement and decides every catch, freeze, pickup, timer and score. Computer
+  players are simulated on the server.
+- One always-on Node server, exactly one instance, owns every room in memory. No
+  database. The same server serves the page and the WebSocket from one address.
+- A dropped connection reconnects by itself and the player keeps their seat. A
+  valid private credential takes its seat over immediately. A name alone never
+  recovers a seat. A server restart sends players to the title with a friendly
+  message.
+- One player's hidden tab, locked phone or slow connection never freezes anyone
+  else. If someone leaves, the game carries on.
+- Real 3D. The scene is readable and colourful at night; darkness hides the
+  geese, not the game. Characters are large and expressive.
+- Every event a player causes or suffers has a visible and audible response.
+- Landscape. The game fills the screen. The page never scrolls or zooms. Text at
+  least 16 pixels and touch targets at least 44 pixels on a small phone.
+- On-screen controls are created once and updated, never rebuilt when messages
+  arrive.
+- Sound starts on the first tap. Nothing essential depends on sound, colour alone
   or vibration.
+- Production runs compiled JavaScript, reads its port from the host, and exposes
+  no development or debugging endpoints.
 - The words prototype, graybox, placeholder and temporary never appear on screen.
+- Use only assets already in the repository folder. If something is missing,
+  build it from simple shapes in the same style, note it in PLAN.md, and continue.
 
-DONE MEANS: before you tell me something is finished, open the game yourself at a
-small landscape phone size and at laptop size, with at least two separate browser
-sessions in the same room, and look at it. Confirm nothing is cut off, nothing
-scrolls, every control is reachable with thumbs, and both sessions agree on what
-is happening. Tell me exactly what you checked and what you could not check.
+DONE MEANS: you ran it and looked at it. Open the game at a small landscape phone
+size (667 by 375) and at laptop size, with at least two separate browser sessions
+where multiplayer is involved. Save screenshots. Judge them as a stranger would.
+Record in PLAN.md exactly what you checked, the commands you ran and their
+results, and what you could not check. Never claim a check passed unless it ran.
 
-HOW WE WORK: one change per request. Before changing anything, tell me your plan
-in two or three sentences. If something I ask for is not possible, say so plainly
-and offer the nearest thing that is. Do not add features I did not ask for.
+HOW WE WORK: PLAN.md at the repository root is the living plan: progress
+checklist, decision log, surprises, and results. Keep it current. Commit and push
+after each phase. Work through the phases without asking for approval between
+them. Stop and ask only before something irreversible outside this repository
+(deploying, purchasing, deleting remote data). If something is not possible, say
+so in PLAN.md, choose the nearest workable option, and carry on. Do not deploy.
 
-APPROVED AMENDMENTS:
-- Mood A is approved. Use its raised camera, houses above sidewalk/road, dark
-  foliage framing, deep blue moonlight and warm cone-shaped beams. Compare a real
-  screenshot against Mood A and report shortcomings at the end of step 2.
-- Send footprints/disturbed marks to seekers without false-trail labels. Each
-  device shows them only inside beams. No server beam/wall visibility filtering.
-- Keep per-tab seats. Offer a disconnected same-browser seat in a new tab using
-  its private credential; never recover by name. A valid private credential
-  takes over a stale/live seat immediately; the displaced tab clears auto-resume.
-- One street and one shared preparation room first. Other layouts after step 6.
-- Start burial trail fading at seeking. Wrong search cooldown starts at 5 seconds.
-- Replacement character downloads must be listed before use. Wait for the user
-  to supply them, preserve source filenames and report mismatches.
-
-CURRENT AUTHORIZATION: Step 7 is independently verified. Build only the finishing
-pass: a compact phone radio dock, optional fullscreen with a dismissible home
-screen tip where unsupported, a portrait play hint, a title description, brief
-round role cards and first-action attention. Preserve gameplay and persistent
-controls. Verify clean Railway install/build/start, write DEPLOY.md and
-FINISHING_VERIFICATION.md, save phone evidence, run server tests ten times and all
-browser tests, commit and stop. No deployment, new art, layouts or scoring changes.
+ON THIS MACHINE: Windows 11, PowerShell, Node 22. Browser tests need Chromium
+started with --use-angle=d3d11 or 3D renders in software at a few frames a
+second. The repository is OfficialEseosa/dusk-dusk-goose, branch main.
