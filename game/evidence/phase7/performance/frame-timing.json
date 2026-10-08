@@ -1,0 +1,56 @@
+[
+  {
+    "frames": 1198,
+    "averageMs": 16.70776293823038,
+    "fps": 59.85241732822407,
+    "p99Ms": 16.80000000000109,
+    "worstMs": 50,
+    "averageCallbackMs": 1.1503338898193536,
+    "backbuffer": {
+      "width": 667,
+      "height": 375
+    },
+    "viewport": {
+      "width": 667,
+      "height": 375
+    },
+    "dpr": 1,
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "size": {
+      "width": 667,
+      "height": 375
+    },
+    "corrections": 0,
+    "errors": [],
+    "physicalPhone": false,
+    "debugger": false,
+    "gpuReadback": false
+  },
+  {
+    "frames": 1197,
+    "averageMs": 16.721720969089393,
+    "fps": 59.8024570466479,
+    "p99Ms": 16.80000000000109,
+    "worstMs": 33.39999999999782,
+    "averageCallbackMs": 1.3025898078494256,
+    "backbuffer": {
+      "width": 1366,
+      "height": 768
+    },
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "dpr": 1,
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "size": {
+      "width": 1366,
+      "height": 768
+    },
+    "corrections": 0,
+    "errors": [],
+    "physicalPhone": false,
+    "debugger": false,
+    "gpuReadback": false
+  }
+]

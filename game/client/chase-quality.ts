@@ -12,7 +12,8 @@ export class ChaseQuality {
     // Bound a single stall, but retain active slow frames: dropping them can
     // prevent a struggling GPU from ever accumulating a quality sample.
     this.sum+=Math.min(elapsed,250);this.frames++;
-    if(elapsed<13)this.fastSince||=now;else this.fastSince=0;
+    // RAF on a healthy 60Hz screen is ~16.7ms, even with spare GPU capacity.
+    if(elapsed<18)this.fastSince||=now;else this.fastSince=0;
     if(this.frames<(title&&!this.titleChecked?120:60)&&this.sum<2000)return false;
     const average=this.sum/this.frames;this.sum=0;this.frames=0;
     const before=this.ratio;
@@ -21,7 +22,7 @@ export class ChaseQuality {
       const cap=Math.min(this.dpr,caps[this.tier]),floor=cap*.6;
       if(average>22){this.ratio=Math.max(floor,this.ratio*.85);this.cooldown=now+2000;
         if(this.ratio<=floor+.001&&++this.floors>=2&&this.tier!=='low'){this.tier='low';this.ratio=Math.min(this.ratio,this.dpr);this.floors=0;}}
-      else if(average<13&&this.fastSince&&now-this.fastSince>=4000){this.ratio=Math.min(cap,this.ratio*1.1);this.cooldown=now+2000;}
+      else if(average<18&&this.fastSince&&now-this.fastSince>=4000){this.ratio=Math.min(cap,this.ratio*1.1);this.cooldown=now+2000;}
     }
     return Math.abs(before-this.ratio)>.001;
   }

@@ -78,7 +78,9 @@ function apply(s:ChaseSnapshot){const was=snapshot;snapshot=s;canvas.setAttribut
     el('result-title').textContent=s.multi.winner?`${s.multi.scores.find(p=>p.id===s.multi!.winner)?.name??'Kid'} wins the night!`:s.entities.some(p=>p.role==='kid')?'Dawn! Kids made it!':'The flock got everyone!';
     el('survived').textContent=`Round ${s.multi.round} / 3 · +${Math.floor(me.score)} points`;
     el('reward').textContent=s.multi.nextGeese.length?`Next goose: ${s.multi.nextGeese.map(id=>s.multi!.scores.find(p=>p.id===id)?.name??'Kid').join(' & ')}`:'';el('result-invite').textContent=`Invite friends: ${s.code}`;
-    el('scores').textContent=[...s.multi.scores].sort((a,b)=>b.total-a.total).map(p=>`${p.name}: ${Math.floor(p.total)}`).join(' · ');
+    // During results, the frame loop owns the count-up. A snapshot must not
+    // flash the final total over that animation every50ms.
+    if(s.multi.stage!=='results')el('scores').textContent=[...s.multi.scores].sort((a,b)=>b.total-a.total).map(p=>`${p.name}: ${Math.floor(p.total)}`).join(' · ');
     el('retry-hint').textContent=`Next chase in ${Math.max(0,Math.ceil((s.multi.deadline-s.multi.serverTime)/1000))} · everyone taps to skip`;
   }
   for(const event of s.events){if(event.id<=lastEventId)continue;lastEventId=event.id;

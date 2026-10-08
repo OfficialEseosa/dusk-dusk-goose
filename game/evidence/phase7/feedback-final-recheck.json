@@ -1,0 +1,23 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T02:22:42.435Z",
+    "duration": 27784.392,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "rare feedback reaches two independent clients and stays inside phone controls",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 23671,
+          "errors": []
+        }
+      ]
+    }
+  ]
+}

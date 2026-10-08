@@ -8,4 +8,4 @@ Move with WASD/arrows or the left thumb stick. Hold Space/J or the right action 
 
 `npm test` runs current and retained server tests. `npm run test:e2e` builds and runs current browser tests, then the original hide-and-seek checks in an isolated historical fixture. The retired story project is preserved under `../legacy/story`; root scripts include its tests too. Historical documentation and unused assets are in `../legacy/` and do not ship in the active page.
 
-See [SOUND_CHOICES.md](SOUND_CHOICES.md), [FEEDBACK_VERIFICATION.md](FEEDBACK_VERIFICATION.md), [NETWORK.md](NETWORK.md), and the repository's `PLAN.md` for evidence and known limits. Selected assets and licences are documented in `public/assets/chase/MANIFEST.md`.
+See [FINAL_VERIFICATION.md](FINAL_VERIFICATION.md) for final checks, screenshots and quality gaps, [SOUND_CHOICES.md](SOUND_CHOICES.md), [FEEDBACK_VERIFICATION.md](FEEDBACK_VERIFICATION.md), [NETWORK.md](NETWORK.md), and the repository's `PLAN.md` for detailed evidence. Selected assets and licences are documented in `public/assets/chase/MANIFEST.md`.

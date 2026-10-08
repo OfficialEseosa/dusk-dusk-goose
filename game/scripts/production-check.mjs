@@ -4,6 +4,7 @@ import {resolve} from 'node:path';
 import {readFile,access,mkdir,writeFile} from 'node:fs/promises';
 import WebSocket from 'ws';
 const directory=resolve(process.argv[2]??'.production-check-20261007'),port=5183;
+const evidence=process.env.DDG_PRODUCTION_EVIDENCE_DIR??'evidence/phase6';
 const pkg=JSON.parse(await readFile(resolve(directory,'package.json'),'utf8'));
 if(pkg.scripts.start!=='node dist/server/server/chase-server.js')throw new Error('Unexpected production command');
 let child;
@@ -17,5 +18,5 @@ try{
   const seat=await message({type:'create',name:'Production check'},'seat');if(!seat.snapshot.solo)throw new Error('Solo did not start');
   await stop();await start();const ended=await message({type:'resume',code:seat.code,token:seat.token,bootId:seat.bootId},'ended');if(!ended.message.includes('night ended'))throw new Error('Restart message missing');
   let developmentToolsPresent=false;try{await access(resolve(directory,'node_modules/tsx'));developmentToolsPresent=true;}catch{}if(developmentToolsPresent)throw new Error('Development loader survived prune');
-  await mkdir('evidence/phase6',{recursive:true});await writeFile('evidence/phase6/production-check.json',JSON.stringify({directory,node:process.version,startCommand:pkg.scripts.start,compiledStart:true,portFromEnvironment:true,page200:true,webSocketSolo:true,forbidden,restartReturnsFriendlyEnded:true,developmentToolsPresent},null,2));console.log('Production HTTP, WebSocket, restart and pruned-runtime checks passed.');
+  await mkdir(evidence,{recursive:true});await writeFile(`${evidence}/production-check.json`,JSON.stringify({directory,node:process.version,startCommand:pkg.scripts.start,compiledStart:true,portFromEnvironment:true,page200:true,webSocketSolo:true,forbidden,restartReturnsFriendlyEnded:true,developmentToolsPresent},null,2));console.log('Production HTTP, WebSocket, restart and pruned-runtime checks passed.');
 }finally{await stop();}

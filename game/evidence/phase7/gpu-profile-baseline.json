@@ -1,0 +1,102 @@
+[
+  {
+    "viewport": {
+      "width": 667,
+      "height": 375
+    },
+    "supported": true,
+    "disjoint": 0,
+    "gpu": {
+      "count": 1069,
+      "meanMs": 1.7012443358278755,
+      "medianMs": 0.842656,
+      "p99Ms": 6.209479,
+      "worstMs": 154.676197
+    },
+    "frames": {
+      "count": 1068,
+      "meanMs": 18.58548689138577,
+      "medianMs": 16.69999999999891,
+      "p99Ms": 50,
+      "worstMs": 533.2999999999993
+    },
+    "callback": {
+      "count": 1068,
+      "meanMs": 1.2631086146786865,
+      "medianMs": 0.9000000059604645,
+      "p99Ms": 5.9000000059604645,
+      "worstMs": 33.400000005960464
+    },
+    "first5s": {
+      "count": 300,
+      "meanMs": 16.72166666666667,
+      "medianMs": 16.69999999999891,
+      "p99Ms": 16.80000000000109,
+      "worstMs": 33.30000000000109
+    },
+    "after5s": {
+      "count": 768,
+      "meanMs": 19.313541666666666,
+      "medianMs": 16.69999999999891,
+      "p99Ms": 133.29999999999927,
+      "worstMs": 533.2999999999993
+    },
+    "renderer": "ANGLE (Intel, Intel(R) Arc(TM) Graphics (0x00007D55) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "webglError": 0,
+    "errors": [],
+    "physicalPhone": false,
+    "debugger": false,
+    "pixelReadback": false,
+    "nonblockingGpuQueries": true
+  },
+  {
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "supported": true,
+    "disjoint": 0,
+    "gpu": {
+      "count": 276,
+      "meanMs": 5.260615815217391,
+      "medianMs": 2.002343,
+      "p99Ms": 142.116302,
+      "worstMs": 232.903697
+    },
+    "frames": {
+      "count": 275,
+      "meanMs": 71.81563636363636,
+      "medianMs": 16.700000000000728,
+      "p99Ms": 716.6000000000022,
+      "worstMs": 1083.2999999999993
+    },
+    "callback": {
+      "count": 275,
+      "meanMs": 1.8080000004985115,
+      "medianMs": 1,
+      "p99Ms": 15.699999988079071,
+      "worstMs": 38.19999998807907
+    },
+    "first5s": {
+      "count": 117,
+      "meanMs": 42.73418803418804,
+      "medianMs": 16.699999999999818,
+      "p99Ms": 466.6999999999989,
+      "worstMs": 516.6000000000004
+    },
+    "after5s": {
+      "count": 158,
+      "meanMs": 93.35063291139241,
+      "medianMs": 16.700000000000728,
+      "p99Ms": 783.2999999999993,
+      "worstMs": 1083.2999999999993
+    },
+    "renderer": "ANGLE (Intel, Intel(R) Arc(TM) Graphics (0x00007D55) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "webglError": 0,
+    "errors": [],
+    "physicalPhone": false,
+    "debugger": false,
+    "pixelReadback": false,
+    "nonblockingGpuQueries": true
+  }
+]

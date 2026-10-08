@@ -1,0 +1,11 @@
+{
+  "delayEachWay": 200,
+  "freezeMs": 1891,
+  "catchMs": 890,
+  "corrections": [
+    0,
+    17
+  ],
+  "convertedMovement": 1.63,
+  "errors": []
+}

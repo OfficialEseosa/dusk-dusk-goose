@@ -141,7 +141,6 @@ export class Street {
     this.buildPreparation();
     this.trailView = new TrailView(this.scene);
     this.ready = true;
-    this.renderer.domElement.dataset.ready = "true";
     const current = this.snapshot ?? snapshot;
     const offset = this.serverOffset;
     this.update(current);
@@ -587,6 +586,8 @@ export class Street {
       this.renderer.domElement.dataset.playerposes = poses;
       this.renderer.domElement.dataset.poses = JSON.stringify(Object.entries(observed).map(([id, pose]) => ({ id, ...pose })));
       this.renderer.domElement.dataset.localId = this.localId;
+      // Readiness includes the first rendered local pose, not just loaded GLBs.
+      if(observed[this.localId])this.renderer.domElement.dataset.ready="true";
       this.lastObservation = now;
     }
     if (now - this.lastMetrics > 500) {

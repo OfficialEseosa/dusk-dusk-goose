@@ -1,6 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {watchChase} from './chase-browser-helpers';
+const evidence=process.env.DDG_PERFORMANCE_EVIDENCE_DIR??'evidence/phase6';
 
 test('records live frame timing without debugger or GPU readback',async({browser})=>{
   test.setTimeout(90000);const reports=[];
@@ -23,5 +24,5 @@ test('records live frame timing without debugger or GPU readback',async({browser
       reports.push({...metrics,renderer,size,corrections:observed.corrections,errors:observed.errors,physicalPhone:false,debugger:false,gpuReadback:false});
     }finally{await context.close();}
   }
-  await mkdir('evidence/phase6',{recursive:true});await writeFile('evidence/phase6/frame-timing.json',JSON.stringify(reports,null,2));
+  await mkdir(evidence,{recursive:true});await writeFile(`${evidence}/frame-timing.json`,JSON.stringify(reports,null,2));
 });

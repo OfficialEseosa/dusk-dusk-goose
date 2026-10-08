@@ -1,0 +1,114 @@
+[
+  {
+    "viewport": {
+      "width": 667,
+      "height": 375
+    },
+    "supported": true,
+    "disjoint": 0,
+    "gpu": {
+      "count": 1198,
+      "meanMs": 1.1662590717863115,
+      "medianMs": 1.083392,
+      "p99Ms": 3.572736,
+      "worstMs": 14.758912
+    },
+    "frames": {
+      "count": 1200,
+      "meanMs": 16.666,
+      "medianMs": 16.69999999999891,
+      "p99Ms": 16.80000000000109,
+      "worstMs": 16.80000000000291
+    },
+    "callback": {
+      "count": 1200,
+      "meanMs": 1.2256666666669964,
+      "medianMs": 1.099999999976717,
+      "p99Ms": 3.800000000046566,
+      "worstMs": 27.79999999998836
+    },
+    "first5s": {
+      "count": 301,
+      "meanMs": 16.66578073089701,
+      "medianMs": 16.699999999999818,
+      "p99Ms": 16.80000000000109,
+      "worstMs": 16.80000000000109
+    },
+    "after5s": {
+      "count": 899,
+      "meanMs": 16.66607341490545,
+      "medianMs": 16.69999999999891,
+      "p99Ms": 16.80000000000109,
+      "worstMs": 16.80000000000291
+    },
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "webglError": 0,
+    "errors": [],
+    "launchArgs": [
+      "--use-angle=d3d11",
+      "--force-high-performance-gpu",
+      "--force_high_performance_gpu"
+    ],
+    "browser": "153.0.8010.12",
+    "physicalPhone": false,
+    "debugger": false,
+    "pixelReadback": false,
+    "nonblockingGpuQueries": true
+  },
+  {
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "supported": true,
+    "disjoint": 0,
+    "gpu": {
+      "count": 1195,
+      "meanMs": 3.684628779916318,
+      "medianMs": 3.667968,
+      "p99Ms": 4.701184,
+      "worstMs": 6.351872
+    },
+    "frames": {
+      "count": 1199,
+      "meanMs": 16.679983319432864,
+      "medianMs": 16.69999999999891,
+      "p99Ms": 16.80000000000109,
+      "worstMs": 33.400000000000546
+    },
+    "callback": {
+      "count": 1199,
+      "meanMs": 1.3049207673062146,
+      "medianMs": 1.2000000000116415,
+      "p99Ms": 3.5,
+      "worstMs": 14.799999999988358
+    },
+    "first5s": {
+      "count": 300,
+      "meanMs": 16.721333333333334,
+      "medianMs": 16.699999999999818,
+      "p99Ms": 16.800000000000182,
+      "worstMs": 33.400000000000546
+    },
+    "after5s": {
+      "count": 899,
+      "meanMs": 16.666184649610678,
+      "medianMs": 16.69999999999891,
+      "p99Ms": 16.80000000000109,
+      "worstMs": 16.80000000000291
+    },
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 4050 Laptop GPU (0x000028A1) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "webglError": 0,
+    "errors": [],
+    "launchArgs": [
+      "--use-angle=d3d11",
+      "--force-high-performance-gpu",
+      "--force_high_performance_gpu"
+    ],
+    "browser": "153.0.8010.12",
+    "physicalPhone": false,
+    "debugger": false,
+    "pixelReadback": false,
+    "nonblockingGpuQueries": true
+  }
+]

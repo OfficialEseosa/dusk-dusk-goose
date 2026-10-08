@@ -1,0 +1,65 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T02:46:55.991Z",
+    "duration": 130019.717,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "rare feedback reaches two independent clients and stays inside phone controls",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 24233,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "rare feedback reaches two independent clients and stays inside phone controls",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 27341,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "solo starts chasing by5s, teaches a freeze by10s and repeatedly retries by3s",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 32786,
+          "errors": [
+            {
+              "location": {
+                "file": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-solo.spec.ts",
+                "column": 158,
+                "line": 27
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 2500ms exceeded while waiting on the predicate\n\n  25 |     await expect.poll(()=>state.snapshot?.entities.some(e=>e.role==='goose'&&Math.hypot(e.vx,e.vz)>0)??false,{timeout:5000}).toBe(true);const chasePollReturned=Date.now(),chased=firstChasedAt-started;expect(firstChasedAt).toBeGreaterThan(started);expect(chased).toBeLessThan(5000);\n  26 |     await expect.poll(()=>{const s=state.snapshot,k=s?.entities.find(e=>e.id===state.id),g=s?.entities.find(e=>e.role==='goose');return k&&g?distance(k,g):100;},{timeout:3000}).toBeLessThan(8.8);\n> 27 |     await page.keyboard.down('Space');try{await expect.poll(()=>state.snapshot?.events.some(e=>e.type==='freeze'&&e.actor===state.id)??false,{timeout:2500}).toBe(true);}catch(error){await writeFile(`${evidence}/timing-failure-${viewport.width}.json`,JSON.stringify({started,firstChasedAt,firstFreezeAt,lastInput:state.lastInput,snapshots,page:await page.evaluate(()=>({log:(window as any).__inputLog,active:document.activeElement?.id,hidden:document.hidden}))},null,2));throw error;}const freeze=firstFreezeAt-started;expect(firstFreezeAt).toBeGreaterThan(started);expect(freeze).toBeLessThan(10000);\n     |                                                                                                                                                              ^\n  28 |     await page.keyboard.up('Space');\n  29 |     const before=state.snapshot!.entities.find(e=>e.id===state.id)!;\n  30 |     await page.keyboard.down('KeyA');await page.waitForTimeout(600);await page.keyboard.up('KeyA');const after=state.snapshot!.entities.find(e=>e.id===state.id)!;\n    at C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-solo.spec.ts:27:158"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "solo starts chasing by5s, teaches a freeze by10s and repeatedly retries by3s",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 35278,
+          "errors": []
+        }
+      ]
+    }
+  ]
+}

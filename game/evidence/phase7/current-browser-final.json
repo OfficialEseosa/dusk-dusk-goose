@@ -1,0 +1,216 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T03:17:25.814Z",
+    "duration": 469117.04099999997,
+    "expected": 17,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "four and six seats share Cul-de-sac and refresh keeps the same arena and seat",
+      "file": "chase-arena.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 11834,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "kit animation, goose waddle and phone character size are visible in the rendered scene",
+      "file": "chase-art.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 19259,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "portrait releases input and restores the same seat while laptop keeps playing",
+      "file": "chase-display.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 11041,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "rare feedback reaches two independent clients and stays inside phone controls",
+      "file": "chase-feedback.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 22411,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "a converted human immediately turns and catches the human friend beside them",
+      "file": "chase-infection.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 17000,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "human beam, lunge, infection and converted chase with100ms each way",
+      "file": "chase-latency.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 22079,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "human beam, lunge, infection and converted chase with200ms each way",
+      "file": "chase-latency.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 24669,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "GPU resources stay bounded across repeated roster and arena changes",
+      "file": "chase-memory.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 18193,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "multiplayer infection, hidden bot cover, dawn and rotated rematch at667",
+      "file": "chase-multi.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 89076,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "multiplayer infection, hidden bot cover, dawn and rotated rematch at1366",
+      "file": "chase-multi.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 89188,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "records live frame timing without debugger or GPU readback",
+      "file": "chase-performance.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 49626,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "silent browser-leg loss reclaims live stale seat while another session keeps playing",
+      "file": "chase-reconnect.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 8972,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "private seat refreshes in every round stage and server restart returns both clients to title",
+      "file": "chase-recovery-states.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 8998,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "solo starts chasing by5s, teaches a freeze by10s and repeatedly retries by3s",
+      "file": "chase-solo.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 34410,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "solo evidence shows chase, freeze, conversion and result at both sizes",
+      "file": "chase-solo.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 15995,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "first gesture unlocks decoded audio, events produce signal, mute and hidden-tab suspension work",
+      "file": "chase-sound.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6749,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "plain chase responds at phone and laptop dimensions with independent joined sessions",
+      "file": "chase.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 14625,
+          "errors": []
+        }
+      ]
+    }
+  ]
+}

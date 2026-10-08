@@ -2,6 +2,8 @@
 
 All checks ran locally on Windows 11 / Node 22. No deployment, downloads or physical phone testing.
 
+This table records Phase 6 readings. See FINAL_VERIFICATION.md for Phase 7 acceptance results, the 60 Hz quality-recovery regression, and later Intel Arc/RTX frame samples. Hardening reruns refresh the Phase 6 display/resource files; final arena captures are in Phase 7. The canonical frozen-roster resource fixture uses stable seat positions while alternating arenas/rosters and rotating roles. It checks strict no-growth after warmup, not full-round or physical-phone endurance. Consult the current memory-cycles.json for the measured counts.
+
 | Area | Evidence and limits |
 |---|---|
 | Recovery | `tests/chase-recovery-states.spec.ts`: private seat refresh in solo, joining, countdown, playing and results; second client advances; real server restart returns both to friendly title and clears stale credentials. Stage-holding fixture isolates recovery; normal full rounds are separate checks. |

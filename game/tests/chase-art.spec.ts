@@ -21,8 +21,13 @@ test('kit animation, goose waddle and phone character size are visible in the re
       await page.goto('/');await expect(page.locator('canvas')).toHaveAttribute('aria-busy','false');await expect.poll(()=>script).toBeTruthy();
       const source=(await cdp.send('Debugger.getScriptSource',{scriptId:script})).scriptSource,needle='this.renderer.render(this.scene,this.camera)',at=source.lastIndexOf(needle);expect(at).toBeGreaterThan(0);
       const before=source.slice(0,at),lineNumber=before.split('\n').length-1,columnNumber=at-before.lastIndexOf('\n')-1;
-      // Read after rendering has updated the new figure's world/bone matrices.
-      const breakpoint=await cdp.send('Debugger.setBreakpoint',{location:{scriptId:script,lineNumber,columnNumber},condition:'(requestAnimationFrame(()=>window.__recordArt(this)),false)'});
+      // Capture the renderer once, then remove the debugger from the frame loop.
+      // The page-local RAF probe runs after the game updates world/bone matrices.
+      const breakpoint=await cdp.send('Debugger.setBreakpoint',{location:{scriptId:script,lineNumber,columnNumber},condition:'(window.__artView=this,false)'});
+      await expect.poll(()=>page.evaluate(()=>!!(window as any).__artView?.figures)).toBe(true);
+      await cdp.send('Debugger.removeBreakpoint',{breakpointId:breakpoint.breakpointId});
+      await cdp.send('Debugger.disable');
+      await page.evaluate(()=>{(window as any).__artProbeOn=true;const sample=()=>{if(!(window as any).__artProbeOn)return;(window as any).__recordArt((window as any).__artView);requestAnimationFrame(sample);};requestAnimationFrame(sample);});
       try{await expect.poll(()=>page.evaluate(()=>(window as any).__artSamples.length)).toBeGreaterThan(30);}catch(error){console.log(JSON.stringify({requested:{lineNumber,columnNumber},actual:breakpoint.actualLocation,errors:state.errors,source:source.slice(at-100,at+100)}));throw error;}
       await captureFrame(page,`${evidence}/title-${viewport.width}.png`);
       const controls=await page.locator('#title input,#title button').evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {x:b.x,y:b.y,right:b.right,bottom:b.bottom,width:b.width,height:b.height,font:parseFloat(getComputedStyle(node).fontSize)};}));
@@ -43,7 +48,7 @@ test('kit animation, goose waddle and phone character size are visible in the re
       await page.evaluate(()=>{(window as any).__artSamples.length=0;});await expect.poll(()=>state.snapshot?.phase,{timeout:15000}).toBe('results');await expect.poll(()=>page.evaluate(id=>(window as any).__artSamples.some((s:any)=>s.figures.some((f:any)=>f.id===id&&f.role==='goose')),state.id)).toBe(true);await expect.poll(()=>frames.length).toBeGreaterThan(2);const resultAt=state.runTimes[state.snapshot!.solo!.runId].results!,firstGoose=await page.evaluate(id=>(window as any).__artSamples.find((s:any)=>s.figures.some((f:any)=>f.id===id&&f.role==='goose'&&f.scale<1))?.wall,state.id);expect(firstGoose).toBeTruthy();await expect.poll(()=>frames.some(f=>f.at>=firstGoose+80),{timeout:2000,intervals:[25,50]}).toBe(true);await cdp.send('Page.stopScreencast');const conversionFrame=[...frames].filter(f=>f.at>=firstGoose+80).sort((a,b)=>Math.abs(a.at-firstGoose-100)-Math.abs(b.at-firstGoose-100))[0];expect(conversionFrame).toBeTruthy();expect(conversionFrame.at-resultAt).toBeLessThan(550);await writeFile(`${evidence}/conversion-${viewport.width}.png`,Buffer.from(conversionFrame.data,'base64'));
       const effectSamples=await page.evaluate(()=>(window as any).__artSamples),own=effectSamples.flatMap((s:any)=>s.figures.filter((f:any)=>f.id===state.id));expect(own.some((f:any)=>f.hitStop)).toBe(true);expect(own.some((f:any)=>f.role==='goose'&&f.scale<1)).toBe(true);expect(Math.max(...effectSamples.map((s:any)=>s.particles))).toBeGreaterThan(20);expect(effectSamples.every((s:any)=>s.pool===256&&s.particles<=256)).toBe(true);
       Object.assign(reports.at(-1)!,{catchFrameAfterResultMs:conversionFrame.at-resultAt,catchFrameAfterRenderedGooseMs:conversionFrame.at-firstGoose,freezeRingDrained:true,catchHitStopObserved:true,conversionPopObserved:true,maxActiveParticles:Math.max(...effectSamples.map((s:any)=>s.particles)),particleCapacity:256});expect(state.errors).toEqual([]);
-      await cdp.send('Debugger.removeBreakpoint',{breakpointId:breakpoint.breakpointId});
+      await page.evaluate(()=>{(window as any).__artProbeOn=false;delete (window as any).__artView;});
     }finally{await context.close();}
   }
   await writeFile(`${evidence}/render-metrics.json`,JSON.stringify(reports,null,2));

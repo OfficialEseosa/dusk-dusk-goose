@@ -1,5 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {mkdir,writeFile} from 'node:fs/promises';
+const evidence=process.env.DDG_SOUND_EVIDENCE_DIR??'evidence/phase5';
 import {watchChase} from './chase-browser-helpers';
 
 test('first gesture unlocks decoded audio, events produce signal, mute and hidden-tab suspension work',async({browser})=>{
@@ -30,6 +31,6 @@ test('first gesture unlocks decoded audio, events produce signal, mute and hidde
     await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,get:()=>true});document.dispatchEvent(new Event('visibilitychange'));});await expect.poll(()=>page.evaluate(()=>(window as any).__audioTrace.contexts[0].state)).toBe('suspended');
     await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,get:()=>false});document.dispatchEvent(new Event('visibilitychange'));});await page.keyboard.press('KeyD');await expect.poll(()=>page.evaluate(()=>(window as any).__audioTrace.contexts[0].state)).toBe('running');await page.waitForTimeout(300);expect(await page.evaluate(()=>(window as any).__audioTrace.music.size)).toBeLessThanOrEqual(1);
     const report=await page.evaluate(()=>{const t=(window as any).__audioTrace;return {decodedFiles:t.decoded.length,decodedSeconds:t.decoded.reduce((v:number,b:any)=>v+b.duration,0),bufferStarts:t.sources.length,thawCueObserved:t.sources.some((s:any)=>s.url?.endsWith('/drop_001.mp3')),oscillatorStarts:t.oscillators,contextState:t.contexts[0].state,masterGain:t.gains[0].gain.value,musicLayersAfterReturn:t.music.size};});
-    expect(failures).toEqual([]);expect(state.errors).toEqual([]);await mkdir('evidence/phase5',{recursive:true});await writeFile('evidence/phase5/audio-check.json',JSON.stringify({...report,networkErrors:failures,browserErrors:state.errors,listeningReview:false},null,2));
+    expect(failures).toEqual([]);expect(state.errors).toEqual([]);await mkdir(evidence,{recursive:true});await writeFile(`${evidence}/audio-check.json`,JSON.stringify({...report,networkErrors:failures,browserErrors:state.errors,listeningReview:false},null,2));
   }finally{await context.close();}
 });

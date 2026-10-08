@@ -1,0 +1,24 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T01:46:18.631Z",
+    "duration": 45357.63,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "kit animation, goose waddle and phone character size are visible in the rendered scene",
+      "status": "expected",
+      "durationMs": 21876,
+      "errors": []
+    },
+    {
+      "title": "GPU resources stay bounded across repeated roster and arena changes",
+      "status": "expected",
+      "durationMs": 18804,
+      "errors": []
+    }
+  ]
+}

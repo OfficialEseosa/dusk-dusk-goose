@@ -1,0 +1,82 @@
+{
+  "measurements": [
+    {
+      "textures": 16,
+      "geometries": 65,
+      "programs": 13,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 17,
+      "geometries": 67,
+      "programs": 13,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 17,
+      "geometries": 68,
+      "programs": 13,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 17,
+      "geometries": 67,
+      "programs": 13,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 17,
+      "geometries": 67,
+      "programs": 13,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 17,
+      "geometries": 68,
+      "programs": 13,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 17,
+      "geometries": 67,
+      "programs": 13,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 17,
+      "geometries": 67,
+      "programs": 13,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 17,
+      "geometries": 68,
+      "programs": 13,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 17,
+      "geometries": 67,
+      "programs": 13,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 17,
+      "geometries": 67,
+      "programs": 13,
+      "figures": 6,
+      "particles": 256
+    }
+  ],
+  "errors": []
+}

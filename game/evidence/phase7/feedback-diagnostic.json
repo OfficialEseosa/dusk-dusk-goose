@@ -1,0 +1,32 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T02:20:33.734Z",
+    "duration": 27526.103,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "rare feedback reaches two independent clients and stays inside phone controls",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 23503,
+          "errors": [
+            {
+              "location": {
+                "file": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-feedback.spec.ts",
+                "column": 661,
+                "line": 45
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"Kid: 747 · Kid: 0\"\u001b[39m\n\n  43 |     sim.elapsed=65;room.multi!.deadline=Date.now()+9800;await expect(pages[0].locator('#recharge')).toBeVisible();await expect(pages[0].locator('#final-count')).toBeVisible();await expect(pages[1].locator('#final-count')).toBeVisible();\n  44 |     for(let i=0;i<2;i++){const b=await pages[i].locator('#recharge').boundingBox();if(i===0){expect(b).toBeTruthy();expect(b!.x+b!.width).toBeLessThanOrEqual(667);}await captureFrame(pages[i],`${evidence}/finale-${i===0?667:1366}.png`);}\n> 45 |     await expect.poll(()=>states.every(s=>s.snapshot?.phase==='results'),{timeout:12000}).toBe(true);await expect(pages[0].locator('#results')).toBeVisible();await expect(pages[1].locator('#results')).toBeVisible();expect(states[0].snapshot!.events.some(e=>e.type==='dawn')).toBe(true);await expect(pages[0].locator('#result-title')).toContainText('Dawn');const firstScoreText=await pages[0].locator('#scores').textContent(),finalScoreText=[...states[0].snapshot!.multi!.scores].sort((a,b)=>b.total-a.total).map(p=>`${p.name}: ${Math.floor(p.total)}`).join(' · ');await expect(pages[0].locator('#scores')).toHaveText(finalScoreText);expect(firstScoreText).not.toBe(finalScoreText);\n     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^\n  46 |     await expect.poll(()=>pages[0].evaluate(id=>{const samples=(window as any).__feedback;const z=samples.flatMap((s:any)=>s.figures.filter((f:any)=>f.id===id&&!f.eyes).map((f:any)=>f.z));return z.length?Math.max(...z)-Math.min(...z):0;},goose.id)).toBeGreaterThan(.5);\n  47 |     for(let i=0;i<2;i++){await captureFrame(pages[i],`${evidence}/dawn-${i===0?667:1366}.png`);expect(await pages[i].evaluate(()=>document.documentElement.scrollWidth===innerWidth&&document.documentElement.scrollHeight===innerHeight)).toBe(true);}\n  48 |     const report={fixtureDriven:true,normalFullRoundsCoveredBy:'chase-multi.spec.ts',windup:true,missStars:true,nearSlowAnimation:true,lowAndEmpty:true,realPickup:true,lampExpiry:true,lastKidRefill:true,finalCountdownBothSessions:true,dawnBothSessions:true,ordinaryGooseWalkOff:true,scoreCountUp:{first:firstScoreText,final:finalScoreText},errors:states.flatMap(s=>s.errors)};expect(report.errors).toEqual([]);await writeFile(`${evidence}/feedback.json`,JSON.stringify(report,null,2));\n    at C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-feedback.spec.ts:45:661"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "threshold": "Rec709 luma <16/255",
+  "images": [
+    {
+      "file": "game/evidence/phase6/art/conversion-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase6/art/conversion-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase6/art/ice-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase6/art/ice-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase6/art/role-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase6/art/role-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase6/art/title-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase6/art/title-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase6/culdesac-alley-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase6/culdesac-four-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase6/culdesac-four-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase6/culdesac-six-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0032409102000976087
+    },
+    {
+      "file": "game/evidence/phase6/culdesac-six-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.001999000499750125
+    }
+  ]
+}

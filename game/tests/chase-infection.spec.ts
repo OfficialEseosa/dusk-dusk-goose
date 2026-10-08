@@ -5,7 +5,7 @@ const evidence=process.env.DDG_NETWORK_EVIDENCE_DIR??'test-results/network-evide
 test('a converted human immediately turns and catches the human friend beside them',async({browser})=>{
   test.setTimeout(55000);const contexts=await Promise.all([{width:667,height:375},{width:1366,height:768},{width:667,height:375}].map(viewport=>browser.newContext({viewport})));
   try{
-    const pages=await Promise.all(contexts.map(c=>c.newPage())),states=pages.map(watchChase);const names=['Alex','Riley','Sam'];
+    const pages=await Promise.all(contexts.map(c=>c.newPage())),states=pages.map(page=>watchChase(page));const names=['Alex','Riley','Sam'];
     await pages[0].goto('/');await pages[0].getByRole('textbox',{name:'Your name'}).fill(names[0]);await pages[0].getByRole('button',{name:'Play',exact:true}).click();await expect.poll(()=>states[0].snapshot?.code).toBeTruthy();
     await Promise.all(pages.slice(1).map(async(page,i)=>{await page.goto('/');await page.getByRole('textbox',{name:'Your name'}).fill(names[i+1]);await page.getByRole('textbox',{name:'Room code'}).fill(states[0].snapshot!.code);await page.getByRole('button',{name:'Join friends'}).click();}));
     await expect.poll(()=>states.every(s=>s.snapshot?.multi?.stage==='playing'),{timeout:12000}).toBe(true);

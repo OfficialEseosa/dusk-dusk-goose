@@ -1,0 +1,203 @@
+{
+  "threshold": "Rec709 luma <16/255",
+  "images": [
+    {
+      "file": "game/evidence/phase7/arena/culdesac-alley-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/arena/culdesac-four-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.00019064177647632992
+    },
+    {
+      "file": "game/evidence/phase7/arena/culdesac-four-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/arena/culdesac-six-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/arena/culdesac-six-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/art/conversion-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/art/conversion-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/art/ice-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/art/ice-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/art/role-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/art/role-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/art/title-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/art/title-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/feedback/dawn-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/feedback/dawn-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/feedback/finale-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.008578879941434846
+    },
+    {
+      "file": "game/evidence/phase7/feedback/finale-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/feedback/low-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/feedback/near-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/network/multiplayer-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0005719253294289898
+    },
+    {
+      "file": "game/evidence/phase7/network/multiplayer-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/network/results-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/network/results-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/solo/catch-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/solo/catch-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/solo/chase-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/solo/chase-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/solo/freeze-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/solo/freeze-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/solo/results-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/solo/results-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/solo/title-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0
+    },
+    {
+      "file": "game/evidence/phase7/solo/title-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0
+    }
+  ]
+}

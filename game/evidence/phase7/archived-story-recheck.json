@@ -1,0 +1,45 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T02:10:36.401Z",
+    "duration": 33806.886,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "invite copy writes the system clipboard and supports modern-only browsers",
+      "file": "clipboard.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2995,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "two independent 3D houses share movement, collide, resume and pick up real story objects",
+      "file": "world.spec.ts",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 23328,
+          "errors": [
+            {
+              "location": {
+                "file": "C:\\Users\\rapha\\Last Night on Maple Street\\legacy\\story\\tests\\browser\\world.spec.ts",
+                "column": 49,
+                "line": 80
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('world-pickup')\nExpected: visible\nReceived: hidden\nTimeout:  8000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('world-pickup') with timeout 8000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('world-pickup')\u001b[22m\n\u001b[2m    20 × locator resolved to <button hidden=\"\" class=\"world-pickup\" data-testid=\"world-pickup\">E · Pick up flashlight</button>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n\n  78 |     await a.waitForTimeout(560);\n  79 |     await a.keyboard.up(\"s\");\n> 80 |     await expect(a.getByTestId(\"world-pickup\")).toBeVisible();\n     |                                                 ^\n  81 |     await a.keyboard.press(\"e\");\n  82 |     await expect(a.locator(\".scene-caption\")).toContainText(\"flashlight alex\");\n  83 |     await s.getByTestId(\"house-canvas\").focus();\n    at C:\\Users\\rapha\\Last Night on Maple Street\\legacy\\story\\tests\\browser\\world.spec.ts:80:49"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

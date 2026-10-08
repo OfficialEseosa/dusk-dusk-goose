@@ -13,6 +13,6 @@ npm start
 
 Open the printed address. Keyboard: WASD/arrows and Space. Phone: move stick and one action button. `M` mutes sound; `F` toggles fullscreen where supported. Rotate a phone to landscape. Rooms and private seats survive reconnects while the single server lives; restart ends every room.
 
-See [PLAN.md](PLAN.md) for honest progress, test results and outstanding acceptance checks, [deployment instructions](game/DEPLOY.md), [sound choices](game/SOUND_CHOICES.md) and [feedback verification](game/FEEDBACK_VERIFICATION.md). No public deployment has been made.
+See [final verification](game/FINAL_VERIFICATION.md) for checks, screenshots and remaining quality gaps, [PLAN.md](PLAN.md) for phase decisions/results, [deployment instructions](game/DEPLOY.md), [sound choices](game/SOUND_CHOICES.md) and [feedback verification](game/FEEDBACK_VERIFICATION.md). No public deployment has been made.
 
-The retired root story application, documents and unchanged tests are retained under `legacy/story/`; they are historical compatibility coverage, not the active production entry. The old hide-and-seek source/tests inside `game/` also remain until their separate compatibility test fixture is complete. Original history remains under the tag `old-game-end-f802515`.
+The retired root story application, documents and unchanged tests are retained under `legacy/story/`; they are historical compatibility coverage. Old hide-and-seek source/tests inside `game/` run in a separate compiled compatibility fixture. Neither archived application is the active production entry. Original history remains under the tag `old-game-end-f802515`.

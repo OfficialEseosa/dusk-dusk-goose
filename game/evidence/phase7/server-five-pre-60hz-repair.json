@@ -1,0 +1,121 @@
+{
+  "node": "v22.23.2",
+  "consecutive": 5,
+  "passes": [
+    {
+      "pass": 1,
+      "suites": [
+        {
+          "name": "game",
+          "tests": 82,
+          "passed": 82,
+          "failed": 0,
+          "skipped": 0,
+          "exit": 0,
+          "elapsedMs": 49593
+        },
+        {
+          "name": "archived-story",
+          "tests": 12,
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0,
+          "exit": 0,
+          "elapsedMs": 6042
+        }
+      ]
+    },
+    {
+      "pass": 2,
+      "suites": [
+        {
+          "name": "game",
+          "tests": 82,
+          "passed": 82,
+          "failed": 0,
+          "skipped": 0,
+          "exit": 0,
+          "elapsedMs": 48279
+        },
+        {
+          "name": "archived-story",
+          "tests": 12,
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0,
+          "exit": 0,
+          "elapsedMs": 5618
+        }
+      ]
+    },
+    {
+      "pass": 3,
+      "suites": [
+        {
+          "name": "game",
+          "tests": 82,
+          "passed": 82,
+          "failed": 0,
+          "skipped": 0,
+          "exit": 0,
+          "elapsedMs": 48143
+        },
+        {
+          "name": "archived-story",
+          "tests": 12,
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0,
+          "exit": 0,
+          "elapsedMs": 5769
+        }
+      ]
+    },
+    {
+      "pass": 4,
+      "suites": [
+        {
+          "name": "game",
+          "tests": 82,
+          "passed": 82,
+          "failed": 0,
+          "skipped": 0,
+          "exit": 0,
+          "elapsedMs": 49200
+        },
+        {
+          "name": "archived-story",
+          "tests": 12,
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0,
+          "exit": 0,
+          "elapsedMs": 5507
+        }
+      ]
+    },
+    {
+      "pass": 5,
+      "suites": [
+        {
+          "name": "game",
+          "tests": 82,
+          "passed": 82,
+          "failed": 0,
+          "skipped": 0,
+          "exit": 0,
+          "elapsedMs": 48884
+        },
+        {
+          "name": "archived-story",
+          "tests": 12,
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0,
+          "exit": 0,
+          "elapsedMs": 5471
+        }
+      ]
+    }
+  ]
+}

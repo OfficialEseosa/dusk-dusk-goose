@@ -1,0 +1,2190 @@
+{
+  "triggered": {
+    "wall": 1791429500102,
+    "now": 4.193,
+    "frozenUntil": 0,
+    "role": "goose"
+  },
+  "serverAfter": {
+    "now": 4.292999999999999,
+    "lungeAt": 4.193,
+    "frozenUntil": 0,
+    "immuneUntil": 0,
+    "held": false,
+    "role": "goose"
+  },
+  "received": [
+    {
+      "client": 0,
+      "wall": 1791429500147,
+      "now": 4.242999999999999,
+      "lungeAt": 4.193,
+      "frozenUntil": 0,
+      "role": "goose",
+      "windups": [
+        {
+          "id": 1,
+          "at": 4.193,
+          "actor": "ba51368b-589b-4097-b8fd-419436ec15f3"
+        }
+      ]
+    },
+    {
+      "client": 1,
+      "wall": 1791429500148,
+      "now": 4.242999999999999,
+      "lungeAt": 4.193,
+      "frozenUntil": 0,
+      "role": "goose",
+      "windups": [
+        {
+          "id": 1,
+          "at": 4.193,
+          "actor": "ba51368b-589b-4097-b8fd-419436ec15f3"
+        }
+      ]
+    },
+    {
+      "client": 1,
+      "wall": 1791429500193,
+      "now": 4.292999999999999,
+      "lungeAt": 4.193,
+      "frozenUntil": 0,
+      "role": "goose",
+      "windups": [
+        {
+          "id": 1,
+          "at": 4.193,
+          "actor": "ba51368b-589b-4097-b8fd-419436ec15f3"
+        }
+      ]
+    },
+    {
+      "client": 0,
+      "wall": 1791429500193,
+      "now": 4.292999999999999,
+      "lungeAt": 4.193,
+      "frozenUntil": 0,
+      "role": "goose",
+      "windups": [
+        {
+          "id": 1,
+          "at": 4.193,
+          "actor": "ba51368b-589b-4097-b8fd-419436ec15f3"
+        }
+      ]
+    }
+  ],
+  "clients": [
+    {
+      "origin": 1791429491970.7,
+      "samples": [
+        {
+          "at": 7903.299999999814,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": -7,
+              "eyes": true,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7919.199999999953,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.8366440677963505,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": -7,
+              "eyes": true,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7936.899999999907,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.798796610169491,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": -7,
+              "eyes": true,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7952.699999999953,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.767847457627119,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": -7,
+              "eyes": true,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7970.09999999986,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.736711864406781,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": -7,
+              "eyes": true,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7987.5,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.685000000000001,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": -7,
+              "eyes": true,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8007.799999999814,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.624880000000004,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": -7,
+              "eyes": true,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 8,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8020.199999999953,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.564760000000002,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": -7,
+              "eyes": true,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 8,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8041.399999999907,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.505119999999682,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8051.699999999953,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.448679999999683,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8070.5,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.391899999999683,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8085.59999999986,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8103.5,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8125.899999999907,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8137.5,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8154.799999999814,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8170.59999999986,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8195.09999999986,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": true,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8203.59999999986,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": true,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 6,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8220.199999999953,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": true,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 4,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 8239,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": true,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 4,
+          "lamp": 0.12,
+          "sky": "23396b"
+        }
+      ]
+    },
+    {
+      "origin": 1791429492438.1,
+      "samples": [
+        {
+          "at": 7552.300000000047,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.5784399999996666,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": -7,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 8,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7580.600000000093,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.505119999999999,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 7,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7587.199999999953,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.448679999999997,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 7,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7603,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3919,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 7,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7618.399999999907,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 7,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7635.300000000047,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 7,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7652.199999999953,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 7,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7668.199999999953,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 7,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7686.899999999907,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 7,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7704.800000000047,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.3,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 7,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7727.699999999953,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": true,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 7,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7736.199999999953,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": true,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 7,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7752.800000000047,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": true,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 7,
+          "lamp": 0.12,
+          "sky": "23396b"
+        },
+        {
+          "at": 7770,
+          "score": "Kid: 0 · Kid: 0",
+          "resultsVisible": false,
+          "figures": [
+            {
+              "id": "filler-1",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.84,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "filler-2",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 7.38,
+              "eyes": false,
+              "marker": 1
+            },
+            {
+              "id": "ba51368b-589b-4097-b8fd-419436ec15f3",
+              "role": "goose",
+              "tell": true,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": true,
+              "marker": 1
+            },
+            {
+              "id": "66d9aeb1-7cb4-4da4-88a3-882f353cbbf3",
+              "role": "kid",
+              "tell": false,
+              "stars": false,
+              "slow": false,
+              "reveal": false,
+              "shield": false,
+              "z": 6,
+              "eyes": false,
+              "marker": 1
+            }
+          ],
+          "drops": 0,
+          "dropPool": 6,
+          "particles": 5,
+          "lamp": 0.12,
+          "sky": "23396b"
+        }
+      ]
+    }
+  ]
+}

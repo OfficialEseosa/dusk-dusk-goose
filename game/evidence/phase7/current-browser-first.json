@@ -1,0 +1,220 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T01:37:32.546Z",
+    "duration": 472332.37899999996,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "file": "chase-arena.spec.ts",
+      "title": "four and six seats share Cul-de-sac and refresh keeps the same arena and seat",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 18482,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-art.spec.ts",
+      "title": "kit animation, goose waddle and phone character size are visible in the rendered scene",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "durationMs": 4604,
+          "errors": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m30\u001b[39m\nReceived:   \u001b[31m17\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  24 |       // Read after rendering has updated the new figure's world/bone matrices.\n  25 |       const breakpoint=await cdp.send('Debugger.setBreakpoint',{location:{scriptId:script,lineNumber,columnNumber},condition:'(requestAnimationFrame(()=>window.__recordArt(this)),false)'});\n> 26 |       try{await expect.poll(()=>page.evaluate(()=>(window as any).__artSamples.length)).toBeGreaterThan(30);}catch(error){console.log(JSON.stringify({requested:{lineNumber,columnNumber},actual:breakpoint.actualLocation,errors:state.errors,source:source.slice(at-100,at+100)}));throw error;}\n     |                                                                                         ^\n  27 |       await captureFrame(page,`${evidence}/title-${viewport.width}.png`);\n  28 |       c"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "chase-display.spec.ts",
+      "title": "portrait releases input and restores the same seat while laptop keeps playing",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 16638,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-feedback.spec.ts",
+      "title": "rare feedback reaches two independent clients and stays inside phone controls",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 21595,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-infection.spec.ts",
+      "title": "a converted human immediately turns and catches the human friend beside them",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 17507,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-latency.spec.ts",
+      "title": "human beam, lunge, infection and converted chase with100ms each way",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 23417,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-latency.spec.ts",
+      "title": "human beam, lunge, infection and converted chase with200ms each way",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 24935,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-memory.spec.ts",
+      "title": "GPU resources stay bounded across repeated roster and arena changes",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "durationMs": 18140,
+          "errors": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m11\u001b[39m\nReceived:    \u001b[31m15\u001b[39m\n\n  22 |     }\n  23 |     await mkdir('evidence/phase6',{recursive:true});await writeFile('evidence/phase6/memory-cycles-diagnostic.json',JSON.stringify({measurements,errors:state.errors},null,2));\n> 24 |     const settled=measurements.slice(6),reference=settled[0];for(const m of settled){expect(m.textures).toBeLessThanOrEqual(reference.textures);expect(m.geometries).toBeLessThanOrEqual(reference.geometries);expect(m.figures).toBe(6);expect(m.particles).toBe(256);}\n     |                                                                                                         ^\n  25 |     expect(state.errors).toEqual([]);await mkdir('evidence/phase6',{recursive:true});await writeFile('evidence/phase6/memory-cycles.json',JSON.stringify({fixtureDrivenBeginnings:true,warmupCycles:6,measuredCycles:5,measurements,errors:state.errors,"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "chase-multi.spec.ts",
+      "title": "multiplayer infection, hidden bot cover, dawn and rotated rematch at667",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 89712,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-multi.spec.ts",
+      "title": "multiplayer infection, hidden bot cover, dawn and rotated rematch at1366",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 88826,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-performance.spec.ts",
+      "title": "records live frame timing without debugger or GPU readback",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 50659,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-reconnect.spec.ts",
+      "title": "silent browser-leg loss reclaims live stale seat while another session keeps playing",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 10019,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-recovery-states.spec.ts",
+      "title": "private seat refreshes in every round stage and server restart returns both clients to title",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 4586,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-solo.spec.ts",
+      "title": "solo starts chasing by5s, teaches a freeze by10s and repeatedly retries by3s",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 36337,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-solo.spec.ts",
+      "title": "solo evidence shows chase, freeze, conversion and result at both sizes",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 16439,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase-sound.spec.ts",
+      "title": "first gesture unlocks decoded audio, events produce signal, mute and hidden-tab suspension work",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 6810,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "file": "chase.spec.ts",
+      "title": "plain chase responds at phone and laptop dimensions with independent joined sessions",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 15121,
+          "errors": []
+        }
+      ]
+    }
+  ]
+}

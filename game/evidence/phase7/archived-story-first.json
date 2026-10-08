@@ -1,0 +1,321 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T01:48:08.350Z",
+    "duration": 268814.35599999997,
+    "expected": 22,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "invite copy writes the system clipboard and supports modern-only browsers",
+      "file": "clipboard.spec.ts",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "timedOut",
+          "duration": 90418,
+          "errors": [
+            {
+              "message": "\u001b[31mTest timeout of 90000ms exceeded.\u001b[39m"
+            },
+            {
+              "location": {
+                "file": "C:\\Users\\rapha\\Last Night on Maple Street\\legacy\\story\\tests\\browser\\clipboard.spec.ts",
+                "column": 5,
+                "line": 50
+              },
+              "message": "Error: browserContext.close: Target page, context or browser has been closed\n\n  48 |     );\n  49 |   } finally {\n> 50 |     await context.close();\n     |     ^\n  51 |     await friendContext.close();\n  52 |   }\n  53 | });\n    at C:\\Users\\rapha\\Last Night on Maple Street\\legacy\\story\\tests\\browser\\clipboard.spec.ts:50:5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "blocked clipboard gives a selected usable invitation instead of claiming success",
+      "file": "clipboard.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2076,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "home is uncluttered and uses local fonts on desktop",
+      "file": "home.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1150,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "home is uncluttered and uses local fonts on phone",
+      "file": "home.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 783,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "home is uncluttered and uses local fonts on compact",
+      "file": "home.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 889,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "home is uncluttered and uses local fonts on landscape",
+      "file": "home.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 811,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "repeated entry taps while offline queue one room request",
+      "file": "interaction.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2344,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "invalid join keeps both title fields and their DOM nodes",
+      "file": "interaction.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 836,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "partner snapshots preserve opening, radio composition and a pressed scene interaction",
+      "file": "interaction.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 8340,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "same browser tabs join separate seats and explicit Resume transfers only its remembered seat",
+      "file": "interaction.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6907,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "a disconnected partner can be left without automatic rejoin",
+      "file": "interaction.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6971,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "Resume on an older invitation chooses that room rather than the most recent one",
+      "file": "interaction.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1803,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "leave lobby returns to title, frees a ready seat, and permits a fresh night",
+      "file": "lobby.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 5460,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "hidden partner does not prevent ready, blackout or ordinary actions",
+      "file": "lobby.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6211,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "network switch recovers automatically immediately despite the old connection",
+      "file": "recovery.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2013,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "network switch recovers explicit Resume immediately despite the old connection",
+      "file": "recovery.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1248,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "server room loss offers a fresh start instead of a stale lobby",
+      "file": "recovery.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2241,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "radio Enter clears sent text and preserves drafts and keyboard focus through partner updates",
+      "file": "recovery.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6713,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "explicit Resume forgets a room that no longer exists",
+      "file": "recovery.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1110,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "scene taps, compact landscape, game menu and reopened invite preserve both seats",
+      "file": "resume.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 7940,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "solo exploration opens without a friend, works offline, picks up flashlight, switches houses and exits",
+      "file": "solo.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2514,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "two independent browsers finish seed 0, tell, recovery and replay",
+      "file": "story.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 52705,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "two independent browsers finish seed 1, defer, recovery and replay",
+      "file": "story.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 20218,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "two independent 3D houses share movement, collide, resume and pick up real story objects",
+      "file": "world.spec.ts",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 19084,
+          "errors": [
+            {
+              "location": {
+                "file": "C:\\Users\\rapha\\Last Night on Maple Street\\legacy\\story\\tests\\browser\\world.spec.ts",
+                "column": 49,
+                "line": 55
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByTestId('world-pickup')\nExpected: visible\nReceived: hidden\nTimeout:  8000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByTestId('world-pickup') with timeout 8000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('world-pickup')\u001b[22m\n\u001b[2m    19 × locator resolved to <button hidden=\"\" class=\"world-pickup\" data-testid=\"world-pickup\">E · Pick up flashlight</button>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n\n  53 |     await a.waitForTimeout(440);\n  54 |     await a.keyboard.up(\"a\");\n> 55 |     await expect(a.getByTestId(\"world-pickup\")).toBeVisible();\n     |                                                 ^\n  56 |     await expect\n  57 |       .poll(async () =>\n  58 |         Number(await s.locator(\"#house-world\").getAttribute(\"data-friend-x\")),\n    at C:\\Users\\rapha\\Last Night on Maple Street\\legacy\\story\\tests\\browser\\world.spec.ts:55:49"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

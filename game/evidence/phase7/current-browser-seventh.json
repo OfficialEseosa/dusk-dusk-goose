@@ -1,0 +1,218 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T03:08:31.887Z",
+    "duration": 468330.95800000004,
+    "expected": 16,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "four and six seats share Cul-de-sac and refresh keeps the same arena and seat",
+      "file": "chase-arena.spec.ts",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 10958,
+          "errors": [
+            "Error: UNKNOWN: unknown error, open 'C:\\Users\\rapha\\Last Night on Maple Street\\game\\evidence\\phase6\\culdesac-alley-1366.png'\n\n  16 |     await expect(p.locator('canvas')).toHaveAttribute('aria-label','The Cul-de-sac');await expect(q.locator('canvas')).toHaveAttribute('aria-label','The Cul-de-sac');\n  17 |     await p.waitForTimeout(400);await mkdir('evidence/phase6',{recursive:true});await p.screenshot({path:'evidence/phase6/culdesac-four-667.png'});await q.screenshot({path:'evidence/phase6/culdesac-four-1366.png'});\n> 18 |     const alley=room.sim.entities.find(e=>e.id===two.id)!;alley.role='goose';alley.x=15;alley.z=-9;alley.frozenUntil=room.sim.now+.6;await q.waitForTimeout(1000);await q.screenshot({path:'evidence/phase6/culdesac-alley-1366.png'});\n     |                                                                                                                                                                   ^\n  19 |     const id=two.id;await q.reload();await expect.poll(()=>two.id).toBe(id);await expect(q.locator('#hud')).toBeVisible();expect(two.snapshot!.arena).toBe('culdesac');\n  20 |     await join(code,'Fifth');await join(code,'Sixth');expect(room.sim.arena.width).toBe(34);room.sim.phase='results';await expect.poll(()=>room.multi?.stage).toBe('results');room.multi!.deadline=Date.now()+100;\n  21 |     await expect.poll(()=>one.snapshot?.multi?.stage,{timeout:6000}).toBe('countdown');await expect.poll(()=>one.snapshot?.multi?.startingGeese.length).toBe(2);expect(one.snapshot!.entities).toHaveLength(6);\n    at C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-arena.spec.ts:18:163"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "kit animation, goose waddle and phone character size are visible in the rendered scene",
+      "file": "chase-art.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 18660,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "portrait releases input and restores the same seat while laptop keeps playing",
+      "file": "chase-display.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 12208,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "rare feedback reaches two independent clients and stays inside phone controls",
+      "file": "chase-feedback.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 22915,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "a converted human immediately turns and catches the human friend beside them",
+      "file": "chase-infection.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 19021,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "human beam, lunge, infection and converted chase with100ms each way",
+      "file": "chase-latency.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 22463,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "human beam, lunge, infection and converted chase with200ms each way",
+      "file": "chase-latency.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 25044,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "GPU resources stay bounded across repeated roster and arena changes",
+      "file": "chase-memory.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 18210,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "multiplayer infection, hidden bot cover, dawn and rotated rematch at667",
+      "file": "chase-multi.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 88958,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "multiplayer infection, hidden bot cover, dawn and rotated rematch at1366",
+      "file": "chase-multi.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 89271,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "records live frame timing without debugger or GPU readback",
+      "file": "chase-performance.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 49916,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "silent browser-leg loss reclaims live stale seat while another session keeps playing",
+      "file": "chase-reconnect.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 8941,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "private seat refreshes in every round stage and server restart returns both clients to title",
+      "file": "chase-recovery-states.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 3855,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "solo starts chasing by5s, teaches a freeze by10s and repeatedly retries by3s",
+      "file": "chase-solo.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 34476,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "solo evidence shows chase, freeze, conversion and result at both sizes",
+      "file": "chase-solo.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 16442,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "first gesture unlocks decoded audio, events produce signal, mute and hidden-tab suspension work",
+      "file": "chase-sound.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6689,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "plain chase responds at phone and laptop dimensions with independent joined sessions",
+      "file": "chase.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 14239,
+          "errors": []
+        }
+      ]
+    }
+  ]
+}

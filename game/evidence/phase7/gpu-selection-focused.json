@@ -1,0 +1,38 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T03:06:15.238Z",
+    "duration": 58711.142,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "GPU resources stay bounded across repeated roster and arena changes",
+      "file": "chase-memory.spec.ts",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 18821,
+          "errors": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m67\u001b[39m\nReceived:    \u001b[31m68\u001b[39m\n\n  26 |     }\n  27 |     await mkdir('evidence/phase6',{recursive:true});await writeFile('evidence/phase6/memory-cycles-diagnostic.json',JSON.stringify({measurements,errors:state.errors},null,2));\n> 28 |     const settled=measurements.slice(6),reference=settled[0];for(const m of settled){expect(m.textures).toBeLessThanOrEqual(reference.textures);expect(m.geometries).toBeLessThanOrEqual(reference.geometries);expect(m.figures).toBe(6);expect(m.particles).toBe(256);}\n     |                                                                                                                                                                      ^\n  29 |     expect(state.errors).toEqual([]);await mkdir('evidence/phase6',{recursive:true});await writeFile('evidence/phase6/memory-cycles.json',JSON.stringify({fixtureDrivenBeginnings:true,canonicalVisibleFrozenRoster:true,warmupCycles:6,measuredCycles:5,measurements,errors:state.errors,physicalPhone:false},null,2));\n  30 |   }finally{await context.close();for(const ws of sockets)ws.terminate();await game.close();}\n  31 | });\n    at C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-memory.spec.ts:28:166"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "solo starts chasing by5s, teaches a freeze by10s and repeatedly retries by3s",
+      "file": "chase-solo.spec.ts",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 35402,
+          "errors": []
+        }
+      ]
+    }
+  ]
+}
