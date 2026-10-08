@@ -1,0 +1,19 @@
+{
+  "fixtureDriven": true,
+  "normalFullRoundsCoveredBy": "chase-multi.spec.ts",
+  "windup": true,
+  "missStars": true,
+  "nearSlowAnimation": true,
+  "lowAndEmpty": true,
+  "realPickup": true,
+  "lampExpiry": true,
+  "lastKidRefill": true,
+  "finalCountdownBothSessions": true,
+  "dawnBothSessions": true,
+  "ordinaryGooseWalkOff": true,
+  "scoreCountUp": {
+    "first": "Kid: 58 · Kid: 0",
+    "final": "Kid: 746 · Kid: 0"
+  },
+  "errors": []
+}

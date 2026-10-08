@@ -5,11 +5,11 @@ import {SoloDirector} from '../server/chase-solo.js';
 import {TUNE,tonightSeed,walkable,distance} from '../shared/chase.js';
 import {readBest,saveBest,recordRun,torchReward} from '../client/chase-best.js';
 function solo(){const sim=new ChaseSimulation('solo',20261007);const kid=sim.add('kid','Kid');const director=new SoloDirector(20261007,kid.id,true);director.prepare(sim);return {sim,kid,director};}
-test('first goose appears at1.5s, threatens an idle kid by5s, beginner beam freezes once',()=>{
+test('first goose appears at1.5s, approaches slowly and the first beam gives20s breathing room',()=>{
   const {sim,kid,director}=solo();
   const tick=(n:number)=>{for(let i=0;i<n;i++){sim.step();director.update(sim,.05);}};
   tick(29);assert.equal(sim.entities.length,1);tick(2);const goose=sim.entities[1];assert.equal(goose.personality,0);assert.ok(walkable(goose));assert.equal(sim.dwellNeeded(goose),.1);
-  tick(48);assert.ok(distance(kid,goose)<9);kid.held=true;tick(12);
+  tick(48);assert.ok(distance(kid,goose)>9&&distance(kid,goose)<11);kid.held=true;tick(24);assert.ok(goose.frozenUntil>=20);
   assert.ok(sim.events.some(e=>e.type==='freeze'));assert.equal(sim.dwellNeeded(goose),TUNE.dwell);assert.equal(kid.role,'kid');
 });
 test('solo director escalates to ten, assigns four personalities, and gives30s milestone relief',()=>{
@@ -34,4 +34,15 @@ test('local best validates corrupt/blocked storage and counts each result once',
   const empty=readBest({getItem:()=>'{bad'});assert.equal(empty.runs,0);assert.equal(readBest({getItem:()=>'{"time":-2,"runs":null}'}).time,0);
   const done=recordRun(empty,'one',35,500);assert.equal(done.runs,1);assert.equal(recordRun(done,'one',35,500).runs,1);assert.equal(recordRun(done,'two',20,200).time,35);
   saveBest(done,{setItem:()=>{throw new Error('Blocked');}});assert.equal(torchReward(30).color,'#ffc873');assert.equal(torchReward(60).color,'#ffb3bd');assert.equal(torchReward(120).color,'#d6b4ff');
+});
+
+test('solo light survives20s across100days, including experienced retries; multiplayer rules unchanged',()=>{
+  for(let day=1;day<=100;day++)for(const beginner of [true,false]){
+    const sim=new ChaseSimulation('solo',day),kid=sim.add('kid','Kid'),director=new SoloDirector(day,kid.id,beginner);director.prepare(sim);
+    while(sim.elapsed<20&&sim.phase==='playing'){kid.held=sim.elapsed>=3;sim.step(.05);director.update(sim,.05);}
+    assert.equal(kid.role,'kid',`day ${day}, beginner ${beginner}, ${sim.elapsed}s`);assert.ok(sim.elapsed>=20);assert.ok(sim.events.some(e=>e.type==='freeze'));
+  }
+  const multi=new ChaseSimulation('multi'),kid=multi.add('kid','Kid'),goose=multi.add('goose','Goose',true,'goose',{x:0,z:7.3});goose.safeUntil=0;multi.firstSoloGooseId=goose.id;
+  assert.equal(multi.speed(goose),TUNE.botSpeed);kid.held=true;kid.aim=Math.PI/2;for(let i=0;i<8;i++)multi.step(.05);
+  const freeze=multi.events.find(e=>e.type==='freeze');assert.ok(freeze);assert.ok(Math.abs(goose.frozenUntil-freeze.at-TUNE.freeze)<1e-9);
 });

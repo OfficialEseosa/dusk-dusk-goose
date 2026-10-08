@@ -1,0 +1,762 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T04:27:59.380Z",
+    "duration": 552621.41,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  },
+  "suites": [
+    {
+      "title": "chase-arena.spec.ts",
+      "file": "chase-arena.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "four and six seats share Cul-de-sac and refresh keeps the same arena and seat",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11660,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:28:01.285Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "76f61c2be965535587d5-0667f7f36e997f200fa4",
+          "file": "chase-arena.spec.ts",
+          "line": 8,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "chase-art.spec.ts",
+      "file": "chase-art.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "kit animation, goose waddle and phone character size are visible in the rendered scene",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14610,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 7000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 7000ms exceeded while waiting on the predicate\n    at C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-art.spec.ts:46:182",
+                    "location": {
+                      "file": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-art.spec.ts",
+                      "column": 182,
+                      "line": 46
+                    },
+                    "snippet": "  44 |       await page.evaluate(()=>{(window as any).__artSamples.length=0;});await page.keyboard.down('Space');await expect.poll(()=>state.snapshot?.events.some(e=>e.type==='freeze'&&e.actor===state.id),{timeout:3000}).toBe(true);\n  45 |       try{await expect.poll(()=>page.evaluate(()=>(window as any).__artSamples.some((s:any)=>s.figures.some((f:any)=>f.ice)))).toBe(true);}catch(error){console.log(JSON.stringify({viewport,errors:state.errors,snapshot:state.snapshot,lastInput:state.lastInput,samples:await page.evaluate(()=>(window as any).__artSamples.slice(-3))}));throw error;}await captureFrame(page,`${evidence}/ice-${viewport.width}.png`);await page.keyboard.up('Space');\n> 46 |       await expect.poll(()=>page.evaluate(()=>(window as any).__artSamples.filter((s:any)=>s.figures.some((f:any)=>f.ice&&f.freezeRing>0&&f.freezeRing<180)).length),{timeout:7000}).toBeGreaterThan(0);\n     |                                                                                                                                                                                      ^\n  47 |       const frames:{at:number;data:string}[]=[];cdp.on('Page.screencastFrame',frame=>{frames.push({at:(frame.metadata.timestamp??Date.now()/1000)*1000,data:frame.data});if(frames.length>40)frames.shift();void cdp.send('Page.screencastFrameAck',{sessionId:frame.sessionId}).catch(()=>{});});await cdp.send('Page.startScreencast',{format:'png',everyNthFrame:1});\n  48 |       await page.evaluate(()=>{(window as any).__artSamples.length=0;});await expect.poll(()=>state.snapshot?.phase,{timeout:30000}).toBe('results');await expect.poll(()=>page.evaluate(id=>(window as any).__artSamples.some((s:any)=>s.figures.some((f:any)=>f.id===id&&f.role==='goose')),state.id)).toBe(true);await expect.poll(()=>frames.length).toBeGreaterThan(2);const resultAt=state.runTimes[state.snapshot!.solo!.runId].results!,firstGoose=await page.evaluate(id=>(window as any).__artSamples.find((s:any)=>s.figures.some((f:any)=>f.id===id&&f.role==='goose'&&f.scale<1))?.wall,state.id);expect(firstGoose).toBeTruthy();await expect.poll(()=>frames.some(f=>f.at>=firstGoose+80),{timeout:2000,intervals:[25,50]}).toBe(true);await cdp.send('Page.stopScreencast');const conversionFrame=[...frames].filter(f=>f.at>=firstGoose+80).sort((a,b)=>Math.abs(a.at-firstGoose-100)-Math.abs(b.at-firstGoose-100))[0];expect(conversionFrame).toBeTruthy();expect(conversionFrame.at-resultAt).toBeLessThan(550);await writeFile(`${evidence}/conversion-${viewport.width}.png`,Buffer.from(conversionFrame.data,'base64'));\n  49 |       const effectSamples=await page.evaluate(()=>(window as any).__artSamples),own=effectSamples.flatMap((s:any)=>s.figures.filter((f:any)=>f.id===state.id));expect(own.some((f:any)=>f.hitStop)).toBe(true);expect(own.some((f:any)=>f.role==='goose'&&f.scale<1)).toBe(true);expect(Math.max(...effectSamples.map((s:any)=>s.particles))).toBeGreaterThan(20);expect(effectSamples.every((s:any)=>s.pool===256&&s.particles<=256)).toBe(true);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-art.spec.ts",
+                        "column": 182,
+                        "line": 46
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 7000ms exceeded while waiting on the predicate\n\n  44 |       await page.evaluate(()=>{(window as any).__artSamples.length=0;});await page.keyboard.down('Space');await expect.poll(()=>state.snapshot?.events.some(e=>e.type==='freeze'&&e.actor===state.id),{timeout:3000}).toBe(true);\n  45 |       try{await expect.poll(()=>page.evaluate(()=>(window as any).__artSamples.some((s:any)=>s.figures.some((f:any)=>f.ice)))).toBe(true);}catch(error){console.log(JSON.stringify({viewport,errors:state.errors,snapshot:state.snapshot,lastInput:state.lastInput,samples:await page.evaluate(()=>(window as any).__artSamples.slice(-3))}));throw error;}await captureFrame(page,`${evidence}/ice-${viewport.width}.png`);await page.keyboard.up('Space');\n> 46 |       await expect.poll(()=>page.evaluate(()=>(window as any).__artSamples.filter((s:any)=>s.figures.some((f:any)=>f.ice&&f.freezeRing>0&&f.freezeRing<180)).length),{timeout:7000}).toBeGreaterThan(0);\n     |                                                                                                                                                                                      ^\n  47 |       const frames:{at:number;data:string}[]=[];cdp.on('Page.screencastFrame',frame=>{frames.push({at:(frame.metadata.timestamp??Date.now()/1000)*1000,data:frame.data});if(frames.length>40)frames.shift();void cdp.send('Page.screencastFrameAck',{sessionId:frame.sessionId}).catch(()=>{});});await cdp.send('Page.startScreencast',{format:'png',everyNthFrame:1});\n  48 |       await page.evaluate(()=>{(window as any).__artSamples.length=0;});await expect.poll(()=>state.snapshot?.phase,{timeout:30000}).toBe('results');await expect.poll(()=>page.evaluate(id=>(window as any).__artSamples.some((s:any)=>s.figures.some((f:any)=>f.id===id&&f.role==='goose')),state.id)).toBe(true);await expect.poll(()=>frames.length).toBeGreaterThan(2);const resultAt=state.runTimes[state.snapshot!.solo!.runId].results!,firstGoose=await page.evaluate(id=>(window as any).__artSamples.find((s:any)=>s.figures.some((f:any)=>f.id===id&&f.role==='goose'&&f.scale<1))?.wall,state.id);expect(firstGoose).toBeTruthy();await expect.poll(()=>frames.some(f=>f.at>=firstGoose+80),{timeout:2000,intervals:[25,50]}).toBe(true);await cdp.send('Page.stopScreencast');const conversionFrame=[...frames].filter(f=>f.at>=firstGoose+80).sort((a,b)=>Math.abs(a.at-firstGoose-100)-Math.abs(b.at-firstGoose-100))[0];expect(conversionFrame).toBeTruthy();expect(conversionFrame.at-resultAt).toBeLessThan(550);await writeFile(`${evidence}/conversion-${viewport.width}.png`,Buffer.from(conversionFrame.data,'base64'));\n  49 |       const effectSamples=await page.evaluate(()=>(window as any).__artSamples),own=effectSamples.flatMap((s:any)=>s.figures.filter((f:any)=>f.id===state.id));expect(own.some((f:any)=>f.hitStop)).toBe(true);expect(own.some((f:any)=>f.role==='goose'&&f.scale<1)).toBe(true);expect(Math.max(...effectSamples.map((s:any)=>s.particles))).toBeGreaterThan(20);expect(effectSamples.every((s:any)=>s.pool===256&&s.particles<=256)).toBe(true);\n    at C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-art.spec.ts:46:182"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:28:13.179Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\test-results\\chase-art-kit-animation-go-0e895-sible-in-the-rendered-scene\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-art.spec.ts",
+                    "column": 182,
+                    "line": 46
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ab99d9ac7efb902aa1be-df1f89ac2c8d3277d640",
+          "file": "chase-art.spec.ts",
+          "line": 7,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "chase-display.spec.ts",
+      "file": "chase-display.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "portrait releases input and restores the same seat while laptop keeps playing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11619,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:28:28.646Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "138a19bcd36e0c2648b6-228c307cfba2f6e16c93",
+          "file": "chase-display.spec.ts",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "chase-feedback.spec.ts",
+      "file": "chase-feedback.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "rare feedback reaches two independent clients and stays inside phone controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 75000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 22606,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:28:40.556Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "08df7ecd36e33d2d18ea-6858d192c7ba7d550509",
+          "file": "chase-feedback.spec.ts",
+          "line": 10,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "chase-infection.spec.ts",
+      "file": "chase-infection.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "a converted human immediately turns and catches the human friend beside them",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 55000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 19674,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"goose\"\u001b[39m\nReceived: \u001b[31m\"kid\"\u001b[39m\n\nCall Log:\n- Timeout 3000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"goose\"\u001b[39m\nReceived: \u001b[31m\"kid\"\u001b[39m\n\nCall Log:\n- Timeout 3000ms exceeded while waiting on the predicate\n    at C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-infection.spec.ts:23:63",
+                    "location": {
+                      "file": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-infection.spec.ts",
+                      "column": 63,
+                      "line": 23
+                    },
+                    "snippet": "  21 |     await expect.poll(()=>states[victim].snapshot!.now-entity(victim).safeUntil,{timeout:3000}).toBeGreaterThan(0);\n  22 |     await pages[victim].bringToFront();await pages[victim].locator('canvas').click();await pages[victim].waitForTimeout(100);await pages[victim].keyboard.down('KeyA');await pages[victim].waitForTimeout(90);await pages[victim].keyboard.up('KeyA');await pages[victim].keyboard.press('Space');\n> 23 |     await expect.poll(()=>entity(friend).role,{timeout:3000}).toBe('goose');\n     |                                                               ^\n  24 |     const second=states[friend].snapshot!.events.find(e=>e.type==='catch'&&e.target===states[friend].id)!;expect(second.actor).toBe(states[victim].id);expect(second.at-first.at).toBeLessThan(3);\n  25 |     for(const index of [victim,friend])await expect(pages[index].locator('#action')).toContainText('LUNGE');\n  26 |     await expect.poll(()=>states.every(s=>s.snapshot!.events.some(e=>e.id===second.id&&e.actor===states[victim].id&&e.target===states[friend].id))).toBe(true);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-infection.spec.ts",
+                        "column": 63,
+                        "line": 23
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"goose\"\u001b[39m\nReceived: \u001b[31m\"kid\"\u001b[39m\n\nCall Log:\n- Timeout 3000ms exceeded while waiting on the predicate\n\n  21 |     await expect.poll(()=>states[victim].snapshot!.now-entity(victim).safeUntil,{timeout:3000}).toBeGreaterThan(0);\n  22 |     await pages[victim].bringToFront();await pages[victim].locator('canvas').click();await pages[victim].waitForTimeout(100);await pages[victim].keyboard.down('KeyA');await pages[victim].waitForTimeout(90);await pages[victim].keyboard.up('KeyA');await pages[victim].keyboard.press('Space');\n> 23 |     await expect.poll(()=>entity(friend).role,{timeout:3000}).toBe('goose');\n     |                                                               ^\n  24 |     const second=states[friend].snapshot!.events.find(e=>e.type==='catch'&&e.target===states[friend].id)!;expect(second.actor).toBe(states[victim].id);expect(second.at-first.at).toBeLessThan(3);\n  25 |     for(const index of [victim,friend])await expect(pages[index].locator('#action')).toContainText('LUNGE');\n  26 |     await expect.poll(()=>states.every(s=>s.snapshot!.events.some(e=>e.id===second.id&&e.actor===states[victim].id&&e.target===states[friend].id))).toBe(true);\n    at C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-infection.spec.ts:23:63"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:29:03.203Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\test-results\\chase-infection-a-converte-9642f-he-human-friend-beside-them\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-infection.spec.ts",
+                    "column": 63,
+                    "line": 23
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f9d1cc14dd5455723302-99024164f0c076f618d1",
+          "file": "chase-infection.spec.ts",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "chase-latency.spec.ts",
+      "file": "chase-latency.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "human beam, lunge, infection and converted chase with100ms each way",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 80000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24189,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:29:23.642Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c7531ba0d960137eb5f8-b75e90d4fb2e3e9de5ff",
+          "file": "chase-latency.spec.ts",
+          "line": 7,
+          "column": 30
+        },
+        {
+          "title": "human beam, lunge, infection and converted chase with200ms each way",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 80000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 25340,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:29:48.004Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c7531ba0d960137eb5f8-8db2ac85c24434a6a0ff",
+          "file": "chase-latency.spec.ts",
+          "line": 7,
+          "column": 30
+        }
+      ]
+    },
+    {
+      "title": "chase-memory.spec.ts",
+      "file": "chase-memory.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "GPU resources stay bounded across repeated roster and arena changes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18655,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:30:13.468Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1d42197b95a87b6ea1cc-868668f84aae1e4a5680",
+          "file": "chase-memory.spec.ts",
+          "line": 7,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "chase-multi.spec.ts",
+      "file": "chase-multi.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "multiplayer infection, hidden bot cover, dawn and rotated rematch at667",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 125000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 88901,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:30:32.152Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867d4b31ede66c8bd8b5-a61da69301699dd7e9f2",
+          "file": "chase-multi.spec.ts",
+          "line": 5,
+          "column": 72
+        },
+        {
+          "title": "multiplayer infection, hidden bot cover, dawn and rotated rematch at1366",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 125000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 89208,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:32:01.066Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867d4b31ede66c8bd8b5-1ed8b1c3256b92b94229",
+          "file": "chase-multi.spec.ts",
+          "line": 5,
+          "column": 72
+        }
+      ]
+    },
+    {
+      "title": "chase-performance.spec.ts",
+      "file": "chase-performance.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "records live frame timing without debugger or GPU readback",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 51032,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:33:30.353Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5525bd02148271fa4e8f-7a2345454a646a18604e",
+          "file": "chase-performance.spec.ts",
+          "line": 6,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "chase-reconnect.spec.ts",
+      "file": "chase-reconnect.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "silent browser-leg loss reclaims live stale seat while another session keeps playing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9633,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:34:21.501Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "22588b2f85690b616b56-01829f36206e4d557c6a",
+          "file": "chase-reconnect.spec.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "chase-recovery-states.spec.ts",
+      "file": "chase-recovery-states.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "private seat refreshes in every round stage and server restart returns both clients to title",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9370,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:34:31.251Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3ec929a543f2428555af-d1f202dcec470ed13c3d",
+          "file": "chase-recovery-states.spec.ts",
+          "line": 6,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "chase-solo.spec.ts",
+      "file": "chase-solo.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "solo starts chasing by5s, teaches a freeze by10s and repeatedly retries by3s",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 69720,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:34:40.739Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7f79d1470bd536e7db90-fc74f7a066be47a19d35",
+          "file": "chase-solo.spec.ts",
+          "line": 8,
+          "column": 1
+        },
+        {
+          "title": "solo evidence shows chase, freeze, conversion and result at both sizes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 44928,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:35:50.471Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7f79d1470bd536e7db90-62580c5a29133a2a6bfa",
+          "file": "chase-solo.spec.ts",
+          "line": 51,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "chase-sound.spec.ts",
+      "file": "chase-sound.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "first gesture unlocks decoded audio, events produce signal, mute and hidden-tab suspension work",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 40000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 21851,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:36:35.484Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "0fc42a27ce03722516fb-6c44fd4ea49c3f6150b9",
+          "file": "chase-sound.spec.ts",
+          "line": 6,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "chase.spec.ts",
+      "file": "chase.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "plain chase responds at phone and laptop dimensions with independent joined sessions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13941,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:36:57.376Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "de715e9a42c3946f0e5f-06f21b2c282fa14ea82c",
+          "file": "chase.spec.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    }
+  ]
+}

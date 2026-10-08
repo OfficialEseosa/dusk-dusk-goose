@@ -1,0 +1,25 @@
+# Requested appearance and solo fixes
+
+1. **Kid/light: fixed.** The body and head face the light; the held flashlight lens anchors both cone and scene lighting. When lit, footwork follows forward/backward/sideways velocity relative to that facing. When unlit, movement facing resumes. Shared rendering covers local, remote, computer and title kids. Turns follow the shortest angle with a bounded smooth step. Start with [phone kid comparison](compare-kid-side-667.png), then both angles in [phone pairs](compare-667.html) and [laptop pairs](compare-1366.html). Extra sidestep originals are in after/.
+2. **Goose: fixed.** My visual judgment at phone size: it now reads as a goose. Pale oval body, long curved neck, flat orange bill, orange webbed feet, folded wings and short tail replace the cube-headed lump. Glowing eyes remain. Wings spread/flap during a lunge; feet/neck/body waddle while walking. Start with [phone goose comparison](compare-goose-walk-667.png). Both comparison pages include walking, lunging, frozen and beam-lit states plus title.
+3. **Solo opening: fixed for the tested new-player LIGHT use.** First approach is slower; first beam freezes quickly and buys breathing room through20s. No multiplayer tuning values changed. Start with [solo comparison](compare-solo-667.png). A real keyboard run holds LIGHT from3s without movement, fixtures or protected seats. This is not invulnerability: deliberately walking into a goose can still lose early. Later difficulty resumes normally.
+
+## Evidence and limits
+
+Original before/after screenshots are unedited. Visual poses use the actual renderer with a local-only fixture, protected server seats, controlled movement and repeated lunge poses. They demonstrate appearance and animation, not normal match outcomes. Before visual fixtures oscillated positions for framing; final after fixtures move by their reported velocity, with opposed-motion assertions. Framing, room IDs, colours and animation times vary; pairs are not pixel-matched. The solo timing capture uses actual input and server simulation, independently of those fixtures. No production debug endpoint was added.
+
+I left foreground foliage covering feet, close character overlap, broad/simple scenery, existing bright freeze sparkles and HUD unchanged. These remain visible weaknesses outside this request. No assets downloaded, research edited or deployment performed. Physical phones and human playtesting were not available; these are Chromium/D3D11 captures at exact requested viewport sizes.
+
+Verification results are recorded below after final runs. Historical archived story tests already had a world-pickup failure before this request; those files and gameplay are untouched. Do not interpret current-game passes as a clean archived-suite result.
+
+## Checks
+
+- `npm run build`: passed (754.39KB, gzip201.12KB; existing chunk-size advisory).
+- `npm test`:84/84 passed,47.753s. Earlier attempts/failures recorded in unit-results.json and PLAN.md.
+- `npx tsx --test tests/chase-solo.test.ts`:7/7 passed, including200 runs with LIGHT from3s through20s and unchanged multiplayer speed/freeze guards.
+- `node scripts/appearance-proof.mjs before`: baseline6.367s catch.
+- `node scripts/appearance-proof.mjs after`:21.434s catch, freeze4.885s, alive20s; both sizes hand/cone gap0 and yaw mismatch0, axis alignment>=.9999999999999996, largest sampled turn17.98degrees/frame, local/remote/bot rendering measured together.
+- `node scripts/appearance-comparisons.mjs`: both-size side-by-side pages plus three first-look PNG pairs saved.
+- First `npx playwright test --reporter=json`:15/17 passed in543.587s; old short-freeze recording/thaw windows failed. Assertions retained, observation windows extended. browser-first.json preserves failures. Second full run also15/17 (552.621s): audio passed, ice observation and unchanged human infection failed. Focused infection passed; art diagnostic exposed tiny reconstructed deadline drift repeatedly resetting the ice ring. Fixed that rendering comparison with10ms tolerance. Focused art passed at both sizes (51.566s), retaining ring drainage, size, animation, catch550ms, hit-stop, pop and particle-capacity assertions. Final complete run: **17/17 passed**,577.585s,0fail/skip/flaky; browser-verified.json. Both full rounds/rematch, private recovery/restart, human conversion/catch, latency, resources, feedback, solo/retry, sound and art passed. Historical archived browser suites were not rerun in this scoped follow-up; the previously documented retired-story pickup failure remains outside scope.
+
+Final evidence was regenerated after the complete passing suite with position/velocity agreement and both opposed-motion dot products=-2m/s; sidestep dot approximately0. Reopened all14 requested after originals at exact sizes, plus first-look comparison pairs. My judgment remains: the goose reads as a goose and the light looks attached/aligned. Foreground foliage still partly hides feet in the second angle; it is disclosed and left unchanged.

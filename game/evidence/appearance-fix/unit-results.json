@@ -1,0 +1,19 @@
+{
+  "command": "npm test",
+  "tests": 84,
+  "passed": 84,
+  "failed": 0,
+  "durationMs": 47752.9965,
+  "previousAttempts": [
+    {
+      "passed": 82,
+      "tests": 83,
+      "failure": "old fast solo approach expectation; updated only this old behavior"
+    },
+    {
+      "passed": 83,
+      "tests": 84,
+      "failure": "unchanged retired server-match authoritative timer timeout; isolated complete rerun passed"
+    }
+  ]
+}

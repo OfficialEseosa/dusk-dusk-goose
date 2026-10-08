@@ -1,0 +1,130 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T04:37:22.877Z",
+    "duration": 36003.784,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "suites": [
+    {
+      "title": "chase-art.spec.ts",
+      "file": "chase-art.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "kit animation, goose waddle and phone character size are visible in the rendered scene",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14290,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 7000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 7000ms exceeded while waiting on the predicate\n    at C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-art.spec.ts:46:186",
+                    "location": {
+                      "file": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-art.spec.ts",
+                      "column": 186,
+                      "line": 46
+                    },
+                    "snippet": "  44 |       await page.evaluate(()=>{(window as any).__artSamples.length=0;});await page.keyboard.down('Space');await expect.poll(()=>state.snapshot?.events.some(e=>e.type==='freeze'&&e.actor===state.id),{timeout:3000}).toBe(true);\n  45 |       try{await expect.poll(()=>page.evaluate(()=>(window as any).__artSamples.some((s:any)=>s.figures.some((f:any)=>f.ice)))).toBe(true);}catch(error){console.log(JSON.stringify({viewport,errors:state.errors,snapshot:state.snapshot,lastInput:state.lastInput,samples:await page.evaluate(()=>(window as any).__artSamples.slice(-3))}));throw error;}await captureFrame(page,`${evidence}/ice-${viewport.width}.png`);await page.keyboard.up('Space');\n> 46 |       try{await expect.poll(()=>page.evaluate(()=>(window as any).__artSamples.filter((s:any)=>s.figures.some((f:any)=>f.ice&&f.freezeRing>0&&f.freezeRing<180)).length),{timeout:7000}).toBeGreaterThan(0);}catch(error){console.log(JSON.stringify({iceProbe:await page.evaluate(()=>{const a=(window as any).__artSamples;return {frames:a.length,seconds:(a.at(-1)?.at-a[0]?.at)/1000,rings:a.filter((s:any)=>s.figures.some((f:any)=>f.ice)).map((s:any)=>s.figures.filter((f:any)=>f.ice).map((f:any)=>f.freezeRing)).slice(-10),figures:[...(window as any).__artView.figures.values()].filter((f:any)=>f.ice).map((f:any)=>({until:f.freezeUntil,duration:f.freezeDuration}))};})}));throw error;}\n     |                                                                                                                                                                                          ^\n  47 |       const frames:{at:number;data:string}[]=[];cdp.on('Page.screencastFrame',frame=>{frames.push({at:(frame.metadata.timestamp??Date.now()/1000)*1000,data:frame.data});if(frames.length>40)frames.shift();void cdp.send('Page.screencastFrameAck',{sessionId:frame.sessionId}).catch(()=>{});});await cdp.send('Page.startScreencast',{format:'png',everyNthFrame:1});\n  48 |       await page.evaluate(()=>{(window as any).__artSamples.length=0;});await expect.poll(()=>state.snapshot?.phase,{timeout:30000}).toBe('results');await expect.poll(()=>page.evaluate(id=>(window as any).__artSamples.some((s:any)=>s.figures.some((f:any)=>f.id===id&&f.role==='goose')),state.id)).toBe(true);await expect.poll(()=>frames.length).toBeGreaterThan(2);const resultAt=state.runTimes[state.snapshot!.solo!.runId].results!,firstGoose=await page.evaluate(id=>(window as any).__artSamples.find((s:any)=>s.figures.some((f:any)=>f.id===id&&f.role==='goose'&&f.scale<1))?.wall,state.id);expect(firstGoose).toBeTruthy();await expect.poll(()=>frames.some(f=>f.at>=firstGoose+80),{timeout:2000,intervals:[25,50]}).toBe(true);await cdp.send('Page.stopScreencast');const conversionFrame=[...frames].filter(f=>f.at>=firstGoose+80).sort((a,b)=>Math.abs(a.at-firstGoose-100)-Math.abs(b.at-firstGoose-100))[0];expect(conversionFrame).toBeTruthy();expect(conversionFrame.at-resultAt).toBeLessThan(550);await writeFile(`${evidence}/conversion-${viewport.width}.png`,Buffer.from(conversionFrame.data,'base64'));\n  49 |       const effectSamples=await page.evaluate(()=>(window as any).__artSamples),own=effectSamples.flatMap((s:any)=>s.figures.filter((f:any)=>f.id===state.id));expect(own.some((f:any)=>f.hitStop)).toBe(true);expect(own.some((f:any)=>f.role==='goose'&&f.scale<1)).toBe(true);expect(Math.max(...effectSamples.map((s:any)=>s.particles))).toBeGreaterThan(20);expect(effectSamples.every((s:any)=>s.pool===256&&s.particles<=256)).toBe(true);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-art.spec.ts",
+                        "column": 186,
+                        "line": 46
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 7000ms exceeded while waiting on the predicate\n\n  44 |       await page.evaluate(()=>{(window as any).__artSamples.length=0;});await page.keyboard.down('Space');await expect.poll(()=>state.snapshot?.events.some(e=>e.type==='freeze'&&e.actor===state.id),{timeout:3000}).toBe(true);\n  45 |       try{await expect.poll(()=>page.evaluate(()=>(window as any).__artSamples.some((s:any)=>s.figures.some((f:any)=>f.ice)))).toBe(true);}catch(error){console.log(JSON.stringify({viewport,errors:state.errors,snapshot:state.snapshot,lastInput:state.lastInput,samples:await page.evaluate(()=>(window as any).__artSamples.slice(-3))}));throw error;}await captureFrame(page,`${evidence}/ice-${viewport.width}.png`);await page.keyboard.up('Space');\n> 46 |       try{await expect.poll(()=>page.evaluate(()=>(window as any).__artSamples.filter((s:any)=>s.figures.some((f:any)=>f.ice&&f.freezeRing>0&&f.freezeRing<180)).length),{timeout:7000}).toBeGreaterThan(0);}catch(error){console.log(JSON.stringify({iceProbe:await page.evaluate(()=>{const a=(window as any).__artSamples;return {frames:a.length,seconds:(a.at(-1)?.at-a[0]?.at)/1000,rings:a.filter((s:any)=>s.figures.some((f:any)=>f.ice)).map((s:any)=>s.figures.filter((f:any)=>f.ice).map((f:any)=>f.freezeRing)).slice(-10),figures:[...(window as any).__artView.figures.values()].filter((f:any)=>f.ice).map((f:any)=>({until:f.freezeUntil,duration:f.freezeDuration}))};})}));throw error;}\n     |                                                                                                                                                                                          ^\n  47 |       const frames:{at:number;data:string}[]=[];cdp.on('Page.screencastFrame',frame=>{frames.push({at:(frame.metadata.timestamp??Date.now()/1000)*1000,data:frame.data});if(frames.length>40)frames.shift();void cdp.send('Page.screencastFrameAck',{sessionId:frame.sessionId}).catch(()=>{});});await cdp.send('Page.startScreencast',{format:'png',everyNthFrame:1});\n  48 |       await page.evaluate(()=>{(window as any).__artSamples.length=0;});await expect.poll(()=>state.snapshot?.phase,{timeout:30000}).toBe('results');await expect.poll(()=>page.evaluate(id=>(window as any).__artSamples.some((s:any)=>s.figures.some((f:any)=>f.id===id&&f.role==='goose')),state.id)).toBe(true);await expect.poll(()=>frames.length).toBeGreaterThan(2);const resultAt=state.runTimes[state.snapshot!.solo!.runId].results!,firstGoose=await page.evaluate(id=>(window as any).__artSamples.find((s:any)=>s.figures.some((f:any)=>f.id===id&&f.role==='goose'&&f.scale<1))?.wall,state.id);expect(firstGoose).toBeTruthy();await expect.poll(()=>frames.some(f=>f.at>=firstGoose+80),{timeout:2000,intervals:[25,50]}).toBe(true);await cdp.send('Page.stopScreencast');const conversionFrame=[...frames].filter(f=>f.at>=firstGoose+80).sort((a,b)=>Math.abs(a.at-firstGoose-100)-Math.abs(b.at-firstGoose-100))[0];expect(conversionFrame).toBeTruthy();expect(conversionFrame.at-resultAt).toBeLessThan(550);await writeFile(`${evidence}/conversion-${viewport.width}.png`,Buffer.from(conversionFrame.data,'base64'));\n  49 |       const effectSamples=await page.evaluate(()=>(window as any).__artSamples),own=effectSamples.flatMap((s:any)=>s.figures.filter((f:any)=>f.id===state.id));expect(own.some((f:any)=>f.hitStop)).toBe(true);expect(own.some((f:any)=>f.role==='goose'&&f.scale<1)).toBe(true);expect(Math.max(...effectSamples.map((s:any)=>s.particles))).toBeGreaterThan(20);expect(effectSamples.every((s:any)=>s.pool===256&&s.particles<=256)).toBe(true);\n    at C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-art.spec.ts:46:186"
+                    }
+                  ],
+                  "stdout": [
+                    {
+                      "text": "{\"iceProbe\":{\"frames\":400,\"seconds\":6.6830999999996274,\"rings\":[[240],[240],[234],[234],[234],[234],[234],[234],[234],[234]],\"figures\":[{\"until\":20.000000000000007,\"duration\":8.579000000000002},{}]}}\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:37:24.484Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\test-results\\chase-art-kit-animation-go-0e895-sible-in-the-rendered-scene\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\tests\\chase-art.spec.ts",
+                    "column": 186,
+                    "line": 46
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ab99d9ac7efb902aa1be-df1f89ac2c8d3277d640",
+          "file": "chase-art.spec.ts",
+          "line": 7,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "chase-infection.spec.ts",
+      "file": "chase-infection.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "a converted human immediately turns and catches the human friend beside them",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 55000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17981,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:37:39.942Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f9d1cc14dd5455723302-99024164f0c076f618d1",
+          "file": "chase-infection.spec.ts",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    }
+  ]
+}

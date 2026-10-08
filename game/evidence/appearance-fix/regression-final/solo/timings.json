@@ -1,0 +1,34 @@
+[
+  {
+    "viewport": {
+      "width": 667,
+      "height": 375
+    },
+    "chasedMs": 3083,
+    "freezeMs": 6832,
+    "retryMs": [
+      1795,
+      1842
+    ],
+    "best": 21.54400062561035,
+    "corrections": 0,
+    "timingMethod": "first received authoritative state",
+    "chasePollReturnMs": 3265
+  },
+  {
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "chasedMs": 3103,
+    "freezeMs": 6834,
+    "retryMs": [
+      1836,
+      1795
+    ],
+    "best": 21.60300064086914,
+    "corrections": 0,
+    "timingMethod": "first received authoritative state",
+    "chasePollReturnMs": 3305
+  }
+]

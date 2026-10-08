@@ -1,0 +1,11 @@
+{
+  "fixtureDrivenBreak": true,
+  "browserSessions": 2,
+  "additionalWebSocketSeats": 4,
+  "fourAndSixSameArena": true,
+  "threeLamps": true,
+  "sixStartsTwoGeese": true,
+  "refreshSameSeat": true,
+  "noScroll": true,
+  "errors": []
+}

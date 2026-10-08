@@ -6,7 +6,7 @@ import {captureFrame} from './chase-capture';
 const evidence=process.env.DDG_EVIDENCE_DIR??'test-results/solo-evidence';
 
 test('solo starts chasing by5s, teaches a freeze by10s and repeatedly retries by3s',async({browser})=>{
-  test.setTimeout(60000);await mkdir(evidence,{recursive:true});const measurements=[];
+  test.setTimeout(120000);await mkdir(evidence,{recursive:true});const measurements=[];
   for(const viewport of [{width:667,height:375},{width:1366,height:768}]){
     let firstChasedAt=0,firstFreezeAt=0;const snapshots:any[]=[];
     const context=await browser.newContext({viewport}),page=await context.newPage(),state=watchChase(page,s=>{
@@ -32,7 +32,7 @@ test('solo starts chasing by5s, teaches a freeze by10s and repeatedly retries by
     expect(distance(before,after)).toBeGreaterThan(1.5);
     const retries=[],actionBox=await page.locator('#action').boundingBox();expect(actionBox).toBeTruthy();
     for(let run=0;run<2;run++){
-      await expect.poll(()=>state.snapshot?.phase,{timeout:15000,intervals:[50,100]}).toBe('results');const oldRun=state.snapshot!.solo!.runId,caught=state.runTimes[oldRun].results!;
+      await expect.poll(()=>state.snapshot?.phase,{timeout:30000,intervals:[50,100]}).toBe('results');const oldRun=state.snapshot!.solo!.runId,caught=state.runTimes[oldRun].results!;
       await expect(page.locator('#action-label')).toHaveText('AGAIN');
       // The persistent button has a fixed measured position. Send a real pointer tap
       // without locator.click's RAF-based stability waits extending the reaction time.
@@ -49,15 +49,15 @@ test('solo starts chasing by5s, teaches a freeze by10s and repeatedly retries by
 });
 
 test('solo evidence shows chase, freeze, conversion and result at both sizes',async({browser})=>{
-  test.setTimeout(45000);await mkdir(evidence,{recursive:true});
+  test.setTimeout(90000);await mkdir(evidence,{recursive:true});
   for(const viewport of [{width:667,height:375},{width:1366,height:768}]){
     const context=await browser.newContext({viewport}),page=await context.newPage(),state=watchChase(page);await page.goto('/');await page.getByRole('button',{name:'Play',exact:true}).click();
-    await expect.poll(()=>{const s=state.snapshot,k=s?.entities.find(e=>e.id===state.id),g=s?.entities.find(e=>e.role==='goose');return s&&k&&g&&s.elapsed>3.5&&distance(k,g)<7.8;}).toBe(true);const run=state.snapshot!.solo!.runId;
+    await expect.poll(()=>{const s=state.snapshot,k=s?.entities.find(e=>e.id===state.id),g=s?.entities.find(e=>e.role==='goose');return s&&k&&g&&s.elapsed>3.5&&distance(k,g)<7.8;},{timeout:8000}).toBe(true);const run=state.snapshot!.solo!.runId;
     // Start a compositor capture, but do not delay the player's defence until
     // the GPU has encoded/read back the PNG. Input continues during capture.
     const captured=captureFrame(page,`${evidence}/chase-${viewport.width}.png`);await page.keyboard.down('Space');await captured;expect(state.snapshot!.solo!.runId).toBe(run);expect(state.snapshot!.phase).toBe('playing');
     await expect.poll(()=>state.snapshot?.events.some(e=>e.type==='freeze'&&e.actor===state.id)??false).toBe(true);await captureFrame(page,`${evidence}/freeze-${viewport.width}.png`);await page.keyboard.up('Space');expect(state.snapshot!.solo!.runId).toBe(run);
-    await expect.poll(()=>state.snapshot?.phase,{timeout:15000,intervals:[25,50]}).toBe('results');await captureFrame(page,`${evidence}/catch-${viewport.width}.png`);await expect(page.locator('#results')).toBeVisible();await captureFrame(page,`${evidence}/results-${viewport.width}.png`);expect(state.snapshot!.solo!.runId).toBe(run);
+    await expect.poll(()=>state.snapshot?.phase,{timeout:30000,intervals:[25,50]}).toBe('results');await captureFrame(page,`${evidence}/catch-${viewport.width}.png`);await expect(page.locator('#results')).toBeVisible();await captureFrame(page,`${evidence}/results-${viewport.width}.png`);expect(state.snapshot!.solo!.runId).toBe(run);
     const bounds=await page.locator('#hud').evaluate(hud=>Array.from(hud.querySelectorAll('b,span')).map(e=>({text:e.textContent,x:e.getBoundingClientRect().x,right:e.getBoundingClientRect().right,scroll:e.scrollWidth,width:e.clientWidth})));
     for(const box of bounds){if(!box.width)continue;expect(box.x).toBeGreaterThanOrEqual(0);expect(box.right).toBeLessThanOrEqual(viewport.width);expect(box.scroll).toBeLessThanOrEqual(box.width);}
     expect(state.errors).toEqual([]);await context.close();

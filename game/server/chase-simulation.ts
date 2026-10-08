@@ -25,13 +25,14 @@ export class ChaseSimulation {
   event(type:ChaseEvent['type'],actor:Entity,target?:Entity){this.events.push({id:++this.eventId,at:this.now,type,actor:actor.id,target:target?.id,x:target?.x??actor.x,z:target?.z??actor.z});if(this.events.length>48)this.events.shift();}
   gooseBoost(){return this.mode==='multi'?(this.elapsed>=60?1.08:1)*(1+.04*Math.max(0,Math.min(4,Math.floor((this.elapsed-this.lastCatchAt-15)/5)))):1;}
   speed(e:Entity){if(e.frozenUntil>this.now||e.safeUntil>this.now&&e.role==='goose')return 0;
+    if(e.role==='goose'&&this.mode==='solo'&&this.firstSoloGooseId&&this.elapsed<20)return e.id===this.firstSoloGooseId&&!this.assistedFreezeUsed?2:1.2;
     const t=this.now-e.lungeAt;if(e.role==='goose'&&t<TUNE.windup+TUNE.dashTime+TUNE.recovery)return t<TUNE.windup?0:t<TUNE.windup+TUNE.dashTime?TUNE.dashDistance/TUNE.dashTime:TUNE.gooseSpeed*.3;
     if(e.role==='kid')return (e.light?TUNE.litSpeed:TUNE.kidSpeed)*(e.id===this.lastKid?1.08:1);
     return (this.mode==='solo'?TUNE.kidSpeed*Math.min(1.12,.92+.02*Math.floor(this.elapsed/15)):e.bot?TUNE.botSpeed:TUNE.gooseSpeed)*this.gooseBoost();
   }
-  lunge(e:Entity){if(e.role!=='goose'||e.frozenUntil>this.now||e.safeUntil>this.now||this.now-e.lungeAt<TUNE.cooldown)return false;
+  lunge(e:Entity){if(this.mode==='solo'&&this.firstSoloGooseId&&this.elapsed<20)return false;if(e.role!=='goose'||e.frozenUntil>this.now||e.safeUntil>this.now||this.now-e.lungeAt<TUNE.cooldown)return false;
     e.lungeAt=this.now;e.lungeAngle=e.facing;e.lungeHit=false;this.event('windup',e);return true;}
-  dwellNeeded(goose:Entity,kid?:Entity){return this.mode==='solo'&&this.beginner&&!this.assistedFreezeUsed&&goose.id===this.firstSoloGooseId||this.mode==='multi'&&this.elapsed<=3&&!!kid&&this.beginnerKids.has(kid.id)? .1:TUNE.dwell;}
+  dwellNeeded(goose:Entity,kid?:Entity){return this.mode==='solo'&&!this.assistedFreezeUsed&&goose.id===this.firstSoloGooseId||this.mode==='multi'&&this.elapsed<=3&&!!kid&&this.beginnerKids.has(kid.id)? .1:TUNE.dwell;}
   practice(dt:number){
     this.now+=dt;
     for(const k of this.entities){if(k.role!=='kid')continue;k.battery=100;k.light=k.held;
@@ -128,7 +129,9 @@ export class ChaseSimulation {
       for(const g of this.entities){if(g.role!=='goose')continue;
         const point=beamPoint(g),hit=e.light&&distance(e,point)<=TUNE.range&&Math.abs(angleDelta(e.aim,angle(e,point)))<=TUNE.halfCone&&clearPath(e,point,this.arena,0,true);
         e.dwell[g.id]=hit?(e.dwell[g.id]??0)+dt:0;
-        if(e.dwell[g.id]>=this.dwellNeeded(g,e)&&g.immuneUntil<=this.now&&g.frozenUntil<=this.now&&e.battery>=TUNE.freezeCost){g.frozenUntil=this.now+TUNE.freeze;g.immuneUntil=g.frozenUntil+TUNE.immunity+(this.mode==='solo'?Math.max(0,Math.floor(this.elapsed/30)-4)*.5:0);e.battery-=TUNE.freezeCost;e.score+=25;e.dwell[g.id]=0;this.assistedFreezeUsed=true;this.event('freeze',e,g);}
+        if(e.dwell[g.id]>=this.dwellNeeded(g,e)&&g.immuneUntil<=this.now&&g.frozenUntil<=this.now&&e.battery>=TUNE.freezeCost){// The opening beam buys time to see the game, on every solo retry.
+          const firstSoloFreeze=this.mode==='solo'&&!this.assistedFreezeUsed&&g.id===this.firstSoloGooseId;
+          g.frozenUntil=firstSoloFreeze?Math.max(this.now+8,20):this.now+TUNE.freeze;g.immuneUntil=g.frozenUntil+TUNE.immunity+(this.mode==='solo'?Math.max(0,Math.floor(this.elapsed/30)-4)*.5:0);e.battery-=TUNE.freezeCost;e.score+=25;e.dwell[g.id]=0;this.assistedFreezeUsed=true;this.event('freeze',e,g);}
       }
       for(const p of this.pickups)if(p.readyAt<=this.now&&distance(e,p)<.9){e.battery=Math.min(100,e.battery+50);e.score+=10;p.readyAt=this.now+8;this.event('pickup',e);const pads=[...this.arena.pads].sort((a,b)=>distance(b,e)-distance(a,e));p.x=pads[0].x;p.z=pads[0].z;}
     }

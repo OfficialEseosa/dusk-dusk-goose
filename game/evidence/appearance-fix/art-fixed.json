@@ -1,0 +1,54 @@
+{
+  "stats": {
+    "startTime": "2026-10-08T04:40:17.831Z",
+    "duration": 51565.633,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "suites": [
+    {
+      "title": "chase-art.spec.ts",
+      "file": "chase-art.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "kit animation, goose waddle and phone character size are visible in the rendered scene",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 48149,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-08T04:40:20.517Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ab99d9ac7efb902aa1be-df1f89ac2c8d3277d640",
+          "file": "chase-art.spec.ts",
+          "line": 7,
+          "column": 1
+        }
+      ]
+    }
+  ]
+}

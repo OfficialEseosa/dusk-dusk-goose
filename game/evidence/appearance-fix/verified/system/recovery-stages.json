@@ -1,0 +1,14 @@
+{
+  "fixtureHeldStages": true,
+  "stages": [
+    "solo",
+    "joining",
+    "countdown",
+    "playing",
+    "results"
+  ],
+  "sameCredential": true,
+  "otherSessionContinued": true,
+  "restartFriendlyTitleBoth": true,
+  "errors": []
+}
