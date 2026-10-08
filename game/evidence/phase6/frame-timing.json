@@ -1,0 +1,56 @@
+[
+  {
+    "frames": 1147,
+    "averageMs": 17.566782911944205,
+    "fps": 56.92561950657845,
+    "p99Ms": 16.80000000000109,
+    "worstMs": 450.1000000000022,
+    "averageCallbackMs": 1.4570183088806472,
+    "backbuffer": {
+      "width": 409,
+      "height": 230
+    },
+    "viewport": {
+      "width": 667,
+      "height": 375
+    },
+    "dpr": 1,
+    "renderer": "ANGLE (Intel, Intel(R) Arc(TM) Graphics (0x00007D55) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "size": {
+      "width": 667,
+      "height": 375
+    },
+    "corrections": 0,
+    "errors": [],
+    "physicalPhone": false,
+    "debugger": false,
+    "gpuReadback": false
+  },
+  {
+    "frames": 1200,
+    "averageMs": 16.679916666666667,
+    "fps": 59.95233789137635,
+    "p99Ms": 16.80000000000109,
+    "worstMs": 33.399999999999636,
+    "averageCallbackMs": 1.3744166668752829,
+    "backbuffer": {
+      "width": 1366,
+      "height": 768
+    },
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "dpr": 1,
+    "renderer": "ANGLE (Intel, Intel(R) Arc(TM) Graphics (0x00007D55) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "size": {
+      "width": 1366,
+      "height": 768
+    },
+    "corrections": 0,
+    "errors": [],
+    "physicalPhone": false,
+    "debugger": false,
+    "gpuReadback": false
+  }
+]

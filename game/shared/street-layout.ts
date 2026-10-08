@@ -29,8 +29,8 @@ export const SOLIDS: readonly StreetSolid[] = [
 ];
 const epsilon = 0.00001;
 function expanded(solid: StreetSolid) {
-  return { minX: solid.minX - PLAYER_RADIUS + epsilon, maxX: solid.maxX + PLAYER_RADIUS - epsilon,
-    minZ: solid.minZ - PLAYER_RADIUS + epsilon, maxZ: solid.maxZ + PLAYER_RADIUS - epsilon };
+  return { minX: solid.minX - PLAYER_RADIUS - epsilon, maxX: solid.maxX + PLAYER_RADIUS + epsilon,
+    minZ: solid.minZ - PLAYER_RADIUS - epsilon, maxZ: solid.maxZ + PLAYER_RADIUS + epsilon };
 }
 const WALK_BOUNDS=SOLIDS.map(expanded);
 const BOUNDS_BY_SOLID=new Map(SOLIDS.map((solid,index)=>[solid,WALK_BOUNDS[index]]));

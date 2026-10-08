@@ -1,0 +1,61 @@
+{
+  "seedRange": [
+    1,
+    100
+  ],
+  "botSpeed": 5.25,
+  "targets": {
+    "kidWinPercent": "35–45",
+    "medianFirstCatch": "10–15s",
+    "medianSolo": "35–50s",
+    "zeroCatchPercent": "<5"
+  },
+  "results": [
+    {
+      "humans": 2,
+      "arena": "park",
+      "rounds": 100,
+      "kidWinPercent": 92,
+      "medianFirstCatch": 72.64999999999802,
+      "medianRound": 75.04999999999788,
+      "zeroCatchPercent": 63
+    },
+    {
+      "humans": 3,
+      "arena": "park",
+      "rounds": 100,
+      "kidWinPercent": 92,
+      "medianFirstCatch": 72.64999999999802,
+      "medianRound": 75.04999999999788,
+      "zeroCatchPercent": 63
+    },
+    {
+      "humans": 4,
+      "arena": "culdesac",
+      "rounds": 100,
+      "kidWinPercent": 100,
+      "medianFirstCatch": null,
+      "medianRound": 75.04999999999788,
+      "zeroCatchPercent": 100
+    },
+    {
+      "humans": 5,
+      "arena": "culdesac",
+      "rounds": 100,
+      "kidWinPercent": 91,
+      "medianFirstCatch": 48.799999999999365,
+      "medianRound": 75.04999999999788,
+      "zeroCatchPercent": 0
+    },
+    {
+      "humans": 6,
+      "arena": "culdesac",
+      "rounds": 100,
+      "kidWinPercent": 0,
+      "medianFirstCatch": 9.650000000000002,
+      "medianRound": 9.650000000000002,
+      "zeroCatchPercent": 0
+    }
+  ],
+  "medianSolo": 14.600000000000072
+}

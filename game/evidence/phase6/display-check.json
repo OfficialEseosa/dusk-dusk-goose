@@ -1,0 +1,11 @@
+{
+  "unsupportedFullscreenFallback": true,
+  "tipDismissed": true,
+  "portraitBotCover": true,
+  "landscapeSameSeat": true,
+  "laptopContinued": true,
+  "noScroll": true,
+  "controlsReachable": true,
+  "physicalFullscreenVerified": false,
+  "errors": []
+}

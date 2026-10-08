@@ -458,7 +458,7 @@ export class Street {
     // WebSocket callback when a busy renderer delays this callback.
     const now = performance.now();
     const elapsed = now - this.lastFrame;
-    const dt = Math.min(elapsed / 1000, 0.05); this.lastFrame = now;
+    const dt = Math.min(elapsed / 1000, 0.05),moveDt=Math.min(elapsed/1000,.15); this.lastFrame = now;
     if (!document.hidden) { this.frames.push(elapsed); this.allFrames.push(elapsed); }
     if (this.allFrames.length > 36000) this.allFrames.splice(0, 18000);
     this.blackout = Boolean(this.snapshot?.blackoutAt && Date.now() + this.serverOffset >= this.snapshot.blackoutAt);
@@ -486,7 +486,7 @@ export class Street {
     const moving = turning&&!frozen;
     if (turning) {
       dx /= Math.max(length, 1); dz /= Math.max(length, 1);
-      const target={x:this.pose.x+dx*MOVE_SPEED*dt*(frozen?0:1),z:this.pose.z+dz*MOVE_SPEED*dt*(frozen?0:1)};
+      const target={x:this.pose.x+dx*MOVE_SPEED*moveDt*(frozen?0:1),z:this.pose.z+dz*MOVE_SPEED*moveDt*(frozen?0:1)};
       const next=this.place==="prep"?{x:THREE.MathUtils.clamp(target.x,PREP_BOUNDS.minX,PREP_BOUNDS.maxX),z:THREE.MathUtils.clamp(target.z,PREP_BOUNDS.minZ,PREP_BOUNDS.maxZ)}:
         moveOnStreet(this.pose,target,point=>this.movePath.push(point));
       this.pose.x=next.x;this.pose.z=next.z;

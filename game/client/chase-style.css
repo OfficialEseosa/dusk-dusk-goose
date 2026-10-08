@@ -32,3 +32,7 @@ h1 em{color:#ffcc57;display:inline-block;transform:rotate(3deg)}
 #message{left:50%;transform:translateX(-50%);width:calc(100% - 300px);max-width:560px;padding:0;top:29%}@media(max-height:450px){#message{top:30%;font-size:18px}}
 
 @media(max-height:450px){#final-count{top:54%}}
+
+html,body{width:100vw;height:100dvh}#app{position:fixed;inset:0;width:100vw;height:100dvh}canvas{width:100%!important;height:100%!important}#portrait-hint{position:fixed!important;width:100vw;height:100dvh}#home-tip{position:absolute;left:50%;bottom:max(8px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(345px,calc(100% - 300px));min-height:44px;padding:8px 10px;background:#192a50f2;border:1px solid #b5b7c777;border-radius:14px;text-align:center;font-size:16px;line-height:1.25;z-index:10}#portrait-hint{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;background:#142447ed;pointer-events:auto}#portrait-hint>b{font-size:80px;color:#ffd36c}#portrait-hint h2{font-size:28px;line-height:1.15}#portrait-hint p{font-size:18px;max-width:320px;line-height:1.4}
+
+@media(orientation:portrait){#title,#hud,#controls,#results,#role-card,#message,#threat,#home-tip{visibility:hidden}}

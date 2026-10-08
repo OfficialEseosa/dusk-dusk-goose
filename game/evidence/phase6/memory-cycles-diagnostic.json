@@ -1,0 +1,82 @@
+{
+  "measurements": [
+    {
+      "textures": 16,
+      "geometries": 40,
+      "programs": 14,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 16,
+      "geometries": 40,
+      "programs": 14,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 16,
+      "geometries": 40,
+      "programs": 14,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 16,
+      "geometries": 40,
+      "programs": 14,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 16,
+      "geometries": 40,
+      "programs": 14,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 16,
+      "geometries": 40,
+      "programs": 14,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 16,
+      "geometries": 40,
+      "programs": 14,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 16,
+      "geometries": 40,
+      "programs": 14,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 16,
+      "geometries": 40,
+      "programs": 14,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 16,
+      "geometries": 40,
+      "programs": 14,
+      "figures": 6,
+      "particles": 256
+    },
+    {
+      "textures": 16,
+      "geometries": 40,
+      "programs": 14,
+      "figures": 6,
+      "particles": 256
+    }
+  ],
+  "errors": []
+}

@@ -10,7 +10,7 @@ export const TUNE = {
 export const SOLO_SPAWNS = [1.5,10,20,32,45,60,75,90,105,120] as const;
 export function tonightSeed(time=Date.now()){return Number(new Date(time).toISOString().slice(0,10).replaceAll('-',''));}
 export type Point = { x: number; z: number };
-export type Solid = { x: number; z: number; w: number; d: number; blocksLight: boolean };
+export type Solid = { x: number; z: number; w: number; d: number; blocksLight: boolean; radius?:number };
 export const PARK = {
   width: 26, depth: 18,
   solids: [
@@ -23,17 +23,26 @@ export const PARK = {
   pads: [{x:-10,z:-6},{x:10,z:6},{x:-3,z:7},{x:3,z:-7},{x:-10,z:2},{x:10,z:-2},{x:-6,z:-7},{x:6,z:7}],
 };
 export type Arena = typeof PARK;
+export const CULDESAC:Arena={width:34,depth:22,solids:[
+  {x:0,z:0,w:4,d:4,radius:2,blocksLight:false},
+  {x:-12.4,z:-5.9,w:4,d:5,blocksLight:true},{x:-8.9,z:-7.9,w:3,d:1,blocksLight:true},
+  {x:10.9,z:-5.9,w:7,d:5,blocksLight:true},{x:-10.9,z:5.9,w:7,d:5,blocksLight:true},
+  {x:12.4,z:5.9,w:4,d:5,blocksLight:true},{x:8.9,z:7.9,w:3,d:1,blocksLight:true},
+  {x:-10.5,z:0,w:4,d:2,blocksLight:true},{x:10.5,z:0,w:4,d:2,blocksLight:true},
+],pads:[{x:-8.9,z:-5.5},{x:8.9,z:5.5},{x:-15,z:-9},{x:15,z:9},{x:-5,z:9},{x:5,z:-9},{x:-15,z:0},{x:15,z:0}]};
+export function arenaFor(name?:'park'|'culdesac'){return name==='culdesac'?CULDESAC:PARK;}
 export function distance(a: Point, b: Point) { return Math.hypot(a.x-b.x,a.z-b.z); }
 export function angle(a: Point,b: Point) { return Math.atan2(b.x-a.x,b.z-a.z); }
 export function angleDelta(a:number,b:number) { return Math.atan2(Math.sin(b-a),Math.cos(b-a)); }
 export function walkable(p:Point, arena:Arena=PARK, radius=.4) {
   return Number.isFinite(p.x) && Number.isFinite(p.z) && Math.abs(p.x)<=arena.width/2-radius && Math.abs(p.z)<=arena.depth/2-radius &&
-    !arena.solids.some(s=>Math.abs(p.x-s.x)<s.w/2+radius && Math.abs(p.z-s.z)<s.d/2+radius);
+    !arena.solids.some(s=>s.radius?distance(p,s)<s.radius+radius:Math.abs(p.x-s.x)<s.w/2+radius && Math.abs(p.z-s.z)<s.d/2+radius);
 }
 export function clearPath(a:Point,b:Point, arena:Arena=PARK, radius=.4, light=false) {
   if(!light && (!walkable(a,arena,radius)||!walkable(b,arena,radius)))return false;
   for(const s of arena.solids){
     if(light&&!s.blocksLight)continue;
+    if(s.radius){const dx=b.x-a.x,dz=b.z-a.z,t=Math.max(0,Math.min(1,((s.x-a.x)*dx+(s.z-a.z)*dz)/(dx*dx+dz*dz||1)));if(Math.hypot(a.x+dx*t-s.x,a.z+dz*t-s.z)<s.radius+radius)return false;continue;}
     let lo=0,hi=1;
     for(const axis of ['x','z'] as const){
       const half=(axis==='x'?s.w:s.d)/2+radius, delta=b[axis]-a[axis];
@@ -63,6 +72,7 @@ export interface SoloState {
   resultAt:number|null; retryReadyAt:number|null; autoRetryAt:number|null;
 }
 export interface ChaseSnapshot {
+  arena?:'park'|'culdesac';
   code:string; now:number; elapsed:number; mode:'solo'|'multi'; phase:'playing'|'results';
   entities:Entity[]; pickups:{x:number;z:number;readyAt:number}[]; events:ChaseEvent[]; firstCatch:number|null;
   solo?:SoloState;

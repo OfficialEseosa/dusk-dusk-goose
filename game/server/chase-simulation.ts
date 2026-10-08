@@ -10,10 +10,11 @@ export class ChaseSimulation {
   startingGeese=new Set<string>();lastKid?:string;private startingBonus=new Set<string>();
   history=new PositionHistory();viewDelay=new Map<string,number>();
   lamps:LampState[]=[{x:-3.8,z:0,remaining:5,readyAt:0,active:false}];beginnerKids=new Set<string>();private lastCatchAt=0;
-  private minds=new Map<string,{lastSeen?:Point; seenAt:number; litAt:number; cornerUntil:number}>();
+  private minds=new Map<string,{lastSeen?:Point; seenAt:number; litAt:number; cornerUntil:number;waitAt:number;nextAmbush:number}>();
   private eventId=0; private rng:()=>number; private navCache=new Map<string,{at:number;field:Map<string,number>}>();
   constructor(public mode:'solo'|'multi'='solo',seed=1,public arena:Arena=PARK){
-    this.rng=randomSeed(seed);this.pickups=arena.pads.slice(0,2).map(p=>({...p,readyAt:0}));
+    this.rng=randomSeed(seed);this.pickups=arena.pads.slice(0,arena===PARK?2:3).map(p=>({...p,readyAt:0}));
+    if(arena!==PARK)this.lamps=[{x:0,z:-3,remaining:5,readyAt:0,active:false},{x:-6,z:0,remaining:5,readyAt:0,active:false},{x:6,z:0,remaining:5,readyAt:0,active:false}];
   }
   add(id:string,name:string,bot=false,role:'kid'|'goose'='kid',position?:Point){
     const n=this.entities.length;let p=position??(role==='kid'?{x:-3-(n%4)*1.8,z:7.3}:{x:10,z:-6});
@@ -65,7 +66,7 @@ export class ChaseSimulation {
   }
   private bot(e:Entity,dt:number){
     let enemies=this.entities.filter(p=>p.role!==e.role);if(!enemies.length)return;
-    let mind=this.minds.get(e.id);if(!mind){mind={seenAt:0,litAt:-100,cornerUntil:0};this.minds.set(e.id,mind);}
+    let mind=this.minds.get(e.id);if(!mind){mind={seenAt:0,litAt:-100,cornerUntil:0,waitAt:-1,nextAmbush:0};this.minds.set(e.id,mind);}
     if(e.role==='goose')enemies=enemies.filter(k=>k.light||distance(e,k)<=12||clearPath(e,k,this.arena,0,true));
     if(!enemies.length){const target=mind.lastSeen&&this.now-mind.seenAt<4?mind.lastSeen:this.arena.pads[(e.personality+Math.floor(this.now/5))%this.arena.pads.length];const a=this.steer(e,target),q=slide(e,Math.sin(a)*this.speed(e)*dt,Math.cos(a)*this.speed(e)*dt,this.arena);e.vx=(q.x-e.x)/dt;e.vz=(q.z-e.z)/dt;e.facing=a;e.x=q.x;e.z=q.z;return;}
     let nearest=enemies[0];for(const p of enemies)if(distance(e,p)<distance(e,nearest))nearest=p;
@@ -75,7 +76,7 @@ export class ChaseSimulation {
       let target:Point=nearest;
       if(e.personality===1)target={x:nearest.x+nearest.vx*.8,z:nearest.z+nearest.vz*.8};
       if(e.personality===2){const chaser=this.entities.find(g=>g.role==='goose'&&g.personality===0)??e;const lead={x:nearest.x+nearest.vx*.4,z:nearest.z+nearest.vz*.4};target={x:lead.x+Math.max(-4,Math.min(4,lead.x-chaser.x)),z:lead.z+Math.max(-4,Math.min(4,lead.z-chaser.z))};}
-      if(e.personality===3&&d<8&&d>4){const pad=this.pickups.reduce((a,b)=>distance(a,nearest)<distance(b,nearest)?a:b);target=pad;if(distance(e,pad)<.5){e.vx=e.vz=0;return;}}
+      if(e.personality===3&&d<8&&d>4&&this.now>=mind.nextAmbush){const pad=this.pickups.reduce((a,b)=>distance(a,nearest)<distance(b,nearest)?a:b);target=pad;if(distance(e,pad)<.5){if(mind.waitAt<0)mind.waitAt=this.now;if(this.now-mind.waitAt<2){e.vx=e.vz=0;return;}mind.nextAmbush=this.now+5;mind.waitAt=-1;target=nearest;}}else mind.waitAt=-1;
       if(this.mode==='solo'&&this.soloIntensity>6&&(e.personality===1||e.personality===3)&&d<6){target={x:e.x+(e.x-nearest.x)/d*2,z:e.z+(e.z-nearest.z)/d*2};}
       if(!walkable(target,this.arena))target=nearest;
       direction=this.steer(e,target);
@@ -97,6 +98,9 @@ export class ChaseSimulation {
       e.held=d<6.5&&nearest.frozenUntil<=this.now&&nearest.immuneUntil<=this.now&&e.battery>26&&clearPath(e,nearest,this.arena,0,true);
       if(e.battery<40&&d>7){let pad=this.pickups.find(p=>p.readyAt<=this.now);if(pad)direction=this.steer(e,pad);}
     }
+    // Keep computer teammates from running as one overlapping body.
+    let sx=0,sz=0;for(const other of this.entities){if(other===e||other.role!==e.role)continue;const gap=distance(e,other);if(gap>=1.4)continue;const weight=(1.4-gap)/1.4,dx=(e.x-other.x)/(gap||1),dz=(e.z-other.z)/(gap||1);sx+=dx*weight;sz+=dz*weight;if(Math.abs(dx*Math.cos(direction)-dz*Math.sin(direction))<.3){const side=e.id<other.id?-1:1;sx+=Math.cos(direction)*side*weight*.7;sz-=Math.sin(direction)*side*weight*.7;}}
+    if(sx||sz){const apart=Math.atan2(Math.sin(direction)+sx*.8,Math.cos(direction)+sz*.8);if(clearPath(e,{x:e.x+Math.sin(apart)*.6,z:e.z+Math.cos(apart)*.6},this.arena))direction=apart;}
     const t=this.now-e.lungeAt;if(e.role==='goose'&&t<TUNE.windup+TUNE.dashTime+TUNE.recovery)direction=e.lungeAngle;
     e.facing=direction;const speed=this.speed(e)*(e.role==='goose'&&mind.cornerUntil>this.now?.85:1),q=slide(e,Math.sin(direction)*speed*dt,Math.cos(direction)*speed*dt,this.arena);
     e.vx=(q.x-e.x)/dt;e.vz=(q.z-e.z)/dt;e.x=q.x;e.z=q.z;
@@ -157,5 +161,5 @@ export class ChaseSimulation {
     if(this.mode==='multi'&&kids.length===1&&!this.lastKid){this.lastKid=kids[0].id;kids[0].battery=100;}
     if(!kids.length||this.mode==='multi'&&this.elapsed>=TUNE.roundSeconds){this.phase='results';for(const e of this.entities)e.score+=kids.length?e.role==='kid'?500:0:e.role==='goose'?250:0;this.event(kids.length?'dawn':'flock',this.entities[0]);}
   }
-  snapshot(code=''):ChaseSnapshot{return {code,now:this.now,elapsed:this.elapsed,mode:this.mode,phase:this.phase,entities:this.entities,pickups:this.pickups,events:this.events,firstCatch:this.firstCatch,lamps:this.lamps,gooseBoost:this.gooseBoost()};}
+  snapshot(code=''):ChaseSnapshot{return {code,arena:this.arena===PARK?'park':'culdesac',now:this.now,elapsed:this.elapsed,mode:this.mode,phase:this.phase,entities:this.entities,pickups:this.pickups,events:this.events,firstCatch:this.firstCatch,lamps:this.lamps,gooseBoost:this.gooseBoost()};}
 }

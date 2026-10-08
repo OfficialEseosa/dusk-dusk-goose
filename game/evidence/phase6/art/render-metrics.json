@@ -1,0 +1,42 @@
+[
+  {
+    "viewport": {
+      "width": 667,
+      "height": 375
+    },
+    "minKidPixels": 72.74493409208591,
+    "maxCalls": 54,
+    "maxTriangles": 50011,
+    "maxPrograms": 12,
+    "kidAnimationSeconds": 0.9999999999999996,
+    "gooseNeckRange": 0.13992305005361508,
+    "errors": [],
+    "catchFrameAfterResultMs": 316.949951171875,
+    "catchFrameAfterRenderedGooseMs": 99.949951171875,
+    "freezeRingDrained": true,
+    "catchHitStopObserved": true,
+    "conversionPopObserved": true,
+    "maxActiveParticles": 35,
+    "particleCapacity": 256
+  },
+  {
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "minKidPixels": 136.4657082348798,
+    "maxCalls": 54,
+    "maxTriangles": 50011,
+    "maxPrograms": 12,
+    "kidAnimationSeconds": 0.9998999999999998,
+    "gooseNeckRange": 0.13932451499763202,
+    "errors": [],
+    "catchFrameAfterResultMs": 323.5810546875,
+    "catchFrameAfterRenderedGooseMs": 97.5810546875,
+    "freezeRingDrained": true,
+    "catchHitStopObserved": true,
+    "conversionPopObserved": true,
+    "maxActiveParticles": 35,
+    "particleCapacity": 256
+  }
+]

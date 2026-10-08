@@ -534,7 +534,7 @@ h1 {
 .showing-scores:not(.radio-keyboard) #radio-toggle {top:8px;bottom:auto;right:150px;}
 
 #clue-transmission {width:calc(100% - 300px);}
-.showing-scores #clue-transmission {position:static;transform:none;width:100%;max-width:none;padding:4px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
+#match-panel #clue-transmission {position:static;transform:none;width:100%;max-width:none;padding:4px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
 
 /* Display hints and teaching leave input and movement available. */
 .display-controls {display:flex;gap:8px;pointer-events:auto;}

@@ -23,7 +23,7 @@ test('kit animation, goose waddle and phone character size are visible in the re
       const before=source.slice(0,at),lineNumber=before.split('\n').length-1,columnNumber=at-before.lastIndexOf('\n')-1;
       // Read after rendering has updated the new figure's world/bone matrices.
       const breakpoint=await cdp.send('Debugger.setBreakpoint',{location:{scriptId:script,lineNumber,columnNumber},condition:'(requestAnimationFrame(()=>window.__recordArt(this)),false)'});
-      await expect.poll(()=>page.evaluate(()=>(window as any).__artSamples.length)).toBeGreaterThan(30);
+      try{await expect.poll(()=>page.evaluate(()=>(window as any).__artSamples.length)).toBeGreaterThan(30);}catch(error){console.log(JSON.stringify({requested:{lineNumber,columnNumber},actual:breakpoint.actualLocation,errors:state.errors,source:source.slice(at-100,at+100)}));throw error;}
       await captureFrame(page,`${evidence}/title-${viewport.width}.png`);
       const controls=await page.locator('#title input,#title button').evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {x:b.x,y:b.y,right:b.right,bottom:b.bottom,width:b.width,height:b.height,font:parseFloat(getComputedStyle(node).fontSize)};}));
       for(const b of controls){expect(b.x).toBeGreaterThanOrEqual(0);expect(b.y).toBeGreaterThanOrEqual(0);expect(b.right).toBeLessThanOrEqual(viewport.width);expect(b.bottom).toBeLessThanOrEqual(viewport.height);expect(b.width).toBeGreaterThanOrEqual(44);expect(b.height).toBeGreaterThanOrEqual(44);expect(b.font).toBeGreaterThanOrEqual(16);}

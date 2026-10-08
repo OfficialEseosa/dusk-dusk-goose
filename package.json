@@ -1,28 +1,11 @@
 {
-  "name": "last-night-on-maple-street",
-  "version": "0.1.0",
+  "name": "dusk-dusk-goose-repository",
+  "version": "1.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "concurrently -k \"tsx watch server/index.ts\" \"vite --host 0.0.0.0\"",
-    "build": "tsc --noEmit && vite build",
-    "start": "tsx server/index.ts",
-    "test": "tsx --test tests/*.test.ts",
-    "test:e2e": "npm run build && playwright test"
-  },
-  "dependencies": {
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1",
-    "three": "^0.186.1"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.56.1",
-    "@types/node": "^22.0.0",
-    "@types/three": "^0.186.0",
-    "concurrently": "^9.0.0",
-    "prettier": "^3.9.9",
-    "tsx": "^4.20.0",
-    "typescript": "^5.9.0",
-    "vite": "^7.1.0"
+    "build": "npm --prefix game run build",
+    "start": "npm --prefix game start",
+    "test": "npm --prefix game test && npm --prefix legacy/story test",
+    "test:e2e": "npm --prefix game run test:e2e && npm --prefix legacy/story run test:e2e"
   }
 }

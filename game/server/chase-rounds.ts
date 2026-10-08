@@ -1,5 +1,5 @@
 import {randomUUID} from 'node:crypto';
-import {TUNE,distance,type MultiplayerState,type Point} from '../shared/chase.js';
+import {TUNE,PARK,CULDESAC,distance,type MultiplayerState,type Point} from '../shared/chase.js';
 import {ChaseSimulation} from './chase-simulation.js';
 export interface Player {id:string;name:string}
 /** Room-owned three-round match. Wall deadlines keep breaks independent of simulation time. */
@@ -21,11 +21,11 @@ export class MultiplayerDirector {
     this.players=players.map(p=>({id:p.id,name:p.name}));this.roster(players);if(this.round===3){this.round=0;for(const s of this.scores.values()){s.total=0;s.starts=0;}}
     this.round++;this.runId=randomUUID();this.stage='countdown';this.deadline=now+3000;this.ready.clear();this.scored=false;this.winner=null;
     this.startingGeese=this.choose(players);this.previous=new Set(this.startingGeese);
-    const sim=new ChaseSimulation('multi',this.seed+this.round);
+    const sim=new ChaseSimulation('multi',this.seed+this.round,players.length>=4?CULDESAC:PARK);
     for(const p of players.filter(p=>!this.startingGeese.includes(p.id)))sim.add(p.id,p.name);
     while(sim.entities.length<Math.max(4,players.length)-this.startingGeese.length)sim.add(`filler-${sim.entities.length}`,`Kid ${sim.entities.length+1}`,true);
     const kids=[...sim.entities];
-    const candidates:Point[]=[{x:10,z:-7},{x:-10,z:-7},{x:10,z:7},{x:-10,z:7}];
+    const candidates:Point[]=players.length>=4?[{x:15,z:-9},{x:-15,z:-9},{x:15,z:9},{x:-15,z:9}]:[{x:10,z:-7},{x:-10,z:-7},{x:10,z:7},{x:-10,z:7}];
     const used:Point[]=[];for(const id of this.startingGeese){const p=players.find(p=>p.id===id)!;
       const position=candidates.filter(p=>used.every(q=>distance(p,q)>3)).sort((a,b)=>Math.min(...kids.map(k=>distance(k,b)))-Math.min(...kids.map(k=>distance(k,a))))[0];used.push(position);
       const goose=sim.add(id,p.name,false,'goose',position);goose.safeUntil=4.5;sim.startingGeese.add(id);this.scores.get(id)!.starts++;

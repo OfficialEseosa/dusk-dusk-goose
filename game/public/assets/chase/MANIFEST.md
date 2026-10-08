@@ -27,3 +27,8 @@ Phase5 additions use generated128x128 ground grain,128x64 puff/feather atlas,
 static contact-shadow planes and pooled simple-shape effects. Kid holding-right
 is blended on the right arm while lit. The audio bank/source licences and all
 synthetic substitutes are listed in game/SOUND_CHOICES.md (27 MP3 files).
+
+Phase6 Cul-de-sac uses these same supplied props, with simple-shape houses,
+windows, parked cars, oval green and circular pond. No additional model files.
+Unused prior hide-and-seek assets are retained under legacy/hideandseek-public
+for their unchanged compatibility tests and are absent from the active public tree.

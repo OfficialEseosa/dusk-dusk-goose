@@ -9,6 +9,7 @@ export default defineConfig({
   reporter: [["list"], ["html", { open: "never" }]],
   use: {
     baseURL: "http://127.0.0.1:5173",
+    launchOptions: { args: process.platform === 'win32' ? ['--use-angle=d3d11'] : [] },
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },

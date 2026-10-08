@@ -1,6 +1,7 @@
 import {ChaseArt} from './chase-art';
+import {ChaseDisplay} from './chase-display';
 import {ChaseSound} from './chase-sound';
-import {PARK,TUNE,tonightSeed,distance,type ChaseSnapshot,type Entity} from '../shared/chase';
+import {arenaFor,TUNE,tonightSeed,distance,type ChaseSnapshot,type Entity} from '../shared/chase';
 import {readBest,saveBest,recordRun,torchReward,formatTime} from './chase-best';
 import {ServerClock,RemotePositions} from './chase-network-view';
 import {SnapshotDecoder,encodeInput} from '../shared/chase-wire';
@@ -12,7 +13,7 @@ app.innerHTML=`<canvas aria-label="The Park" tabindex="0"></canvas><div id="shad
 <main id="title"><div class="brand"><p class="eyebrow">A LITTLE LIGHT. A LOT OF HONK.</p><h1><span>Dusk Dusk</span><br><em>Goose.</em></h1><p class="pitch">Run. Freeze the flock.<br>Get caught. Chase your friends.</p></div><div class="entry-panel"><p class="eyebrow">1–6 PLAYERS · ONE VERY BAD GOOSE</p><input id="name" aria-label="Your name" placeholder="Your name" maxlength="16" value="Kid"><button id="play">Play</button><div class="join-row"><input id="code" aria-label="Room code" placeholder="Code" maxlength="5"><button id="join">Join friends</button></div><p id="notice" role="status">No login · WASD + Space</p></div></main>
 <header id="hud" hidden><div><b id="room"></b><span id="invite">Invite a friend with this code</span></div><div id="clock"><b id="timer">0:00</b><span id="best">BEST 0:00</span><span id="recharge" hidden>NO RECHARGE</span></div><div><span id="count"></span><span id="hour">HOUR 1</span></div></header>
 <aside id="role-card" hidden><b id="role-title"></b><span id="role-tip"></span></aside><div id="final-count" hidden aria-live="off"></div><div id="dawn-wash"></div><div id="flock-eyes" hidden><i></i><i></i></div><div id="pickup-hint" hidden></div><div id="threat" hidden>→ GOOSE</div><div id="message" role="status"></div><section id="results" hidden><h2 id="result-title">The geese got you!</h2><p id="survived"></p><p id="reward"></p><p id="scores" hidden></p><p id="result-invite"></p><p id="retry-hint"></p></section>
-<div id="controls" hidden><div id="stick" aria-label="Move"><span></span><b>MOVE</b></div><button id="action"><span id="action-icon">☀</span><span id="action-label">LIGHT</span><span id="action-state">100%</span></button></div>`;
+<div id="controls" hidden><div id="stick" aria-label="Move"><span></span><b>MOVE</b></div><button id="action"><span id="action-icon">☀</span><span id="action-label">LIGHT</span><span id="action-state">100%</span></button></div><aside id="home-tip" hidden>Add to your Home Screen for more room.<br>Tap this tip to dismiss.</aside><aside id="portrait-hint" hidden><b aria-hidden="true">↻</b><h2>Turn your phone sideways</h2><p>The chase keeps going. We’ll keep you moving.</p></aside>`;
 const el=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id) as T;
 const canvas=app.querySelector('canvas')!;
 const art=new ChaseArt(canvas);
@@ -25,6 +26,7 @@ let local={x:-4,z:6},seq=0,held=false,lunge=false,lastSend=0,lastMessage=0,retry
 let best=readBest(),runId='',runBest=best.time,newBestShown=false,lastBestSecond=-1,lastEventId=0,messageUntil=0,roleUntil=0,eyesUntil=0,eyesFrom=0,resultOpenedAt=0,lastFinalNumber=-1,firstMove=false,firstFreeze=false;
 el('notice').textContent=`Tonight's park · ${String(tonightSeed()).slice(4,6)}/${String(tonightSeed()).slice(6)} · WASD + Space`;
 const keys=new Set<string>();let stickX=0,stickZ=0,pointer:number|undefined,origin={x:0,y:0};
+const display=new ChaseDisplay(el('portrait-hint'),el('home-tip'),()=>{keys.clear();held=false;lunge=false;stickX=stickZ=0;pointer=undefined;el('stick').querySelector('span')!.style.transform='';});
 let credential:any;try{credential=JSON.parse(sessionStorage.getItem('ddg-seat')??'null');}catch{}
 function send(m:any){if(ws?.readyState===WebSocket.OPEN)ws.send(m.type==='input'?encodeInput({...m,clientTime:clock.ready?clock.now(performance.now()):Date.now()}):JSON.stringify(m));}
 function connect(intent?:'create'|'join'){
@@ -44,7 +46,7 @@ function connect(intent?:'create'|'join'){
 }
 function flash(message:string,seconds=1.4){el('message').textContent=message;messageUntil=performance.now()+seconds*1000;}
 function roleCard(title:string,tip:string,seconds=1.8){el('role-title').textContent=title;el('role-tip').textContent=tip;roleUntil=performance.now()+seconds*1000;el('role-card').hidden=false;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)el('role-card').animate([{transform:'translateX(-50%) scale(.86)',opacity:0},{transform:'translateX(-50%) scale(1.04)',opacity:1},{transform:'translateX(-50%) scale(1)',opacity:1}],{duration:280});}
-function apply(s:ChaseSnapshot){const was=snapshot;snapshot=s;snapshotAt=performance.now();const me=s.entities.find(e=>e.id===id);if(!me)return;
+function apply(s:ChaseSnapshot){const was=snapshot;snapshot=s;canvas.setAttribute('aria-label',s.arena==='culdesac'?'The Cul-de-sac':'The Park');snapshotAt=performance.now();const me=s.entities.find(e=>e.id===id);if(!me)return;
   const nextRun=s.solo?.runId??s.multi?.runId;const fresh=!!nextRun&&runId!==nextRun;
   if(fresh){runId=nextRun!;runBest=best.time;newBestShown=false;lastBestSecond=-1;lastEventId=was?0:s.events.at(-1)?.id??0;firstMove=false;firstFreeze=false;held=false;lunge=false;flash(s.mode==='solo'?'Move left. Hold LIGHT when the goose comes.':me.role==='kid'?'Stay a kid until dawn!':'You start as the goose. Chase your friends!',2);el('timer').classList.remove('record');}
   if(fresh){remote.clear();roleCard(me.role==='kid'?'YOU’RE A KID':'YOU’RE THE GOOSE',me.role==='kid'?'Hold LIGHT to freeze. Release and run.':'Tap LUNGE. Catch a kid. Grow the flock.');}remote.receive(s.now,s.entities);
@@ -103,7 +105,7 @@ function apply(s:ChaseSnapshot){const was=snapshot;snapshot=s;snapshotAt=perform
   const nearest=s.entities.filter(e=>e.role==='goose').sort((a,b)=>distance(a,me)-distance(b,me))[0];if(nearest&&me.role==='kid')el('threat').textContent=`${nearest.x>=me.x?'→':'←'} GOOSE`;
   sound.update(s,id,local);
 }
-el('play').onclick=()=>{autoResume=true;credential=null;connect('create');};el('join').onclick=()=>{autoResume=true;credential=null;connect('join');};
+el('play').onclick=()=>{display.enter();autoResume=true;credential=null;connect('create');};el('join').onclick=()=>{display.enter();autoResume=true;credential=null;connect('join');};
 const action=(on:boolean)=>{held=on;if(on&&snapshot?.phase==='results'){send({type:'retry'});return;}if(on)lunge=true;};
 el('action').onpointerdown=e=>{e.preventDefault();el('action').setPointerCapture(e.pointerId);action(true);};
 el('action').onpointerup=el('action').onpointercancel=()=>action(false);
@@ -117,11 +119,11 @@ let previousInput=performance.now();
 // Input transport must not wait for a WebGL frame (screenshots, shader work or a slow GPU).
 setInterval(()=>{
   const now=performance.now(),dt=(now-previousInput)/1000,me=snapshot?.entities.find(e=>e.id===id);previousInput=now;
-  if(me&&snapshot&&!document.hidden){const x=stickX+(keys.has('KeyD')||keys.has('ArrowRight')?1:0)-(keys.has('KeyA')||keys.has('ArrowLeft')?1:0),z=stickZ+(keys.has('KeyS')||keys.has('ArrowDown')?1:0)-(keys.has('KeyW')||keys.has('ArrowUp')?1:0),d=Math.hypot(x,z);
+  if(me&&snapshot&&!document.hidden&&!display.portrait){const x=stickX+(keys.has('KeyD')||keys.has('ArrowRight')?1:0)-(keys.has('KeyA')||keys.has('ArrowLeft')?1:0),z=stickZ+(keys.has('KeyS')||keys.has('ArrowDown')?1:0)-(keys.has('KeyW')||keys.has('ArrowUp')?1:0),d=Math.hypot(x,z);
     if(d>.1&&!firstMove){firstMove=true;if(!firstFreeze)flash('Hold LIGHT. It finds the goose for you.',2);}
-    if((snapshot.phase==='playing'||snapshot.multi)&&me.frozenUntil<=snapshot.now&&!(me.role==='goose'&&(me.safeUntil>snapshot.now||snapshot.now-me.lungeAt<.84))){const speed=me.role==='kid'?(me.light?TUNE.litSpeed:TUNE.kidSpeed)*(snapshot.multi?.lastKid===id?1.08:1):TUNE.gooseSpeed*(snapshot.gooseBoost??1);local=advanceMotion(local,{x,z},speed,dt);if(d>.1)me.facing=Math.atan2(x,z);}
+    if((snapshot.phase==='playing'||snapshot.multi)&&me.frozenUntil<=snapshot.now&&!(me.role==='goose'&&(me.safeUntil>snapshot.now||snapshot.now-me.lungeAt<.84))){const speed=me.role==='kid'?(me.light?TUNE.litSpeed:TUNE.kidSpeed)*(snapshot.multi?.lastKid===id?1.08:1):TUNE.gooseSpeed*(snapshot.gooseBoost??1);local=advanceMotion(local,{x,z},speed,dt,arenaFor(snapshot.arena));if(d>.1)me.facing=Math.atan2(x,z);}
   }
-  if(me&&!document.hidden&&ws?.readyState===WebSocket.OPEN){lastSend=now;send({type:'input',seq:++seq,x:local.x,z:local.z,facing:me.facing,held,lunge});lunge=false;}
+  if(me&&!document.hidden&&!display.portrait&&ws?.readyState===WebSocket.OPEN){lastSend=now;send({type:'input',seq:++seq,x:local.x,z:local.z,facing:me.facing,held,lunge});lunge=false;}
   if(me&&!document.hidden&&now-lastMessage>2200&&now>retryAt){retryAt=now+2500;ws?.close();}
 },50);
 setInterval(()=>{if(ws?.readyState===WebSocket.OPEN)send({type:'ping',clientTime:performance.now()});},5000);

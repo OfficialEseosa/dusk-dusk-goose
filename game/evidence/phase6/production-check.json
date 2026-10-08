@@ -1,0 +1,17 @@
+{
+  "directory": "C:\\Users\\rapha\\Last Night on Maple Street\\game\\.production-final-20261007",
+  "node": "v22.23.2",
+  "startCommand": "node dist/server/server/chase-server.js",
+  "compiledStart": true,
+  "portFromEnvironment": true,
+  "page200": true,
+  "webSocketSolo": true,
+  "forbidden": {
+    "/__debug": 404,
+    "/@vite/client": 404,
+    "/server/chase-server.ts": 404,
+    "/live": 404
+  },
+  "restartReturnsFriendlyEnded": true,
+  "developmentToolsPresent": false
+}
