@@ -37,3 +37,13 @@ test('seeded runs deterministic and events remain bounded',()=>{
   assert.deepEqual(run(),run());
 });
 
+
+
+test('thaw feedback is emitted once at the freeze deadline, never for conversion safety',()=>{
+  const sim=new ChaseSimulation('solo');sim.add('kid','Kid',false,'kid',{x:-10,z:7});
+  const goose=sim.add('goose','Goose',false,'goose',{x:10,z:-7});goose.frozenUntil=.1;goose.immuneUntil=4.1;
+  sim.step(.05);assert.equal(sim.events.filter(e=>e.type==='thaw').length,0);
+  sim.step(.05);assert.equal(sim.events.filter(e=>e.type==='thaw').length,1);assert.equal(sim.events.at(-1)?.actor,'goose');
+  sim.step(.05);assert.equal(sim.events.filter(e=>e.type==='thaw').length,1);
+  goose.frozenUntil=.2;goose.immuneUntil=0;sim.step(.1);assert.equal(sim.events.filter(e=>e.type==='thaw').length,1);
+});

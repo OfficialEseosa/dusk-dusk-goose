@@ -3,6 +3,7 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import {watchChase} from './chase-browser-helpers';
 import {latencyRelay} from './chase-relay';
 import {distance,clearPath} from '../shared/chase';
+const evidence=process.env.DDG_NETWORK_EVIDENCE_DIR??'test-results/network-evidence';
 for(const delay of [100,200])test(`human beam, lunge, infection and converted chase with${delay}ms each way`,async({browser,baseURL})=>{
   test.setTimeout(80000);const relay=await latencyRelay(Number(new URL(baseURL!).port),delay),a=await browser.newContext({viewport:{width:667,height:375}}),b=await browser.newContext({viewport:{width:1366,height:768}});
   const p=await a.newPage(),q=await b.newPage(),one=watchChase(p),two=watchChase(q);
@@ -36,6 +37,6 @@ for(const delay of [100,200])test(`human beam, lunge, infection and converted ch
     await kid.bringToFront();await kid.locator('canvas').focus();await kid.keyboard.down(direction.key);await kid.waitForTimeout(300);await kid.keyboard.up(direction.key);await kid.waitForTimeout(delay*2+180);const moved=distance(before,me(ks));expect(moved).toBeGreaterThan(.5);
     await kid.keyboard.press('Space');await expect.poll(()=>ks.snapshot!.events.some(e=>e.type==='windup'&&e.actor===ks.id),{timeout:2500}).toBe(true);
     expect(ks.snapshot!.multi!.runId).toBe(run);expect([...one.errors,...two.errors]).toEqual([]);
-    await mkdir('evidence/phase3',{recursive:true});await writeFile(`evidence/phase3/latency-${delay}.json`,JSON.stringify({delayEachWay:delay,freezeMs,catchMs,corrections:[one.corrections,two.corrections],convertedMovement:moved,errors:[...one.errors,...two.errors]},null,2));
+    await mkdir(evidence,{recursive:true});await writeFile(`${evidence}/latency-${delay}.json`,JSON.stringify({delayEachWay:delay,freezeMs,catchMs,corrections:[one.corrections,two.corrections],convertedMovement:moved,errors:[...one.errors,...two.errors]},null,2));
   }finally{await a.close();await b.close();await relay.close();}
 });

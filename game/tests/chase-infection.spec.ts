@@ -1,6 +1,7 @@
 import {test,expect,type Page} from '@playwright/test';
 import {writeFile,mkdir} from 'node:fs/promises';
 import {watchChase} from './chase-browser-helpers';
+const evidence=process.env.DDG_NETWORK_EVIDENCE_DIR??'test-results/network-evidence';
 test('a converted human immediately turns and catches the human friend beside them',async({browser})=>{
   test.setTimeout(55000);const contexts=await Promise.all([{width:667,height:375},{width:1366,height:768},{width:667,height:375}].map(viewport=>browser.newContext({viewport})));
   try{
@@ -23,6 +24,6 @@ test('a converted human immediately turns and catches the human friend beside th
     const second=states[friend].snapshot!.events.find(e=>e.type==='catch'&&e.target===states[friend].id)!;expect(second.actor).toBe(states[victim].id);expect(second.at-first.at).toBeLessThan(3);
     for(const index of [victim,friend])await expect(pages[index].locator('#action')).toContainText('LUNGE');
     await expect.poll(()=>states.every(s=>s.snapshot!.events.some(e=>e.id===second.id&&e.actor===states[victim].id&&e.target===states[friend].id))).toBe(true);
-    await mkdir('evidence/phase3',{recursive:true});await writeFile('evidence/phase3/human-infection.json',JSON.stringify({firstActor:names[goose],convertedPlayer:names[victim],secondVictim:names[friend],secondsBetweenCatches:second.at-first.at,errors:states.flatMap(s=>s.errors)},null,2));expect(states.flatMap(s=>s.errors)).toEqual([]);
+    await mkdir(evidence,{recursive:true});await writeFile(`${evidence}/human-infection.json`,JSON.stringify({firstActor:names[goose],convertedPlayer:names[victim],secondVictim:names[friend],secondsBetweenCatches:second.at-first.at,errors:states.flatMap(s=>s.errors)},null,2));expect(states.flatMap(s=>s.errors)).toEqual([]);
   }finally{await Promise.all(contexts.map(c=>c.close()));}
 });

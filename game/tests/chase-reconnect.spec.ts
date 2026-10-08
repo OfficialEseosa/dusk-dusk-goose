@@ -16,9 +16,9 @@ test('silent browser-leg loss reclaims live stale seat while another session kee
     await p.goto(`http://127.0.0.1:${(relay.address() as {port:number}).port}/`);await p.getByRole('button',{name:'Play',exact:true}).click();await expect.poll(()=>one.snapshot?.code).toBeTruthy();
     await q.goto('/');await q.getByRole('textbox',{name:'Room code'}).fill(one.snapshot!.code);await q.getByRole('button',{name:'Join friends'}).click();await expect.poll(()=>one.snapshot?.multi?.stage,{timeout:10000}).toBe('playing');
     const credential=await p.evaluate(()=>sessionStorage.getItem('ddg-seat')),id=one.id,run=one.snapshot!.multi!.runId,before=two.snapshot!.now;
-    expect(tunnels).toHaveLength(1);const old=tunnels[0];old.blackhole=true;old.client.unpipe(old.upstream);old.upstream.unpipe(old.client);const began=Date.now();old.client.destroy();expect(old.upstream.destroyed).toBe(false);
+    expect(tunnels).toHaveLength(1);const old=tunnels[0];old.blackhole=true;old.client.unpipe(old.upstream);old.upstream.unpipe(old.client);const began=Date.now();old.client.destroy();expect(old.upstream.destroyed).toBe(false);await expect(p.locator('#message')).toHaveText('Reconnecting…');
     await expect.poll(()=>tunnels.length,{timeout:3000}).toBe(2);await expect.poll(()=>one.receivedAt>began&&one.snapshot?.multi?.runId===run).toBe(true);
-    expect(Date.now()-began).toBeLessThan(3000);expect(staleAtResume).toBe(true);expect(one.id).toBe(id);expect(await p.evaluate(()=>sessionStorage.getItem('ddg-seat'))).toBe(credential);
+    expect(Date.now()-began).toBeLessThan(3000);expect(staleAtResume).toBe(true);await expect(p.locator('#message')).not.toContainText('Reconnecting');expect(one.id).toBe(id);expect(await p.evaluate(()=>sessionStorage.getItem('ddg-seat'))).toBe(credential);
     await expect.poll(()=>two.snapshot!.now).toBeGreaterThan(before+.3);expect(one.snapshot!.entities.filter(e=>e.id===id)).toHaveLength(1);expect([...one.errors,...two.errors]).toEqual([]);
   }finally{await a.close();await b.close();for(const socket of sockets)socket.destroy();await new Promise<void>(r=>relay.close(()=>r()));}
 });

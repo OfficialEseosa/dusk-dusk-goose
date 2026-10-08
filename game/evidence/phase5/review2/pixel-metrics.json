@@ -1,0 +1,133 @@
+{
+  "nearBlackDefinition": "Rec709 luma <16/255; entire viewport including HUD",
+  "images": [
+    {
+      "file": "catch-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 113,
+      "meanLuma": 112.87
+    },
+    {
+      "file": "catch-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 101,
+      "meanLuma": 102.04
+    },
+    {
+      "file": "chase-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 61,
+      "meanLuma": 61.84
+    },
+    {
+      "file": "chase-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 62,
+      "meanLuma": 67.46
+    },
+    {
+      "file": "dawn-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 71,
+      "meanLuma": 72.7
+    },
+    {
+      "file": "dawn-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 61,
+      "meanLuma": 71.62
+    },
+    {
+      "file": "finale-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0172,
+      "medianLuma": 60,
+      "meanLuma": 61.98
+    },
+    {
+      "file": "finale-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0004,
+      "medianLuma": 62,
+      "meanLuma": 71.08
+    },
+    {
+      "file": "freeze-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 61,
+      "meanLuma": 67.44
+    },
+    {
+      "file": "freeze-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 62,
+      "meanLuma": 74.06
+    },
+    {
+      "file": "low-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 62,
+      "meanLuma": 67.8
+    },
+    {
+      "file": "near-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 62,
+      "meanLuma": 69.52
+    },
+    {
+      "file": "results-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 57,
+      "meanLuma": 59.43
+    },
+    {
+      "file": "results-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 54,
+      "meanLuma": 62.92
+    },
+    {
+      "file": "title-1366.png",
+      "width": 1366,
+      "height": 768,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 51,
+      "meanLuma": 61.76
+    },
+    {
+      "file": "title-667.png",
+      "width": 667,
+      "height": 375,
+      "nearBlackPercent": 0.0,
+      "medianLuma": 46,
+      "meanLuma": 64.77
+    }
+  ]
+}

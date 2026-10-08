@@ -1,0 +1,38 @@
+[
+  {
+    "viewport": {
+      "width": 667,
+      "height": 375
+    },
+    "minKidPixels": 68.95226875061036,
+    "maxCalls": 53,
+    "maxTriangles": 50001,
+    "maxPrograms": 12,
+    "kidAnimationSeconds": 0.9333,
+    "gooseNeckRange": 0.1399519822067468,
+    "errors": [],
+    "freezeRingDrained": true,
+    "catchHitStopObserved": true,
+    "conversionPopObserved": true,
+    "maxActiveParticles": 35,
+    "particleCapacity": 256
+  },
+  {
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "minKidPixels": 123.27863633451568,
+    "maxCalls": 53,
+    "maxTriangles": 50001,
+    "maxPrograms": 12,
+    "kidAnimationSeconds": 1.0833000000000008,
+    "gooseNeckRange": 0.13975600266851648,
+    "errors": [],
+    "freezeRingDrained": true,
+    "catchHitStopObserved": true,
+    "conversionPopObserved": true,
+    "maxActiveParticles": 45,
+    "particleCapacity": 256
+  }
+]

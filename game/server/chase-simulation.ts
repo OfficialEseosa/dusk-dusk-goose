@@ -104,7 +104,9 @@ export class ChaseSimulation {
   step(dt=.05){
     if(this.phase==='results')return;const before=new Map(this.entities.map(e=>[e.id,{x:e.x,z:e.z}]));
     for(const e of this.entities)this.history.record(e.id,this.now,e);
-    this.now+=dt;this.elapsed+=dt;
+    const previousTime=this.now;this.now+=dt;this.elapsed+=dt;
+    // Only a completed beam/lamp freeze emits thaw; conversion safety is separate.
+    for(const e of this.entities)if(e.role==='goose'&&e.frozenUntil>previousTime&&e.frozenUntil<=this.now&&e.immuneUntil>e.frozenUntil)this.event('thaw',e);
     for(const e of this.entities){if(e.bot)this.bot(e,dt);
       else if(e.role==='goose'&&this.now-e.lungeAt>=TUNE.windup&&this.now-e.lungeAt<TUNE.windup+TUNE.dashTime&&e.frozenUntil<=this.now){const q=slide(e,Math.sin(e.lungeAngle)*this.speed(e)*dt,Math.cos(e.lungeAngle)*this.speed(e)*dt,this.arena);e.x=q.x;e.z=q.z;}
     }
